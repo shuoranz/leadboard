@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+/* Self-hosted so the bundle works offline and chart label measurement matches what renders. */
+@import '@fontsource-variable/inter/wght.css';
+
+/*
+ * Theme: every token is defined once with light-dark(). The OS preference picks
+ * the side via `color-scheme`; a data-theme attribute on <html> can force one.
+ */
+:root {
+  color-scheme: light dark;
+
+  --page: light-dark(#f6f7fb, #0f1115);
+  --surface: light-dark(#ffffff, #171a21);
+  --surface-2: light-dark(#f8f9fc, #1c2029);
+  --ink: light-dark(#111827, #f3f4f6);
+  --ink-2: light-dark(#4b5563, #c3c7d1);
+  --muted: light-dark(#8a8f9c, #8b909c);
+  --line: light-dark(#e6e8ef, #272b35);
+  --line-strong: light-dark(#d3d7e2, #353a46);
+  --accent: light-dark(#3b4fd8, #7385ff);
+  --accent-ink: light-dark(#ffffff, #0f1115);
+  --good: light-dark(#16803c, #3fbf6a);
+  --bad: light-dark(#c2352f, #f07470);
+  --grid: light-dark(#eceef3, #232731);
+  --dim: light-dark(#cfd3dc, #3a3f4b);
+
+  /* Categorical series: fixed order, validated for CVD separation in both modes. */
+  --series-1: light-dark(#2a78d6, #3987e5);
+  --series-2: light-dark(#eb6834, #d95926);
+  --series-3: light-dark(#1baf7a, #199e70);
+  --series-4: light-dark(#eda100, #c98500);
+  --series-5: light-dark(#e87ba4, #d55181);
+  --series-6: light-dark(#008300, #008300);
+  --series-7: light-dark(#4a3aa7, #9085e9);
+  --series-8: light-dark(#e34948, #e66767);
+  --series-other: light-dark(#9a9ca3, #6b6e76);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* Every token is a Tailwind color (bg-*, text-*, fill-*, stroke-*), so SVG and HTML
+   consume tokens the same way. Colors reference the runtime tokens above. */
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-bad: var(--bad);
+  --color-grid: var(--grid);
+  --color-dim: var(--dim);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+  --color-series-5: var(--series-5);
+  --color-series-6: var(--series-6);
+  --color-series-7: var(--series-7);
+  --color-series-8: var(--series-8);
+  --color-series-other: var(--series-other);
+}
+
+/* Emitted as real CSS variables: charts read --font-sans at runtime to measure labels. */
+@theme {
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* Type scale, alongside Tailwind's xs (12) / sm (14) / base (16) / lg (18). */
+  --text-tiny: 10px;
+  --text-micro: 11px;
+  --text-meta: 13px;
+  --text-body: 15px;
+
+  --container-page: 1500px;
+}
+
+html,
+body {
+  background: var(--page);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

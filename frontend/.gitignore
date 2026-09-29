@@ -1,0 +1,11 @@
+node_modules
+*.local
+.vite
+test-results
+playwright-report
+
+# Env files can hold credentials, and any VITE_* value in them is copied into the
+# public bundle. Only the documented example is committed.
+.env
+.env.*
+!.env.example
