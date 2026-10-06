@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildScatter, paretoFrontier, placeLabels } from './scatterLayout'
+import { buildScatter, nearestPoint, paretoFrontier, placeLabels } from './scatterLayout'
 
 const plot = { x: 50, y: 10, w: 500, h: 300 }
 
@@ -55,6 +55,23 @@ describe('placeLabels', () => {
     }
   })
 
+  it('never places a label on top of another point', () => {
+    const crowd = [
+      { x: 200, y: 150 },
+      { x: 150, y: 130 },
+      { x: 250, y: 130 },
+      { x: 150, y: 170 },
+      { x: 250, y: 170 },
+    ]
+    const out = placeLabels([{ x: 200, y: 150, w: 60, h: 16 }], crowd, area, 6)
+    for (const { box } of out) {
+      for (const p of crowd.slice(1)) {
+        const hit = p.x + 8 > box.x && p.x - 8 < box.x + box.w && p.y + 8 > box.y && p.y - 8 < box.y + box.h
+        expect(hit).toBe(false)
+      }
+    }
+  })
+
   it('drops a label that cannot fit anywhere', () => {
     expect(placeLabels([{ x: 10, y: 10, w: 500, h: 16 }], [], area, 6)).toHaveLength(0)
   })
@@ -70,5 +87,23 @@ describe('paretoFrontier', () => {
       { id: 'best', cost: 2, score: 85 },
     ]
     expect(paretoFrontier(pts).map((p) => p.id)).toEqual(['cheap', 'mid', 'best'])
+  })
+})
+
+describe('nearestPoint', () => {
+  const pts = [
+    { id: 'a', x: 100, y: 100 },
+    { id: 'b', x: 106, y: 101 }, // overlaps a
+    { id: 'c', x: 300, y: 50 },
+  ]
+
+  it('picks the closest point even when hit areas overlap', () => {
+    expect(nearestPoint(pts, 100, 100, 14)?.id).toBe('a')
+    expect(nearestPoint(pts, 106, 101, 14)?.id).toBe('b')
+    expect(nearestPoint(pts, 104, 100, 14)?.id).toBe('b')
+  })
+
+  it('returns nothing beyond the radius', () => {
+    expect(nearestPoint(pts, 200, 200, 14)).toBeUndefined()
   })
 })

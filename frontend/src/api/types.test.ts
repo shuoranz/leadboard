@@ -53,4 +53,28 @@ describe('LeaderboardSchema', () => {
     bad.categories[0].id = ''
     expect(LeaderboardSchema.safeParse(bad).success).toBe(false)
   })
+
+  it('accepts providers, the new metrics, capabilities and run conditions', () => {
+    const rich = structuredClone(payload) as Record<string, unknown> & { models: Record<string, unknown>[] }
+    Object.assign(rich.models[0], {
+      provider: 'Swiftserve',
+      model_id: 'm',
+      perf: {
+        ttft_ms: { p50: 300, p95: 900, p99: 1500 },
+        itl_ms: { p50: 12, p95: 30 },
+        stall_rate: 0.01,
+        error_breakdown: { rate_limited: 3, timeout: null },
+        ttft_by_input: [{ input_tokens: 1000, p50_ms: 280 }],
+      },
+      capabilities: { context_window: 128000, tool_calling: true, regions: ['us'] },
+    })
+    rich.run = { client_region: 'us-east', concurrency: [1, 8], profiles: [{ name: 'Short chat', share: 0.5 }] }
+    const board = LeaderboardSchema.parse(rich)
+    const m = board.models[0]
+    expect(m.provider).toBe('Swiftserve')
+    expect(m.perf?.ttft_ms?.p99).toBe(1500)
+    expect(m.perf?.error_breakdown).toEqual({ rate_limited: 3, timeout: undefined })
+    expect(m.capabilities?.regions).toEqual(['us'])
+    expect(board.run?.concurrency).toEqual([1, 8])
+  })
 })

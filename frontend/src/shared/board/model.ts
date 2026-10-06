@@ -25,3 +25,28 @@ export const passesFinetune = (m: ModelEntry, includeFinetunes: boolean) => incl
 export const shortName = (m: ModelEntry) => m.short_name ?? m.name
 export const chipLabel = (c: Category) => c.short_name ?? c.name
 export const abbrLabel = (c: Category) => c.abbr ?? c.name.slice(0, 3)
+
+/** Identity of the underlying model, shared by every provider's row for it. */
+export const modelKey = (m: ModelEntry) => m.model_id ?? m.id
+
+/** Full name plus provider, for anywhere rows are listed outside the table (selects, tooltips). */
+export const displayName = (m: ModelEntry) => (m.provider ? `${m.name} · ${m.provider}` : m.name)
+
+/** Input:output token ratio used for the blended price, a common shorthand for chat traffic. */
+export const BLEND_INPUT_PER_OUTPUT = 3
+
+/** List price per 1M tokens at a 3:1 input:output mix. */
+export function blendedPrice(m: ModelEntry): number | undefined {
+  const input = m.cost?.input_per_million
+  const output = m.cost?.output_per_million
+  if (input == null || output == null) return undefined
+  return (BLEND_INPUT_PER_OUTPUT * input + output) / (BLEND_INPUT_PER_OUTPUT + 1)
+}
+
+/** Share of billed output tokens that are hidden reasoning tokens, 0–1. */
+export function reasoningShare(m: ModelEntry): number | undefined {
+  const reasoning = m.cost?.avg_reasoning_tokens
+  const output = m.cost?.avg_output_tokens
+  if (reasoning == null || !output) return undefined
+  return Math.min(1, reasoning / output)
+}

@@ -1,6 +1,6 @@
 // Everything derived from one leaderboard payload, computed once per fetch and
 // shared through BoardContext, so no component re-derives lookups on its own.
-import type { AppSummary, Category, Leaderboard, ModelEntry } from '../../api/types'
+import type { AppSummary, Category, Leaderboard, ModelEntry, RunConditions } from '../../api/types'
 import { buildOrgPalette, type OrgPalette } from './orgPalette'
 
 export interface BoardIndex {
@@ -12,7 +12,11 @@ export interface BoardIndex {
   categoriesById: ReadonlyMap<string, Category>
   /** Alphabetical. */
   organizations: string[]
+  /** Alphabetical; empty when no row names a provider. */
+  providers: string[]
   palette: OrgPalette
+  /** How the benchmark was run, when the backend reports it. */
+  run?: RunConditions
 }
 
 export function buildBoardIndex(board: Leaderboard): BoardIndex {
@@ -24,7 +28,9 @@ export function buildBoardIndex(board: Leaderboard): BoardIndex {
     modelsById: new Map(models.map((m) => [m.id, m])),
     categoriesById: new Map(board.categories.map((c) => [c.id, c])),
     organizations: [...new Set(models.map((m) => m.organization))].sort(),
+    providers: [...new Set(models.flatMap((m) => (m.provider ? [m.provider] : [])))].sort(),
     palette: buildOrgPalette(models),
+    run: board.run,
   }
 }
 

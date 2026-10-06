@@ -1,5 +1,6 @@
 import { Popover } from 'radix-ui'
 import type { ReactNode } from 'react'
+import { cn } from '../lib/cn'
 import { pill } from './pill'
 
 /**
@@ -31,7 +32,7 @@ export function PopoverMenu({
           align={align}
           sideOffset={8}
           collisionPadding={12}
-          className="z-40 w-72 rounded-xl border border-line bg-surface p-2 text-ink shadow-lg shadow-black/5 focus:outline-none"
+          className="z-40 max-h-[min(70vh,var(--radix-popover-content-available-height))] w-72 overflow-y-auto rounded-xl border border-line bg-surface p-2 text-ink shadow-lg shadow-black/5 focus:outline-none"
         >
           {children}
         </Popover.Content>
@@ -40,10 +41,33 @@ export function PopoverMenu({
   )
 }
 
-export function CheckRow({ checked, onChange, children }: { checked: boolean; onChange: () => void; children: ReactNode }) {
+export function CheckRow({
+  checked,
+  indeterminate = false,
+  onChange,
+  children,
+  className,
+}: {
+  checked: boolean
+  /** Partly checked, e.g. a group with only some of its items on. */
+  indeterminate?: boolean
+  onChange: () => void
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <label className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-ink hover:bg-surface-2">
-      <input type="checkbox" checked={checked} onChange={onChange} className="size-4 accent-accent" />
+    <label className={cn('flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-ink hover:bg-surface-2', className)}>
+      <input
+        type="checkbox"
+        checked={checked}
+        // `indeterminate` is a DOM property, not an attribute, so set it imperatively;
+        // browsers then report the box as partly checked.
+        ref={(el) => {
+          if (el) el.indeterminate = indeterminate
+        }}
+        onChange={onChange}
+        className="size-4 accent-accent"
+      />
       <span className="min-w-0 flex-1 truncate">{children}</span>
     </label>
   )

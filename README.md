@@ -2,7 +2,7 @@
 
 A benchmark leaderboard frontend with **one leaderboard per API app**. Pick the app in the header (`?app=<id>` in the URL); every table column, category chip and chart comes from that app's own categories.
 
-- **Leaderboard**: overall score, API performance metrics (requests, success rate, errors, latency p50/p95, throughput, tokens/min, decode speed) and cost; search, open-weights / finetune / org filters, compare, column picker, category tabs (subtask columns), sortable columns, top-5 shading, expandable rows with subtask scores.
+- **Leaderboard**: one row per model *and provider*, with grouped columns for quality, reliability, latency (incl. inter-token latency and stalls), throughput and true cost (reasoning share, blended and cached prices, billing drift), a test-conditions panel, a provider filter and a "one row per model" toggle; search, open-weights / finetune / org filters, compare, column picker, category tabs (subtask columns), sortable columns, top-5 shading, expandable rows with subtask scores.
 - **Insights**: quality vs. cost scatter (log cost, value frontier, click-to-show kill zone), cost ranking (hover for $/1M output and verbosity), and a 2–3 model category radar.
 
 Stack: Vite, React 18, TypeScript, TanStack Query, zod (mini), Tailwind CSS v4, Radix UI primitives. Charts are hand-written SVG, with no chart library.
@@ -72,8 +72,16 @@ See [`frontend/src/api/types.ts`](frontend/src/api/types.ts) for full field docs
 | `GET /api/apps/{app_id}/leaderboard` | `Leaderboard`: `{ app, categories, models }` |
 
 - `categories[]`: `{ id, name, short_name?, abbr?, subtasks: [{ id, name }] }`
-- `models[]`: `{ id, name, short_name?, variant?, organization, open_weights, finetune, base_model?, overall, categories: {cat_id: score}, subtasks: {subtask_id: score}, cost?: { per_success: { overall?, categories: {cat_id: usd} }, output_per_million?, avg_output_tokens? }, perf?: ModelPerf }`
-- `ModelPerf` (client-side load-test results, every field optional): `{ requests, success_rate (0–1), errors, ttft_ms: {p50, p95}, e2e_ms: {p50, p95}, client_overhead_ms: {p50, p95}, throughput_rps, tokens_per_min: {avg, peak}, decode_tps_p50 }`. The **All** view of the table shows these metrics between Overall and cost; each category view shows that category's subtask scores.
+- `models[]`: one row per **deployment** (a model served by a provider): `{ id, model_id?, provider?, name, short_name?, variant?, organization, open_weights, finetune, base_model?, overall, categories, subtasks, cost?, perf?, capabilities? }`.
+- `cost`: `per_success: { overall?, categories }`, list prices (`input_per_million`, `cached_input_per_million`, `output_per_million`), `avg_output_tokens` (including reasoning), `avg_reasoning_tokens`, `tokens_per_1k_chars`, `billing_drift`.
+- `perf` (client-side load-test results):
+  - reliability: requests, `success_rate`, `success_after_retry`, `errors` + `error_breakdown`, `truncation_rate`;
+  - latency: `ttft_ms`, `itl_ms`, `e2e_ms` (each `{p50, p95, p99}`), `ttft_by_input`, `stall_rate`, `client_overhead_ms`;
+  - throughput: `throughput_rps`, `tokens_per_min {avg, peak}`, `decode_tps_p50`, `prefill_tps`.
+- `capabilities`: context window, max output, streaming, tool calling, JSON mode, vision, prompt caching, batch API, regions.
+- `run` (top level): the test conditions shown above the table.
+
+Every field there is optional. Rates are 0–1 fractions. See `types.ts` for each field's meaning.
 
 Scores are 0–100. Optional fields may be omitted or `null`, and `null` entries in score maps are dropped. Missing scores or costs render as "—" and are left out of the charts.
 

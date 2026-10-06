@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { ModelEntry } from '../../api/types'
 import { useBoard } from '../../shared/board/BoardContext'
-import { costFor, scoreFor, type View } from '../../shared/board/model'
+import { costFor, displayName, scoreFor, type View } from '../../shared/board/model'
 import { formatCost, formatInt, formatPrice, formatScore } from '../../shared/lib/format'
 import { OrgDot } from '../../shared/ui/marks'
 import { SelectPill } from '../../shared/ui/SelectPill'
@@ -27,7 +27,7 @@ export function CostRanked({ models, view }: { models: ModelEntry[]; view: View 
   const current = new Set(ids ?? defaultIds)
   const rows = withCost.filter((m) => current.has(m.id)).sort((a, b) => costFor(a, view)! - costFor(b, view)!)
   const max = Math.max(...rows.map((m) => costFor(m, view)!), 0)
-  const addable = withCost.filter((m) => !current.has(m.id)).sort((a, b) => a.name.localeCompare(b.name))
+  const addable = withCost.filter((m) => !current.has(m.id)).sort((a, b) => displayName(a).localeCompare(displayName(b)))
 
   return (
     <div>
@@ -36,7 +36,7 @@ export function CostRanked({ models, view }: { models: ModelEntry[]; view: View 
           <option value="">Add a model…</option>
           {addable.map((m) => (
             <option key={m.id} value={m.id}>
-              {m.name}
+              {displayName(m)}
             </option>
           ))}
         </SelectPill>
@@ -69,12 +69,15 @@ export function CostRanked({ models, view }: { models: ModelEntry[]; view: View 
               >
                 <button
                   type="button"
-                  aria-label={`${m.name}: ${formatCost(cost)} per successful task`}
+                  aria-label={`${displayName(m)}: ${formatCost(cost)} per successful task`}
                   className="col-span-3 grid grid-cols-subgrid items-center rounded-md py-1.5 text-left focus-visible:outline-2 focus-visible:outline-accent"
                 >
                   <span className="flex min-w-0 items-center gap-2.5 text-body text-ink">
                     <OrgDot color={color} />
-                    <span className="truncate">{m.name}</span>
+                    <span className="truncate" title={displayName(m)}>
+                      {m.name}
+                      {m.provider && <span className="text-muted"> · {m.provider}</span>}
+                    </span>
                   </span>
                   <span className="h-5 rounded-[4px] bg-surface-2">
                     <span className="block h-5 rounded-r-[4px]" style={{ width: `${Math.max(1.2, (cost / max) * 100)}%`, background: color }} />
@@ -84,7 +87,7 @@ export function CostRanked({ models, view }: { models: ModelEntry[]; view: View 
               </Tip>
               <button
                 type="button"
-                aria-label={`Remove ${m.name}`}
+                aria-label={`Remove ${displayName(m)}`}
                 onClick={() => setIds([...current].filter((id) => id !== m.id))}
                 className="text-muted opacity-0 group-hover:opacity-100 hover:text-ink focus:opacity-100"
               >

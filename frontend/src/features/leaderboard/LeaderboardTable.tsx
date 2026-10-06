@@ -1,10 +1,11 @@
 import { Fragment, useMemo, useState } from 'react'
 import type { ModelEntry } from '../../api/types'
 import { cn } from '../../shared/lib/cn'
+import { useElementWidth } from '../../shared/lib/hooks'
 import { cssVar, tint } from '../../shared/lib/tokens'
 import { Badge } from '../../shared/ui/marks'
 import { ModelDetail } from './ModelDetail'
-import { defaultDir, topRanks, type Column, type SortState } from './table'
+import { defaultDir, groupSpans, startsGroup, topRanks, type Column, type SortState } from './table'
 
 // Best-5 shading per column: one hue, stepping lighter with rank.
 const HEAT = [26, 19, 13, 8, 4.5]
@@ -29,6 +30,9 @@ export function LeaderboardTable({
   limit?: number
 }) {
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  // The table is far wider than the screen, so expanded details are pinned to the
+  // visible width of the scroll area instead of spreading across every column.
+  const [scrollRef, visibleWidth] = useElementWidth<HTMLDivElement>()
 
   // Rank among all matching rows (not just the rendered ones) so shading is stable.
   const ranks = useMemo(
@@ -47,38 +51,61 @@ export function LeaderboardTable({
       return next
     })
 
-  const divider = (col: Column) => col.groupStart && 'border-l border-line'
-  // Header cells stick to the top of the scroll area; the first two also stick left.
-  const headCell = 'sticky top-0 z-20 bg-surface shadow-[inset_0_-1px_0_var(--line)]'
+  // A divider marks each group boundary. The first group sits against the Model
+  // column's own border, so it doesn't get one.
+  const divider = (i: number) => i > 0 && startsGroup(columns, i) && 'border-l border-line'
+  const spans = groupSpans(columns)
+  // Both header rows stick to the top of the scroll area: the group row at 0, the
+  // titles just below it (GROUP_ROW is the group row's fixed height).
+  const headCell = 'sticky z-20 bg-surface shadow-[inset_0_-1px_0_var(--line)]'
+  const GROUP_ROW = 'h-9'
   const stickyLeft = 'sticky z-10 bg-surface group-hover:bg-surface-2'
 
   return (
     // When every row is shown the table scrolls inside a bounded area, so the
     // header can stay pinned (sticky can't escape a horizontal scroll container).
-    <div className={cn('overflow-auto rounded-2xl border border-line bg-surface', limit == null && 'max-h-[80vh]')}>
-      <table className="w-full border-separate border-spacing-0 text-body">
+    <div ref={scrollRef} className={cn('overflow-auto rounded-2xl border border-line bg-surface', limit == null && 'max-h-[80vh]')}>
+      <table aria-label="Leaderboard" className="w-full border-separate border-spacing-0 text-body">
         <thead>
           <tr>
-            <th scope="col" className={cn(headCell, 'left-0 z-30 w-10')}>
+            <th scope="col" rowSpan={2} className={cn(headCell, 'top-0 left-0 z-30 w-10')}>
               <span className="sr-only">Expand</span>
             </th>
             <th
               scope="col"
+              rowSpan={2}
               className={cn(
                 headCell,
-                'left-10 z-30 min-w-56 border-r border-line py-4 pr-4 text-left align-bottom font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase',
+                'top-0 left-10 z-30 min-w-56 border-r border-line py-4 pr-4 text-left align-bottom font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase',
               )}
             >
               Model
             </th>
-            {columns.map((col) => {
+            {spans.map((g, i) => (
+              <th
+                key={`${g.group}-${i}`}
+                scope="colgroup"
+                colSpan={g.span}
+                className={cn(
+                  headCell,
+                  GROUP_ROW,
+                  'top-0 px-4 text-left font-mono text-micro font-semibold tracking-widest text-muted uppercase',
+                  i > 0 && 'border-l border-line',
+                )}
+              >
+                {g.label}
+              </th>
+            ))}
+          </tr>
+          <tr>
+            {columns.map((col, i) => {
               const active = sort.id === col.id
               return (
                 <th
                   key={col.id}
                   scope="col"
                   aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
-                  className={cn(headCell, 'px-4 py-4 text-right align-bottom', divider(col))}
+                  className={cn(headCell, 'top-9 px-4 py-3 text-right align-bottom', divider(i))}
                 >
                   <button
                     type="button"
@@ -131,9 +158,13 @@ export function LeaderboardTable({
                       {m.open_weights && <Badge>open</Badge>}
                       {m.finetune && <Badge tone="muted">finetune</Badge>}
                     </div>
-                    {showOrg && <div className="mt-0.5 text-xs font-normal text-muted">{m.organization}</div>}
+                    {(m.provider || showOrg) && (
+                      <div className="mt-0.5 text-xs font-normal whitespace-nowrap text-muted">
+                        {[m.provider && `via ${m.provider}`, showOrg && m.organization].filter(Boolean).join(' · ')}
+                      </div>
+                    )}
                   </th>
-                  {columns.map((col) => {
+                  {columns.map((col, i) => {
                     const v = col.get(m)
                     return (
                       <td
@@ -141,7 +172,7 @@ export function LeaderboardTable({
                         style={{ background: col.shade ? heat(ranks.get(col.id)?.get(m.id)) : undefined }}
                         className={cn(
                           'px-4 py-3.5 text-right font-mono whitespace-nowrap text-ink tabular-nums',
-                          divider(col),
+                          divider(i),
                           col.primary && 'text-base font-bold',
                           v == null && 'text-muted',
                         )}
@@ -154,7 +185,9 @@ export function LeaderboardTable({
                 {open && (
                   <tr className="bg-surface-2">
                     <td colSpan={columns.length + 2} className="border-b border-line p-0">
-                      <ModelDetail model={m} highlightCategory={highlightCategory} />
+                      <div className="sticky left-0" style={{ width: visibleWidth || undefined }}>
+                        <ModelDetail model={m} highlightCategory={highlightCategory} />
+                      </div>
                     </td>
                   </tr>
                 )}

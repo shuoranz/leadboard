@@ -80,9 +80,10 @@ const overlaps = (a: Box, b: Box) => a.x < b.x + b.w && b.x < a.x + a.w && a.y <
 const inside = (b: Box, area: Box) => b.x >= area.x && b.y >= area.y && b.x + b.w <= area.x + area.w && b.y + b.h <= area.y + area.h
 
 /**
- * Greedy label placement. Each label tries positions around its point, first
- * avoiding every point and earlier label, then only earlier labels; a label
- * with no free position is dropped (the tooltip still carries it).
+ * Greedy label placement. Each label tries positions around its point and takes
+ * the first that stays inside the area and clear of every point and earlier
+ * label. A label with no clear position is dropped (the tooltip still names it):
+ * a label sitting on another dot reads as belonging to it.
  */
 export function placeLabels<L extends { x: number; y: number; w: number; h: number }>(
   labels: L[],
@@ -104,12 +105,29 @@ export function placeLabels<L extends { x: number; y: number; w: number; h: numb
       { x: x + 12, y: y - h / 2, w, h }, // right
       { x: x - w - 12, y: y - h / 2, w, h }, // left
     ]
-    const free = (b: Box, avoidPoints: boolean) =>
-      inside(b, area) && !placed.some((o) => overlaps(o, b)) && (!avoidPoints || !pointBoxes.some((o) => overlaps(o, b)))
-    const box = candidates.find((b) => free(b, true)) ?? candidates.find((b) => free(b, false))
+    const box = candidates.find((b) => inside(b, area) && !placed.some((o) => overlaps(o, b)) && !pointBoxes.some((o) => overlaps(o, b)))
     if (!box) continue
     placed.push(box)
     out.push({ ...l, box })
   }
   return out
+}
+
+/**
+ * The point closest to (x, y) within `maxDist` px, or undefined. Used for hover
+ * and click instead of per-point hit areas: when points overlap (e.g. one model
+ * from two providers), a per-point target drawn on top would steal clicks from
+ * the dot actually under the pointer.
+ */
+export function nearestPoint<P extends { x: number; y: number }>(points: P[], x: number, y: number, maxDist: number): P | undefined {
+  let best: P | undefined
+  let bestD = maxDist * maxDist
+  for (const p of points) {
+    const d = (p.x - x) ** 2 + (p.y - y) ** 2
+    if (d <= bestD) {
+      best = p
+      bestD = d
+    }
+  }
+  return best
 }

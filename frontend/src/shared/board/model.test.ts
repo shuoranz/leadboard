@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { model } from '../../test/fixtures'
-import { OVERALL, costFor, passesFinetune, scoreFor } from './model'
+import { OVERALL, blendedPrice, costFor, displayName, modelKey, passesFinetune, reasoningShare, scoreFor } from './model'
 
 describe('scoreFor / costFor', () => {
   const m = model({
@@ -35,5 +35,27 @@ describe('passesFinetune', () => {
     expect(passesFinetune(ft, false)).toBe(false)
     expect(passesFinetune(ft, true)).toBe(true)
     expect(passesFinetune(model({ id: 'b' }), false)).toBe(true)
+  })
+})
+
+describe('provider and cost helpers', () => {
+  it('shares a model key across providers and names the provider', () => {
+    const m = model({ id: 'nimbus@swift', model_id: 'nimbus', name: 'Nimbus 4', provider: 'Swiftserve' })
+    expect(modelKey(m)).toBe('nimbus')
+    expect(modelKey(model({ id: 'solo' }))).toBe('solo')
+    expect(displayName(m)).toBe('Nimbus 4 · Swiftserve')
+    expect(displayName(model({ id: 'x', name: 'X' }))).toBe('X')
+  })
+
+  it('blends input and output prices 3:1', () => {
+    const m = model({ id: 'p', cost: { per_success: { categories: {} }, input_per_million: 1, output_per_million: 5 } })
+    expect(blendedPrice(m)).toBe(2)
+    expect(blendedPrice(model({ id: 'q' }))).toBeUndefined()
+  })
+
+  it('reports reasoning tokens as a share of billed output', () => {
+    const m = model({ id: 'r', cost: { per_success: { categories: {} }, avg_output_tokens: 2000, avg_reasoning_tokens: 900 } })
+    expect(reasoningShare(m)).toBe(0.45)
+    expect(reasoningShare(model({ id: 's' }))).toBeUndefined()
   })
 })

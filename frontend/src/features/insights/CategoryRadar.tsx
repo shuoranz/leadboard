@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ModelEntry } from '../../api/types'
 import { useBoard } from '../../shared/board/BoardContext'
-import { abbrLabel } from '../../shared/board/model'
+import { abbrLabel, displayName } from '../../shared/board/model'
 import { formatScore } from '../../shared/lib/format'
 import { CHART_TEXT, ChartFrame } from '../../shared/ui/ChartFrame'
 import { LineKey } from '../../shared/ui/marks'
@@ -64,10 +64,10 @@ export function CategoryRadar({ models }: { models: ModelEntry[] }) {
           {series.map(({ m, color, dash }) => (
             <span key={m.id} className="inline-flex h-10 items-center gap-2 rounded-full border-2 border-ink/80 pr-2 pl-4 text-body font-semibold text-ink">
               <LineKey color={color} dash={dash} />
-              {m.name}
+              {displayName(m)}
               <button
                 type="button"
-                aria-label={`Remove ${m.name}`}
+                aria-label={`Remove ${displayName(m)}`}
                 onClick={() => setPicks(picks.filter((p) => p.id !== m.id))}
                 className="rounded-full px-1.5 text-muted hover:text-ink"
               >
@@ -82,7 +82,7 @@ export function CategoryRadar({ models }: { models: ModelEntry[] }) {
                 .filter((m) => !picks.some((p) => p.id === m.id))
                 .map((m) => (
                   <option key={m.id} value={m.id}>
-                    {m.name}
+                    {displayName(m)}
                   </option>
                 ))}
             </SelectPill>
@@ -102,7 +102,10 @@ export function CategoryRadar({ models }: { models: ModelEntry[] }) {
                     <th key={m.id} scope="col" className="px-3 py-2 text-right font-medium text-ink-2">
                       <span className="inline-flex items-center gap-1.5">
                         <LineKey color={color} dash={dash} width={16} />
-                        <span className="max-w-40 truncate">{m.short_name ?? m.name}</span>
+                        <span className="max-w-48 truncate" title={displayName(m)}>
+                          {m.short_name ?? m.name}
+                          {m.provider && <span className="text-muted"> · {m.provider}</span>}
+                        </span>
                       </span>
                     </th>
                   ))}
@@ -196,7 +199,7 @@ function RadarPlot({ series, width, height }: { series: Series[]; width: number;
             const [x, y] = pt(i, m.categories[c.id] ?? 0)
             return (
               <circle key={c.id} cx={x} cy={y} r={4} fill={color} strokeWidth={1.5} className="stroke-surface">
-                <title>{`${m.name} · ${c.name}: ${formatScore(m.categories[c.id])}`}</title>
+                <title>{`${displayName(m)} · ${c.name}: ${formatScore(m.categories[c.id])}`}</title>
               </circle>
             )
           })}

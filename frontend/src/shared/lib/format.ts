@@ -66,3 +66,15 @@ export function formatCompact(v: number | undefined) {
 export function formatPair(a: number | undefined, b: number | undefined, format: (v: number | undefined) => string) {
   return a == null && b == null ? EMPTY : `${format(a)} / ${format(b)}`
 }
+
+/** A signed 0–1 fraction as a percent, e.g. 0.012 -> "+1.2%", -0.004 -> "-0.4%". */
+export function formatSignedPercent(v: number | undefined) {
+  return v == null
+    ? EMPTY
+    : nf('spct', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1, signDisplay: 'exceptZero' }).format(v)
+}
+
+/** Token counts with a unit, e.g. 128000 -> "128K". */
+export function formatTokens(v: number | undefined) {
+  return v == null ? EMPTY : nf('tok', { notation: 'compact', maximumFractionDigits: 1 }).format(v)
+}

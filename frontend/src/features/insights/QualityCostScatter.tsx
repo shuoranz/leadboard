@@ -1,19 +1,21 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type MouseEvent, type PointerEvent } from 'react'
 import type { ModelEntry } from '../../api/types'
 import { useBoard } from '../../shared/board/BoardContext'
 import { viewLabel } from '../../shared/board/boardIndex'
-import { costFor, scoreFor, shortName, type View } from '../../shared/board/model'
+import { costFor, displayName, scoreFor, shortName, type View } from '../../shared/board/model'
 import { formatCost, formatCostTick, formatScore } from '../../shared/lib/format'
 import { measureText, useFontsReady } from '../../shared/lib/hooks'
 import { cssVar } from '../../shared/lib/tokens'
 import { CHART_TEXT, ChartFrame } from '../../shared/ui/ChartFrame'
 import { LineKey, OrgDot } from '../../shared/ui/marks'
 import { Tip, TooltipRows } from '../../shared/ui/Tooltip'
-import { buildScatter, placeLabels, type Datum, type Placed } from './scatterLayout'
+import { buildScatter, nearestPoint, placeLabels, type Datum, type Placed } from './scatterLayout'
 
 const HEIGHT = 440
 const M = { top: 16, right: 24, bottom: 52, left: 60 }
 const R = 6
+/** How far from a dot the pointer may be and still hover or click it. */
+const HIT = 14
 const LINE_H = 14
 
 // Direct-label type. The same values style the <text> and feed measurement, so
@@ -65,7 +67,7 @@ export function QualityCostScatter({ models, view }: { models: ModelEntry[]; vie
         {selected && (
           <span className="inline-flex items-center gap-1.5">
             <OrgDot color={cssVar.dim} size={9} />
-            Beaten by {shortName(selected.item)} ({beaten})
+            Beaten by {displayName(selected.item)} ({beaten})
           </span>
         )}
       </div>
@@ -88,7 +90,11 @@ function ScatterPlot({
 }) {
   const board = useBoard()
   const fontsReady = useFontsReady()
-  const [hoverId, setHoverId] = useState<string | null>(null)
+  // Pointer hover and keyboard focus are tracked apart, so leaving one doesn't
+  // clear the other. Focus wins when both point somewhere.
+  const [pointerId, setPointerId] = useState<string | null>(null)
+  const [focusId, setFocusId] = useState<string | null>(null)
+  const activeId = focusId ?? pointerId
 
   const plot = useMemo(() => ({ x: M.left, y: M.top, w: Math.max(0, width - M.left - M.right), h: HEIGHT - M.top - M.bottom }), [width])
   const chart = useMemo(() => buildScatter(data, plot), [data, plot])
@@ -108,7 +114,10 @@ function ScatterPlot({
     const variantFont = cssFont(LABEL_TYPE.variant)
     const sized = wanted.map((p) => {
       const name = shortName(p.item)
-      const variant = p.item.variant ? `(${p.item.variant})` : undefined
+      // Second line: configuration and provider, e.g. "(max · Swiftserve)". Several
+      // providers can serve one model, so the provider tells their points apart.
+      const detail = [p.item.variant, p.item.provider].filter(Boolean).join(' · ')
+      const variant = detail ? `(${detail})` : undefined
       const w = Math.max(measureText(name, nameFont), variant ? measureText(variant, variantFont) : 0)
       return { x: p.x, y: p.y, w, h: variant ? LINE_H * 2 + 2 : LINE_H + 2, id: p.item.id, name, variant }
     })
@@ -119,13 +128,19 @@ function ScatterPlot({
   const label = viewLabel(board, view)
   const toggleSelect = (id: string) => onSelect(selectedId === id ? null : id)
 
+  // Pointer input goes through one overlay that picks the nearest dot, so a click
+  // always lands on the dot under the pointer even where dots overlap.
+  const pointAt = (e: PointerEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
+    const box = e.currentTarget.ownerSVGElement!.getBoundingClientRect()
+    return nearestPoint(chart.points, e.clientX - box.left, e.clientY - box.top, HIT)
+  }
+
   return (
     <svg
       width={width}
       height={HEIGHT}
       role="img"
       aria-label={`Scatter of ${label} score versus cost per successful task for ${data.length} models`}
-      onClick={() => onSelect(null)}
       className="block overflow-visible select-none"
     >
       {chart.yTicks.map((v) => (
@@ -183,11 +198,12 @@ function ScatterPlot({
           return (
             <Tip
               key={m.id}
+              open={m.id === activeId}
               content={
                 <>
                   <div className="flex items-center gap-2 font-semibold text-ink">
                     <OrgDot color={board.palette.color(m.organization)} />
-                    <span className="truncate">{m.name}</span>
+                    <span className="truncate">{displayName(m)}</span>
                   </div>
                   <div className="mt-0.5 mb-2 text-xs text-muted">{m.organization}</div>
                   <TooltipRows
@@ -200,20 +216,16 @@ function ScatterPlot({
                 </>
               }
             >
+              {/* Each dot is a keyboard stop (Tab, then Enter/Space). Pointer input is
+                  handled by the overlay below, so the dot itself ignores it. */}
               <g
                 tabIndex={0}
                 role="button"
                 aria-pressed={isSel}
-                aria-label={`${m.name}: ${formatScore(p.score)} at ${formatCost(p.cost)}`}
-                className="cursor-pointer outline-none"
-                onMouseEnter={() => setHoverId(m.id)}
-                onMouseLeave={() => setHoverId(null)}
-                onFocus={() => setHoverId(m.id)}
-                onBlur={() => setHoverId(null)}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  toggleSelect(m.id)
-                }}
+                aria-label={`${displayName(m)}: ${formatScore(p.score)} at ${formatCost(p.cost)}`}
+                className="pointer-events-none outline-none"
+                onFocus={() => setFocusId(m.id)}
+                onBlur={() => setFocusId(null)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
@@ -221,8 +233,7 @@ function ScatterPlot({
                   }
                 }}
               >
-                <circle cx={p.x} cy={p.y} r={12} fill="transparent" />
-                {(isSel || m.id === hoverId) && <circle cx={p.x} cy={p.y} r={R + 4} fill="none" strokeWidth={1.5} className="stroke-ink" />}
+                {(isSel || m.id === activeId) && <circle cx={p.x} cy={p.y} r={R + 4} fill="none" strokeWidth={1.5} className="stroke-ink" />}
                 <circle
                   cx={p.x}
                   cy={p.y}
@@ -235,6 +246,24 @@ function ScatterPlot({
             </Tip>
           )
         })}
+
+      <rect
+        aria-hidden
+        x={plot.x - HIT}
+        y={plot.y - HIT}
+        width={plot.w + 2 * HIT}
+        height={plot.h + 2 * HIT}
+        fill="transparent"
+        className={pointerId ? 'cursor-pointer' : undefined}
+        onPointerMove={(e) => setPointerId(pointAt(e)?.item.id ?? null)}
+        onPointerLeave={() => setPointerId(null)}
+        onClick={(e) => {
+          // A click on a dot toggles its kill zone; a click on empty space clears it.
+          const p = pointAt(e)
+          if (p) toggleSelect(p.item.id)
+          else onSelect(null)
+        }}
+      />
 
       {labels.map(({ id, box, name, variant }) => (
         <g key={`l${id}`} className="pointer-events-none">

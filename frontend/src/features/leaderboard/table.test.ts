@@ -2,7 +2,22 @@ import { describe, expect, it } from 'vitest'
 import { buildBoardIndex } from '../../shared/board/boardIndex'
 import { OVERALL } from '../../shared/board/model'
 import { board as rawBoard, model } from '../../test/fixtures'
-import { PERF_COLUMNS, colId, columnsFor, defaultDir, filterModels, formatSort, parseSort, sortModels, topRanks } from './table'
+import {
+  COLUMN_GROUPS,
+  DEFAULT_HIDDEN,
+  PERF_COLUMNS,
+  bestPerModel,
+  colId,
+  columnsFor,
+  defaultDir,
+  filterModels,
+  formatSort,
+  groupSpans,
+  parseSort,
+  sortModels,
+  startsGroup,
+  topRanks,
+} from './table'
 
 const a = model({
   id: 'a',
@@ -19,25 +34,18 @@ const models = [a, b, c]
 const board = (ms: typeof models) => buildBoardIndex(rawBoard(ms))
 
 describe('columnsFor', () => {
-  it('overall view has overall, the performance metrics and cost — no category columns', () => {
-    const ids = columnsFor(board(models), OVERALL).map((c) => c.id)
-    expect(ids).toEqual([
-      'overall',
-      'perf:requests',
-      'perf:success_rate',
-      'perf:errors',
-      'perf:ttft',
-      'perf:e2e',
-      'perf:client_overhead',
-      'perf:throughput',
-      'perf:tokens_per_min',
-      'perf:decode',
-      'cost',
-    ])
+  it('overall view has overall, then reliability, latency, throughput and cost groups — no category columns', () => {
+    const cols = columnsFor(board(models), OVERALL)
+    expect(cols[0].id).toBe('overall')
+    expect(cols.at(-1)!.id).toBe('cost')
+    expect(cols.some((c) => c.id.startsWith('cat:'))).toBe(false)
+    // groups appear in COLUMN_GROUPS order, each as one contiguous run
+    expect(groupSpans(cols).map((g) => g.group)).toEqual(COLUMN_GROUPS.map((g) => g.id))
   })
 
-  it('titles the metric columns as specified', () => {
-    expect(PERF_COLUMNS.map((c) => c.label)).toEqual([
+  it('keeps the originally requested metric titles, alongside the new ones', () => {
+    const labels = PERF_COLUMNS.map((c) => c.label)
+    for (const title of [
       'Requests',
       'Success rate',
       'Errors',
@@ -47,7 +55,24 @@ describe('columnsFor', () => {
       'Throughput (req/s)',
       'Tokens/min avg / peak',
       'Per-request decode (tok/s, p50)',
-    ])
+    ]) {
+      expect(labels).toContain(title)
+    }
+    for (const title of ['Success after retries', 'Truncated', 'TTFT client p99 (ms)', 'ITL p50 / p95 (ms)', 'Stall rate', 'Blended $/1M (3:1)']) {
+      expect(labels).toContain(title)
+    }
+  })
+
+  it('hides the less essential columns by default', () => {
+    expect([...DEFAULT_HIDDEN].sort()).toEqual(
+      ['perf:billing_drift', 'perf:cached_input_price', 'perf:e2e_p99', 'perf:prefill', 'perf:tokens_per_1k_chars'].sort(),
+    )
+  })
+
+  it('marks group boundaries for dividers', () => {
+    const cols = columnsFor(board(models), OVERALL)
+    const starts = cols.flatMap((c, i) => (startsGroup(cols, i) ? [c.group] : []))
+    expect(starts).toEqual(COLUMN_GROUPS.map((g) => g.id))
   })
 
   it('formats paired cells and missing metrics', () => {
@@ -87,6 +112,12 @@ describe('filterModels', () => {
     expect(filterModels(models, { query: ' ALPHA ' }).map((m) => m.id)).toEqual(['a'])
   })
 
+  it('filters by provider and matches the query against provider names', () => {
+    const served = [model({ id: 'x1', name: 'Xeno', provider: 'Swiftserve' }), model({ id: 'x2', name: 'Xeno', provider: 'Cloudhaven' })]
+    expect(filterModels(served, { provider: 'Cloudhaven' }).map((m) => m.id)).toEqual(['x2'])
+    expect(filterModels(served, { query: 'swift' }).map((m) => m.id)).toEqual(['x1'])
+  })
+
   it('applies open-weights and organization filters', () => {
     expect(filterModels(models, { openOnly: true }).map((m) => m.id)).toEqual(['a'])
     expect(filterModels(models, { organization: 'Acme', includeFinetunes: true }).map((m) => m.id)).toEqual(['a', 'c'])
@@ -105,6 +136,29 @@ describe('sortModels', () => {
     const input = [...models]
     sortModels(input, math, 'desc')
     expect(input).toEqual(models)
+  })
+})
+
+describe('bestPerModel', () => {
+  it('keeps the first (best-sorted) provider row of each model', () => {
+    const rows = [
+      model({ id: 'n@fast', model_id: 'n', provider: 'Fast' }),
+      model({ id: 'm@a', model_id: 'm', provider: 'A' }),
+      model({ id: 'n@slow', model_id: 'n', provider: 'Slow' }),
+      model({ id: 'solo' }),
+    ]
+    expect(bestPerModel(rows).map((m) => m.id)).toEqual(['n@fast', 'm@a', 'solo'])
+  })
+})
+
+describe('billing drift', () => {
+  it('sorts by the size of the drift but shows its sign', () => {
+    const drift = PERF_COLUMNS.find((c) => c.id === colId.perf('billing_drift'))!
+    const over = model({ id: 'over', cost: { per_success: { categories: {} }, billing_drift: 0.02 } })
+    const under = model({ id: 'under', cost: { per_success: { categories: {} }, billing_drift: -0.005 } })
+    expect(sortModels([over, under], drift, 'asc').map((m) => m.id)).toEqual(['under', 'over'])
+    expect(drift.format(over)).toBe('+2.0%')
+    expect(drift.format(under)).toBe('-0.5%')
   })
 })
 

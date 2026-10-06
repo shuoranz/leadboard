@@ -8,7 +8,7 @@ test('leaderboard loads, sorts, expands and keeps its view in the URL', async ({
 
   await page.goto('/')
   await expect(page).toHaveURL(/\?app=chat-completions/)
-  const table = page.locator('table').first()
+  const table = page.getByRole('table', { name: 'Leaderboard' })
   await expect(table.locator('tbody tr').first()).toBeVisible()
 
   await page.getByRole('radio', { name: 'Coding' }).first().click()
@@ -32,12 +32,27 @@ test('insights charts render, the kill zone toggles, and tooltips work by keyboa
   // Pin the exact point: selecting re-orders the points (dominated ones drawn first).
   const name = (await page.getByRole('button', { name: /: .* at \$/ }).first().getAttribute('aria-label'))!
   const point = page.getByRole('button', { name, exact: true })
-  await point.click()
-  await expect(page.getByText(/Beaten by/)).toBeVisible()
-  await point.click()
+  const pointName = name.slice(0, name.lastIndexOf(': '))
+  const beaten = page.getByText(`Beaten by ${pointName}`, { exact: false })
+
+  // Keyboard: each point is a button.
+  await point.focus()
+  await page.keyboard.press('Enter')
+  await expect(beaten).toBeVisible()
+  await page.keyboard.press('Enter')
   await expect(page.getByText(/Beaten by/)).toHaveCount(0)
 
-  // Reach a cost row the way a keyboard user does (Tab), not via element.focus().
+  // Mouse: clicking the dot selects that dot, even where another provider's dot
+  // for the same model overlaps it.
+  const box = (await point.boundingBox())!
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
+  await expect(beaten).toBeVisible()
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
+  await expect(page.getByText(/Beaten by/)).toHaveCount(0)
+
+  // Move the mouse off the chart (as a user heading for the cost list would), then
+  // reach a cost row the way a keyboard user does (Tab), not via element.focus().
+  await page.mouse.move(0, 0)
   const costRow = page.getByRole('button', { name: /: \$[0-9.]+ per successful task$/ }).first()
   await costRow.focus()
   await page.keyboard.press('Shift+Tab')
@@ -56,4 +71,21 @@ test('switching apps navigates and back restores the previous view', async ({ pa
   await page.goBack()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Chat Completions API')
   await expect(page.getByRole('radio', { name: 'Coding' }).first()).toBeChecked()
+})
+
+test('providers, column groups and test conditions render from the production bundle', async ({ page }) => {
+  await page.goto('/?app=chat-completions')
+  const table = page.getByRole('table', { name: 'Leaderboard' })
+  for (const g of ['Quality', 'Reliability', 'Latency', 'Throughput', 'Cost']) {
+    await expect(table.getByRole('columnheader', { name: g, exact: true })).toBeVisible()
+  }
+  await expect(table.getByText(/^via /).first()).toBeVisible()
+
+  await page.getByText('Test conditions').click()
+  await expect(page.getByRole('cell', { name: /Long-context RAG/ }).or(page.getByRole('rowheader', { name: 'Long-context RAG' }))).toBeVisible()
+
+  const before = await table.locator('tbody > tr').count()
+  await page.getByLabel('Provider').selectOption('Cloudhaven')
+  await expect(table.getByText(/^via /).first()).toHaveText('via Cloudhaven')
+  expect(await table.locator('tbody > tr').count()).toBeLessThan(before)
 })

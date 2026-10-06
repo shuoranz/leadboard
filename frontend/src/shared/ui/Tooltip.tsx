@@ -13,10 +13,22 @@ export function TooltipProvider({ children }: { children: ReactNode }) {
 /**
  * Hover/focus tooltip on `children` (which must be focusable to reach keyboard
  * users). Positioned by Radix/Floating UI, so it flips and shifts at edges.
+ * Pass `open` to control it yourself, e.g. when a chart decides which point is
+ * hovered rather than the trigger element.
  */
-export function Tip({ content, children, side = 'top' }: { content: ReactNode; children: ReactElement; side?: 'top' | 'bottom' | 'left' | 'right' }) {
+export function Tip({
+  content,
+  children,
+  side = 'top',
+  open,
+}: {
+  content: ReactNode
+  children: ReactElement
+  side?: 'top' | 'bottom' | 'left' | 'right'
+  open?: boolean
+}) {
   return (
-    <Tooltip.Root>
+    <Tooltip.Root open={open}>
       <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Content
