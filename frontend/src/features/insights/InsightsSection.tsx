@@ -33,7 +33,7 @@ export default function InsightsSection() {
           title="Latency vs. cost"
           subtitle={
             <>
-              {LATENCY[metric].label} vs. cost per 1K requests (log). The <strong className="font-semibold text-accent">value frontier</strong> is the
+              {LATENCY[metric].label} vs. cost per 1K successful requests (log). The <strong className="font-semibold text-accent">value frontier</strong> is the
               lowest latency at each cost. Click a point to grey out its <strong className="font-semibold text-ink">kill zone</strong> — everything
               slower and more expensive; click it again to clear.
             </>
@@ -41,7 +41,7 @@ export default function InsightsSection() {
         >
           <LatencyCostScatter rows={board.rows} metric={metric} />
         </Card>
-        <Card title="Cost, ranked" subtitle="List-price cost per 1K requests at this service's real token counts, cheapest first. Hover or focus a row for details.">
+        <Card title="Cost, ranked" subtitle="List-price cost per 1K successful requests at this service's real token counts (failed requests that still used tokens included), cheapest first. Hover or focus a row for details.">
           <CostRanked rows={board.rows} />
         </Card>
       </div>

@@ -142,7 +142,7 @@ function ScatterPlot({
       width={width}
       height={HEIGHT}
       role="img"
-      aria-label={`Scatter of ${label} latency versus cost per 1K requests for ${data.length} rows`}
+      aria-label={`Scatter of ${label} latency versus cost per 1K successful requests for ${data.length} rows`}
       className="block overflow-visible select-none"
     >
       {chart.yTicks.map((v) => (
@@ -164,7 +164,7 @@ function ScatterPlot({
         </g>
       ))}
       <text x={plot.x + plot.w} y={HEIGHT - 6} textAnchor="end" fontSize={CHART_TEXT.tick} className="fill-muted font-mono">
-        Cost per 1K requests (log) →
+        Cost per 1K successful requests (log) →
       </text>
       <text transform={`translate(16 ${plot.y + plot.h}) rotate(-90)`} fontSize={CHART_TEXT.tick} className="fill-muted font-mono">
         {label} (ms) — lower is better
@@ -205,7 +205,7 @@ function ScatterPlot({
                   <TooltipRows
                     rows={[
                       [LATENCY[metric].short, `${formatInt(p.value)} ms`],
-                      ['Cost / 1K requests', formatCost1k(p.cost)],
+                      ['Cost / 1K successful requests', formatCost1k(p.cost)],
                     ]}
                   />
                   <div className="mt-2 text-micro text-muted">{isSel ? 'Click to clear kill zone' : 'Click to show kill zone'}</div>

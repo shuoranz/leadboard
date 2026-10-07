@@ -1,7 +1,53 @@
 [
   {
-    "id": "r_87790baf9d",
-    "batch_id": "b_d1600d64",
+    "id": "r_a5bea96167",
+    "batch_id": "b_0ce76205",
+    "service_id": "summarize-profile",
+    "label": null,
+    "routing": {
+      "mode": "fixed",
+      "offering_id": "stratus--aurora-4",
+      "pool": null
+    },
+    "load": {
+      "concurrency": 3,
+      "ramp_up_s": 5,
+      "duration_s": 30,
+      "think_time_s": 1.0,
+      "profile_id": "custom",
+      "name": "Custom"
+    },
+    "status": "completed",
+    "progress": 100,
+    "created_at": "2026-10-07T03:07:58Z",
+    "started_at": "2026-10-07T03:07:58Z",
+    "ended_at": "2026-10-07T03:07:58Z",
+    "updated_at": "2026-10-07T03:07:58Z",
+    "error": null,
+    "cancel_requested": false,
+    "blazemeter": {
+      "test_id": 10000026,
+      "master_id": 10000018,
+      "report_url": "http://127.0.0.1:8102/app/masters/10000018",
+      "status": "ENDED"
+    },
+    "splunk": {
+      "sid": "1791342478.274_c7479504",
+      "search": "search index=llm_api run_id=r_a5bea96167",
+      "search_url": "http://127.0.0.1:8103/en-US/app/search/search?q=search%20index%3Dllm_api%20run_id%3Dr_a5bea96167",
+      "events": 15
+    },
+    "headline": {
+      "requests": 15,
+      "error_rate": 0.0,
+      "e2e_p95_ms": 6225.5,
+      "ttft_p50_ms": 497.6,
+      "cost_per_1k": 9.1564
+    }
+  },
+  {
+    "id": "r_2e5618bc67",
+    "batch_id": "b_70aed640",
     "service_id": "summarize-profile",
     "label": null,
     "routing": {
@@ -34,76 +80,30 @@
     },
     "status": "completed",
     "progress": 100,
-    "created_at": "2026-10-07T02:26:30Z",
-    "started_at": "2026-10-07T02:26:30Z",
-    "ended_at": "2026-10-07T02:26:31Z",
-    "updated_at": "2026-10-07T02:26:31Z",
+    "created_at": "2026-10-07T03:07:58Z",
+    "started_at": "2026-10-07T03:07:58Z",
+    "ended_at": "2026-10-07T03:07:58Z",
+    "updated_at": "2026-10-07T03:07:58Z",
     "error": null,
     "cancel_requested": false,
     "blazemeter": {
-      "test_id": 10000125,
-      "master_id": 10000139,
-      "report_url": "http://127.0.0.1:8102/app/masters/10000139",
+      "test_id": 10000074,
+      "master_id": 10000081,
+      "report_url": "http://127.0.0.1:8102/app/masters/10000081",
       "status": "ENDED"
     },
     "splunk": {
-      "sid": "1791339991.042_57eb15b0",
-      "search": "search index=llm_api run_id=r_87790baf9d",
-      "search_url": "http://127.0.0.1:8103/en-US/app/search/search?q=search%20index%3Dllm_api%20run_id%3Dr_87790baf9d",
-      "events": 21
+      "sid": "1791342478.440_8445fd52",
+      "search": "search index=llm_api run_id=r_2e5618bc67",
+      "search_url": "http://127.0.0.1:8103/en-US/app/search/search?q=search%20index%3Dllm_api%20run_id%3Dr_2e5618bc67",
+      "events": 22
     },
     "headline": {
-      "requests": 21,
+      "requests": 22,
       "error_rate": 0.0,
-      "e2e_p95_ms": 4966.2,
-      "ttft_p50_ms": 352.4,
-      "cost_per_1k": 6.1328
-    }
-  },
-  {
-    "id": "r_3d56a2d268",
-    "batch_id": "b_c8d32fa5",
-    "service_id": "summarize-profile",
-    "label": null,
-    "routing": {
-      "mode": "fixed",
-      "offering_id": "stratus--aurora-4",
-      "pool": null
-    },
-    "load": {
-      "concurrency": 3,
-      "ramp_up_s": 5,
-      "duration_s": 30,
-      "think_time_s": 1.0,
-      "profile_id": "custom",
-      "name": "Custom"
-    },
-    "status": "completed",
-    "progress": 100,
-    "created_at": "2026-10-07T02:26:30Z",
-    "started_at": "2026-10-07T02:26:30Z",
-    "ended_at": "2026-10-07T02:26:30Z",
-    "updated_at": "2026-10-07T02:26:30Z",
-    "error": null,
-    "cancel_requested": false,
-    "blazemeter": {
-      "test_id": 10000072,
-      "master_id": 10000049,
-      "report_url": "http://127.0.0.1:8102/app/masters/10000049",
-      "status": "ENDED"
-    },
-    "splunk": {
-      "sid": "1791339990.873_ec275497",
-      "search": "search index=llm_api run_id=r_3d56a2d268",
-      "search_url": "http://127.0.0.1:8103/en-US/app/search/search?q=search%20index%3Dllm_api%20run_id%3Dr_3d56a2d268",
-      "events": 14
-    },
-    "headline": {
-      "requests": 14,
-      "error_rate": 0.0714,
-      "e2e_p95_ms": 14748.0,
-      "ttft_p50_ms": 472.4,
-      "cost_per_1k": 9.4781
+      "e2e_p95_ms": 4634.5,
+      "ttft_p50_ms": 258.7,
+      "cost_per_1k": 3.5044
     }
   },
   {
@@ -164,7 +164,7 @@
       "error_rate": 0.0225,
       "e2e_p95_ms": 5748.1,
       "ttft_p50_ms": 313.4,
-      "cost_per_1k": 4.1162
+      "cost_per_1k": 4.139
     }
   },
   {
@@ -210,7 +210,7 @@
       "error_rate": 0.0052,
       "e2e_p95_ms": 6369.0,
       "ttft_p50_ms": 499.0,
-      "cost_per_1k": 9.1042
+      "cost_per_1k": 9.1312
     }
   },
   {
@@ -256,7 +256,7 @@
       "error_rate": 0.045,
       "e2e_p95_ms": 6537.1,
       "ttft_p50_ms": 520.4,
-      "cost_per_1k": 9.0119
+      "cost_per_1k": 9.1502
     }
   }
 ]

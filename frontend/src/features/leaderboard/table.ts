@@ -97,7 +97,7 @@ export const COLUMNS: Column[] = [
     defaultHidden: true,
   }),
   // Cost
-  metric('cost', 'cost_1k', 'Cost / 1K requests', 'lower', 'Splunk', costPer1k, (r) => formatCost1k(costPer1k(r))),
+  metric('cost', 'cost_1k', 'Cost / 1K successful requests', 'lower', 'Splunk', costPer1k, (r) => formatCost1k(costPer1k(r))),
   metric('cost', 'tokens', 'Avg tokens in / out', null, 'Splunk', (r) => r.perf.avg_input_tokens, (r) =>
     formatPair(r.perf.avg_input_tokens, r.perf.avg_output_tokens, formatCompact),
   ),

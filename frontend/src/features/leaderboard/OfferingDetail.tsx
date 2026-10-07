@@ -24,7 +24,7 @@ export function OfferingDetail({ row }: { row: LeaderboardRow }) {
       ? [
           ['Routing', 'Each request goes to a model picked at random'],
           ['Models in pool', String(row.routing_mix?.length ?? 0)],
-          ['Cost / 1K requests', formatCost1k(cost.per_1k_requests)],
+          ['Cost / 1K successful requests', formatCost1k(cost.per_1k_requests)],
         ]
       : [
           ['From', row.organization],
@@ -35,7 +35,7 @@ export function OfferingDetail({ row }: { row: LeaderboardRow }) {
             'Avg tokens in / out',
             row.perf.avg_input_tokens == null ? undefined : `${formatCompact(row.perf.avg_input_tokens)} / ${formatCompact(row.perf.avg_output_tokens)}`,
           ],
-          ['Cost / 1K requests', formatCost1k(cost.per_1k_requests)],
+          ['Cost / 1K successful requests', formatCost1k(cost.per_1k_requests)],
         ]
   const perf = row.perf
 

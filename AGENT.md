@@ -19,7 +19,7 @@ A leaderboard of LLM deployments **per service**. Teams own LLM-backed API servi
 
 The service page has three tabs (`?tab=`):
 
-- **Leaderboard**: 01 Leaderboard (profile tabs, test conditions, grouped columns: Latency / Reliability / Throughput / Cost, filters, compare, column chooser, expandable rows with capabilities, error causes, TTFT by prompt length, recent runs, routing mix) and 02 Insights (latency-vs-cost scatter with frontier and kill zone, cost per 1K requests ranked, performance radar).
+- **Leaderboard**: 01 Leaderboard (profile tabs, test conditions, grouped columns: Latency / Reliability / Throughput / Cost, filters, compare, column chooser, expandable rows with capabilities, error causes, TTFT by prompt length, recent runs, routing mix) and 02 Insights (latency-vs-cost scatter with frontier and kill zone, cost per 1K successful requests ranked, performance radar).
 - **Runs**: the run list (live status, polling while in flight, cancel, report links), the new-run form, and the run detail page (`?run=`): stepper, KPIs, BlazeMeter card with timeline chart, Splunk card, routing mix.
 - **Models catalog**: provider → LLM or LLM → provider, with prices, status, regions, capabilities.
 
@@ -196,7 +196,7 @@ GET  /api/runs/{id}/results                -> { blazemeter{summary, interval_s, 
 GET  /api/services/{id}/leaderboard?profile -> { service, profiles[+runs], profile, rows: LeaderboardRow[], conditions }
 ```
 
-`Perf`: `requests`, `errors`, `success_rate`, `error_breakdown` (counts), `truncation_rate`, `ttft_ms`, `itl_ms`, `e2e_ms` (client), `server_e2e_ms`, `client_overhead_ms` (each `{p50, p95, p99}`), `ttft_by_input[]`, `stall_rate`, `throughput_rps`, `tokens_per_min {avg, peak}`, `decode_tps_p50`, `prefill_tps`, `avg_input_tokens`, `avg_output_tokens`. Rates are 0–1; times ms; prices USD per 1M tokens; `cost.per_1k_requests` is list price at the logged token counts.
+`Perf`: `requests`, `errors`, `success_rate`, `error_breakdown` (counts), `truncation_rate`, `ttft_ms`, `itl_ms`, `e2e_ms` (client), `server_e2e_ms`, `client_overhead_ms` (each `{p50, p95, p99}`), `ttft_by_input[]`, `stall_rate`, `throughput_rps`, `tokens_per_min {avg, peak}`, `decode_tps_p50`, `prefill_tps`, `avg_input_tokens`, `avg_output_tokens`. Rates are 0–1; times ms; prices USD per 1M tokens; `cost.per_request` / `per_1k_requests` is list-price spend at the logged token counts, per *successful* request: requests rejected up front (429 / 503 / 400) aren't billed; timeouts and dropped streams are, and are spread over the successes.
 
 `API_BASE` defaults to `api` **resolved relative to the page**; override with `VITE_API_BASE`.
 
@@ -274,7 +274,7 @@ Then check by hand with `make dev` (the real stack, http://localhost:5176):
 - **Radix RadioGroup** selects on arrow keys only while the key is held (it moves focus in a `setTimeout`). Playwright's `keyboard.press` is too fast; use `down` → wait ~60ms → `up`. Real users are fine.
 - **Playwright locators:**
   - `name: 'All'` also matches "Overall"; use `exact: true`.
-  - `/per successful task$/` also matches the "Cost per successful task" column header.
+  - `/1K requests/` matches every "Cost / 1K successful requests" label (column, radar axis, tooltips); anchor or scope it.
   - Selecting a scatter point re-orders the points (dominated ones are drawn first), so `.first()` changes. Pin the point by its exact `aria-label`.
 - **The mock must serve both servers:** it needs `configureServer` *and* `configurePreviewServer`, or `vite preview` (and e2e) has no API.
 - **jsdom lacks ResizeObserver, canvas and pointer capture.** `src/test/setup.ts` stubs them. Don't delete it.

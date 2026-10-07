@@ -1,3 +1,5 @@
+import pytest
+
 from app_benchmark.runs.aggregate import build_results, cost, headline, percentile, server_perf, ttft_by_input
 
 
@@ -111,4 +113,26 @@ def test_auto_run_splits_per_offering_and_weights_cost():
     mix = {b["offering_id"]: b["share"] for b in res["splunk"]["by_offering"]}
     assert mix == {"p--a": 0.75, "q--a": 0.25}
     per = {b["offering_id"]: b["cost"]["per_request"] for b in res["splunk"]["by_offering"]}
-    assert res["cost"]["per_request"] == round(0.75 * per["p--a"] + 0.25 * per["q--a"], 6)
+    assert res["cost"]["per_request"] == pytest.approx(0.75 * per["p--a"] + 0.25 * per["q--a"], abs=1e-6)
+
+
+def test_cost_skips_rejected_requests_and_charges_failures_to_the_successes():
+    prices = {"input_per_million": 2.0, "output_per_million": 10.0}
+    one = (1000 * 2 + 100 * 10) / 1e6
+    ok = [ev(), ev()]
+    rejected = [ev(status="error", error_type=t, output_tokens=0) for t in ("rate_limited", "server_error", "refused")]
+    # Rejected up front: not billed, and not counted as answers.
+    assert cost(ok + rejected, prices)["per_request"] == round(one, 6)
+    # A timeout still burned tokens: billed, and spread over the two successes.
+    timeout = ev(status="error", error_type="timeout")
+    assert cost(ok + [timeout], prices)["per_request"] == round(one * 3 / 2, 6)
+    assert cost(rejected, prices)["per_request"] is None  # no successful request to price
+
+
+def test_auto_run_cost_is_total_spend_per_successful_request():
+    run = {"id": "r3", "routing": {"mode": "auto", "pool": ["p--a", "q--a"]}}
+    events = [ev(offering_id="p--a"), ev(offering_id="q--a"), ev(offering_id="q--a", status="error", error_type="timeout")]
+    res = build_results(run=run, bm_summary=BM_SUMMARY, bm_timeline=TIMELINE, events=events, offerings=OFFERINGS, stall_threshold_ms=2000)
+    p_spend = (1000 * 1 + 100 * 2) / 1e6
+    q_spend = (1000 * 3 + 100 * 4) / 1e6
+    assert res["cost"]["per_request"] == round((p_spend + 2 * q_spend) / 2, 6)

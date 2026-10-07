@@ -32,7 +32,7 @@ export const AXES: Axis[] = [
   { key: 'e2e', name: 'E2E p95 (ms)', abbr: 'E2E', better: 'lower', get: (r) => r.perf.e2e_ms?.p95, format: formatInt },
   { key: 'decode', name: 'Decode (tok/s)', abbr: 'Decode', better: 'higher', get: (r) => r.perf.decode_tps_p50, format: formatDecimal },
   { key: 'success', name: 'Success rate', abbr: 'Success', better: 'higher', get: (r) => r.perf.success_rate, format: formatPercent },
-  { key: 'cost', name: 'Cost / 1K requests', abbr: 'Cost', better: 'lower', get: costPer1k, format: formatCost1k },
+  { key: 'cost', name: 'Cost / 1K successful requests', abbr: 'Cost', better: 'lower', get: costPer1k, format: formatCost1k },
 ]
 
 /** 0–100 position on an axis, relative to the best and worst rows on the board. */

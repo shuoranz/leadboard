@@ -4,7 +4,7 @@ Benchmark the LLM-backed API services your teams own, **per service**, and compa
 
 - **Start runs from the UI.** A run is a BlazeMeter load test against a service (e.g. "Summarize Profile API"). Pick models from a two-layer **provider → LLM** catalog (one LLM is often served by several providers, so you can compare the same model across them), or pick **auto routing**, where the service sends each request to a random model from a pool. Picking several models creates a batch that runs one test at a time.
 - **See results from both sides.** BlazeMeter reports what the load generator saw (hits, failures, response-time percentiles, a timeline). The service's own Splunk logs give TTFT, inter-token latency, tokens, error causes and, for auto runs, the per-model split.
-- **Leaderboard per service.** Every provider × model, ranked on its latest completed run under a load profile (Smoke / Baseline / Stress). Grouped, sortable columns for latency, reliability, throughput and cost, plus insights: latency vs. cost (value frontier, kill zone), cost per 1K requests ranked, and a performance radar.
+- **Leaderboard per service.** Every provider × model, ranked on its latest completed run under a load profile (Smoke / Baseline / Stress). Grouped, sortable columns for latency, reliability, throughput and cost, plus insights: latency vs. cost (value frontier, kill zone), cost per 1K successful requests ranked, and a performance radar.
 
 BlazeMeter, Splunk, the database and the services themselves are **faked** for now: four small HTTP services whose data and canned responses are plain JSON files in [`fake_data/`](fake_data/). The backend only talks to them over HTTP, so switching to the real systems is configuration (see [Going live](#going-live)).
 

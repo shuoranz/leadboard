@@ -95,18 +95,44 @@ def server_perf(events: list[dict], duration_s: float | None, stall_threshold_ms
     }
 
 
-def cost(events: list[dict], prices: dict[str, float | None]) -> dict[str, Any]:
-    """List-price cost per request from logged token counts; cached input billed at the cache rate."""
+#: Rejected before the model processed anything (HTTP 429 / 503 / 400): providers don't bill these.
+UNBILLED_ERRORS = ("rate_limited", "server_error", "refused")
+
+
+def _spend(events: list[dict], prices: dict[str, float | None]) -> float | None:
+    """List-price USD for the billable requests; None without input and output prices.
+
+    Timeouts and dropped streams still consumed tokens, so they're billed like successes."""
     ip, cp, op = prices.get("input_per_million"), prices.get("cached_input_per_million"), prices.get("output_per_million")
-    base = {"input_per_million": ip, "cached_input_per_million": cp, "output_per_million": op}
-    if not events or ip is None or op is None:
-        return {**base, "per_request": None, "per_1k_requests": None}
+    if ip is None or op is None:
+        return None
     total = 0.0
     for e in events:
+        if e.get("status") != "ok" and e.get("error_type") in UNBILLED_ERRORS:
+            continue
         n_in, cached, n_out = (_num(e.get(k)) or 0.0 for k in ("input_tokens", "cached_input_tokens", "output_tokens"))
         total += (n_in - cached) * ip + cached * (cp if cp is not None else ip) + n_out * op
-    per_request = total / len(events) / 1e6
-    return {**base, "per_request": round(per_request, 6), "per_1k_requests": round(per_request * 1000, 4)}
+    return total / 1e6
+
+
+def _ok(events: list[dict]) -> int:
+    return sum(1 for e in events if e.get("status") == "ok")
+
+
+def _per_success(spend: float | None, ok: int) -> dict[str, float | None]:
+    if spend is None or not ok:
+        return {"per_request": None, "per_1k_requests": None}
+    per_request = spend / ok
+    return {"per_request": round(per_request, 6), "per_1k_requests": round(per_request * 1000, 4)}
+
+
+def cost(events: list[dict], prices: dict[str, float | None]) -> dict[str, Any]:
+    """List-price cost per *successful* request from logged token counts; cached input billed at the cache rate.
+
+    Spend on billed requests that failed is spread over the ones that succeeded, so an
+    unreliable offering costs more per useful answer, not less."""
+    base = {k: prices.get(k) for k in ("input_per_million", "cached_input_per_million", "output_per_million")}
+    return {**base, **_per_success(_spend(events, prices), _ok(events))}
 
 
 def blazemeter_view(summary: dict[str, Any], timeline: dict[str, Any] | None) -> dict[str, Any]:
@@ -197,13 +223,9 @@ def build_results(
     if run["routing"]["mode"] == "fixed":
         run_cost = by_offering[0]["cost"] if by_offering else cost([], offerings.get(run["routing"]["offering_id"], {}).get("prices", {}))
     else:
-        # Mixed traffic: the request-weighted average of each model's cost.
-        per = [(b["share"], b["cost"]["per_request"]) for b in by_offering if b["cost"]["per_request"] is not None]
-        pr = sum(sh * c for sh, c in per) / sum(sh for sh, _ in per) if per else None
-        run_cost = {
-            "per_request": round(pr, 6) if pr is not None else None,
-            "per_1k_requests": round(pr * 1000, 4) if pr is not None else None,
-        }
+        # Mixed traffic: total spend over every model, per successful request.
+        priced = [(evs, p) for oid, evs in groups.items() if (p := _spend(evs, offerings.get(oid, {}).get("prices", {}))) is not None]
+        run_cost = _per_success(sum(p for _, p in priced), sum(_ok(evs) for evs, _ in priced)) if priced else _per_success(None, 0)
 
     return {
         "run_id": run["id"],

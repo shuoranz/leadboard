@@ -69,7 +69,7 @@ export function CostRanked({ rows: all }: { rows: LeaderboardRow[] }) {
               >
                 <button
                   type="button"
-                  aria-label={`${displayName(m)}: ${formatCost1k(cost)} per 1K requests`}
+                  aria-label={`${displayName(m)}: ${formatCost1k(cost)} per 1K successful requests`}
                   className="col-span-3 grid grid-cols-subgrid items-center rounded-md py-1.5 text-left focus-visible:outline-2 focus-visible:outline-accent"
                 >
                   <span className="flex min-w-0 items-center gap-2.5 text-body text-ink">

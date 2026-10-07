@@ -104,7 +104,7 @@ export function formatMs(v: number | undefined) {
   return v == null ? EMPTY : `${formatInt(v)} ms`
 }
 
-/** Cost per 1K requests: cents need two decimals, sub-cent amounts three. */
+/** Cost per 1K successful requests: cents need two decimals, sub-cent amounts three. */
 export function formatCost1k(v: number | undefined) {
   if (v == null) return EMPTY
   return usd(v >= 100 ? 0 : v >= 1 ? 2 : 3).format(v)
