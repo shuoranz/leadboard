@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from ..deps import Deps
+from ..deps import Deps, PathId
 from ..runs.leaderboard import build_leaderboard, latest_run_ids
 from ..schemas import Leaderboard
 from .catalog import load_catalog
@@ -9,7 +9,7 @@ router = APIRouter(tags=["leaderboard"])
 
 
 @router.get("/services/{service_id}/leaderboard", response_model=Leaderboard)
-async def leaderboard(service_id: str, deps: Deps, profile: str | None = None):
+async def leaderboard(service_id: PathId, deps: Deps, profile: str | None = None):
     """Offerings ranked on their latest completed run under one load profile (default: the latest run's)."""
     db = deps.db
     service = await db.get("services", service_id)

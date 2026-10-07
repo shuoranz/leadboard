@@ -93,7 +93,7 @@ src/app_benchmark/               the backend (FastAPI)
   schemas.py                     Pydantic contract (mirrored by frontend/src/api/types.ts)
   deps.py                        Container: clients + orchestrator per app
   api/                           services, catalog, runs, leaderboard routers
-  clients/                       db.py, blazemeter.py, splunk.py: thin httpx clients; errors.py: UpstreamError
+  clients/                       db.py, blazemeter.py, splunk.py: thin httpx clients; errors.py: UpstreamError, segment()
   runs/orchestrator.py           per-service queue; queued -> starting -> running -> collecting -> completed|failed|cancelled
   runs/aggregate.py              pure: BlazeMeter summary + Splunk rows -> results (unit-tested)
   runs/leaderboard.py            pure: completed runs -> leaderboard rows; results loaded only for the shown runs
@@ -156,9 +156,10 @@ frontend/
 9. **Rows are offerings.** Identity across providers is `modelKey(r)` (the LLM id). Use `displayName(r)` (name · provider; just the name for the auto row) anywhere rows appear outside the table (selects, tooltips, chart labels), or rows for the same model become indistinguishable. Org color is the model maker's, not the provider's. Elsewhere, name an offering id with `offeringLabel(catalog, id)`.
 10. **The backend never talks to the services under test.** It only drives BlazeMeter and reads Splunk, exactly as it will in production; every external system is a URL + credential in `settings.py`. `src/app_benchmark` must not import `src/benchmark_fakes`.
 11. **Fake data is JSON.** Seed data, latency profiles and response templates live in `fake_data/` and are edited by hand. Fake code fills placeholders and computes numbers; it doesn't hold data.
-12. **Upstream details stay in the logs.**
+12. **Upstream details stay in the logs; ids stay in their segment.**
     - Every client error is an `UpstreamError`: `str(e)` (paths, upstream response text) is logged, and only `e.public` reaches API callers (502 `detail`) and a run's `error`.
     - Failure reasons written for users are `RunFailed`; any other exception shows as a generic internal error.
+    - Ids from requests are checked against `ID_PATTERN` (`Id` in bodies, `PathId` in paths), and clients put ids into URLs only through `segment()` (BlazeMeter ids through `int()`).
 
 ---
 

@@ -3,7 +3,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 
-from ..deps import Deps
+from ..deps import Deps, PathId
 from ..runs.orchestrator import now
 from ..schemas import Run as RunModel
 from ..schemas import RunCreate, RunResults, RunStatus
@@ -106,18 +106,18 @@ async def _run(deps: Deps, run_id: str) -> dict[str, Any]:
 
 
 @router.get("/runs/{run_id}", response_model=RunModel)
-async def get_run(run_id: str, deps: Deps):
+async def get_run(run_id: PathId, deps: Deps):
     return await _run(deps, run_id)
 
 
 @router.post("/runs/{run_id}/cancel", response_model=RunModel)
-async def cancel_run(run_id: str, deps: Deps):
+async def cancel_run(run_id: PathId, deps: Deps):
     """Queued runs are cancelled at once; running ones stop and keep their partial results."""
     return await deps.orchestrator.cancel(await _run(deps, run_id))
 
 
 @router.get("/runs/{run_id}/results", response_model=RunResults)
-async def run_results(run_id: str, deps: Deps):
+async def run_results(run_id: PathId, deps: Deps):
     run = await _run(deps, run_id)
     res = await deps.db.get("run_results", run_id)
     if not res:

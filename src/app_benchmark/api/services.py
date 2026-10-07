@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from ..deps import Deps
+from ..deps import Deps, PathId
 from ..schemas import Service
 
 router = APIRouter(tags=["services"])
@@ -13,7 +13,7 @@ async def services(deps: Deps):
 
 
 @router.get("/services/{service_id}", response_model=Service)
-async def service(service_id: str, deps: Deps):
+async def service(service_id: PathId, deps: Deps):
     s = await deps.db.get("services", service_id)
     if not s:
         raise HTTPException(404, "Unknown service")

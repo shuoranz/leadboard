@@ -62,16 +62,16 @@ class BlazeMeterClient:
         )
 
     async def start(self, test_id: int) -> dict[str, Any]:
-        return await self._call("POST", f"/tests/{test_id}/start")
+        return await self._call("POST", f"/tests/{int(test_id)}/start")
 
     async def status(self, master_id: int) -> dict[str, Any]:
-        return await self._call("GET", f"/masters/{master_id}/status")
+        return await self._call("GET", f"/masters/{int(master_id)}/status")
 
     async def stop(self, master_id: int) -> Any:
-        return await self._call("POST", f"/masters/{master_id}/stop")
+        return await self._call("POST", f"/masters/{int(master_id)}/stop")
 
     async def summary(self, master_id: int) -> dict[str, Any]:
-        return (await self._call("GET", f"/masters/{master_id}/reports/default/summary"))["summary"][0]
+        return (await self._call("GET", f"/masters/{int(master_id)}/reports/default/summary"))["summary"][0]
 
     async def timeline(self, master_id: int) -> dict[str, Any]:
-        return await self._call("GET", f"/masters/{master_id}/reports/timeline/kpis")
+        return await self._call("GET", f"/masters/{int(master_id)}/reports/timeline/kpis")

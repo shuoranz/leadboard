@@ -4,7 +4,7 @@ from typing import Any
 
 import httpx
 
-from .errors import UpstreamError
+from .errors import UpstreamError, segment
 
 
 class DbError(UpstreamError):
@@ -29,6 +29,10 @@ class DbClient:
             raise DbError(f"DB {method} {path} -> {res.status_code}: {res.text[:200]}", status=res.status_code)
         return res.json()
 
+    @staticmethod
+    def _doc(collection: str, doc_id: str) -> str:
+        return f"/collections/{segment(collection)}/docs/{segment(doc_id)}"
+
     async def query(
         self,
         collection: str,
@@ -38,24 +42,24 @@ class DbClient:
         offset: int = 0,
     ) -> list[dict[str, Any]]:
         body = {"filter": filter or {}, "sort": sort or [], "limit": limit, "offset": offset}
-        return (await self._call("POST", f"/collections/{collection}/query", json=body))["items"]
+        return (await self._call("POST", f"/collections/{segment(collection)}/query", json=body))["items"]
 
     async def all(self, collection: str) -> list[dict[str, Any]]:
-        return (await self._call("GET", f"/collections/{collection}/docs"))["items"]
+        return (await self._call("GET", f"/collections/{segment(collection)}/docs"))["items"]
 
     async def get(self, collection: str, doc_id: str) -> dict[str, Any] | None:
         try:
-            return await self._call("GET", f"/collections/{collection}/docs/{doc_id}")
+            return await self._call("GET", self._doc(collection, doc_id))
         except DbError as e:
             if e.status == 404:
                 return None
             raise
 
     async def create(self, collection: str, doc: dict[str, Any]) -> dict[str, Any]:
-        return await self._call("POST", f"/collections/{collection}/docs", json=doc)
+        return await self._call("POST", f"/collections/{segment(collection)}/docs", json=doc)
 
     async def put(self, collection: str, doc_id: str, doc: dict[str, Any]) -> dict[str, Any]:
-        return await self._call("PUT", f"/collections/{collection}/docs/{doc_id}", json=doc)
+        return await self._call("PUT", self._doc(collection, doc_id), json=doc)
 
     async def patch(self, collection: str, doc_id: str, patch: dict[str, Any]) -> dict[str, Any]:
-        return await self._call("PATCH", f"/collections/{collection}/docs/{doc_id}", json=patch)
+        return await self._call("PATCH", self._doc(collection, doc_id), json=patch)

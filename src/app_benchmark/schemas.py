@@ -4,13 +4,17 @@ Optional fields serialize as null. Rates are 0–1 fractions, times are millisec
 USD per 1M tokens, timestamps are ISO-8601 UTC.
 """
 
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 RunStatus = Literal["queued", "starting", "running", "collecting", "completed", "failed", "cancelled"]
 ACTIVE_STATUSES = ("queued", "starting", "running", "collecting")
 TERMINAL_STATUSES = ("completed", "failed", "cancelled")
+
+#: Every id a request may name (services, runs, offerings, load profiles).
+ID_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+Id = Annotated[str, Field(pattern=ID_PATTERN)]
 
 
 class Model(BaseModel):
@@ -103,9 +107,9 @@ class LoadProfile(Model):
 class RoutingIn(Model):
     mode: Literal["fixed", "auto"]
     #: fixed: one run is created per offering (a batch).
-    offering_ids: list[str] = Field(default_factory=list, max_length=20)
+    offering_ids: list[Id] = Field(default_factory=list, max_length=20)
     #: auto: the offerings to route between; default every usable offering of the service.
-    pool: list[str] | None = None
+    pool: list[Id] | None = None
 
 
 class LoadIn(Model):
@@ -122,10 +126,10 @@ class LoadIn(Model):
 
 
 class RunCreate(Model):
-    service_id: str
+    service_id: Id
     routing: RoutingIn
     #: A preset; or omit it and give `load` for a custom profile.
-    load_profile_id: str | None = None
+    load_profile_id: Id | None = None
     load: LoadIn | None = None
     label: str | None = Field(default=None, max_length=80)
 

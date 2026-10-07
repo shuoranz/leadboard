@@ -1,4 +1,6 @@
-"""Errors from upstream systems."""
+"""Errors from upstream systems, and how ids go into their URLs."""
+
+from urllib.parse import quote
 
 
 class UpstreamError(RuntimeError):
@@ -14,3 +16,11 @@ class UpstreamError(RuntimeError):
         super().__init__(message)
         self.status = status
         self.public = public or (f"{self.system} returned HTTP {status}" if status else f"{self.system} is unreachable")
+
+
+def segment(value: object) -> str:
+    """One URL path segment: escaped, so an id can't add path segments or a query string."""
+    s = str(value)
+    if s in ("", ".", ".."):
+        raise ValueError(f"Not a valid id: {s!r}")
+    return quote(s, safe="")

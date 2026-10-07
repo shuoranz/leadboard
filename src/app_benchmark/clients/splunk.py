@@ -6,7 +6,7 @@ from typing import Any
 
 import httpx
 
-from .errors import UpstreamError
+from .errors import UpstreamError, segment
 
 
 class SplunkError(UpstreamError):
@@ -38,7 +38,7 @@ class SplunkClient:
     async def wait(self, sid: str, poll_s: float, timeout_s: float) -> int:
         deadline = time.monotonic() + timeout_s
         while True:
-            body = await self._call("GET", f"/services/search/jobs/{sid}", f"job {sid} status", params={"output_mode": "json"})
+            body = await self._call("GET", f"/services/search/jobs/{segment(sid)}", f"job {sid} status", params={"output_mode": "json"})
             content = body["entry"][0]["content"]
             if content["dispatchState"] == "FAILED":
                 raise SplunkError(f"Splunk job {sid} failed", "Splunk search job failed")
@@ -52,7 +52,7 @@ class SplunkClient:
         rows: list[dict[str, str]] = []
         while True:
             params = {"output_mode": "json", "count": page, "offset": len(rows)}
-            path = f"/services/search/jobs/{sid}/results"
+            path = f"/services/search/jobs/{segment(sid)}/results"
             batch = (await self._call("GET", path, f"results for {sid}", params=params))["results"]
             rows.extend(batch)
             if len(batch) < page:

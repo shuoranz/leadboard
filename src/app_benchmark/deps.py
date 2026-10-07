@@ -4,12 +4,13 @@ from dataclasses import dataclass
 from typing import Annotated
 
 import httpx
-from fastapi import Depends, Request
+from fastapi import Depends, Path, Request
 
 from .clients.blazemeter import BlazeMeterClient
 from .clients.db import DbClient
 from .clients.splunk import SplunkClient
 from .runs.orchestrator import Orchestrator
+from .schemas import ID_PATTERN
 from .settings import Settings
 
 
@@ -40,3 +41,6 @@ def _container(request: Request) -> Container:
 
 
 Deps = Annotated[Container, Depends(_container)]
+
+#: An id in the URL path. Checked before it reaches a route, so it can't reshape upstream URLs.
+PathId = Annotated[str, Path(pattern=ID_PATTERN)]
