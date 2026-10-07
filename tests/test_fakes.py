@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import os
 
 from benchmark_fakes.splunk.app import parse_search
 
@@ -68,3 +69,47 @@ async def test_target_service_routes_and_rejects_unknown(fake_clients):
         seen.add(r.json()["model"]["offering_id"])
     assert len(seen) > 2  # random per request, within the service's allowed offerings
     assert "stratus--aurora-4" not in seen
+
+
+async def test_db_sorts_numbers_as_numbers(fake_clients):
+    db = fake_clients.db
+    for doc_id, n in (("a", 10), ("b", 9), ("c", None), ("d", "x"), ("e", 2.5)):
+        await db.post("/collections/numbers/docs", json={"id": doc_id, "n": n})
+    asc = (await db.post("/collections/numbers/query", json={"sort": [["n", 1]]})).json()["items"]
+    assert [d["id"] for d in asc] == ["c", "e", "b", "a", "d"]
+    desc = (await db.post("/collections/numbers/query", json={"sort": [["n", -1]]})).json()["items"]
+    assert [d["id"] for d in desc] == ["d", "a", "b", "e", "c"]
+
+
+def test_target_service_rereads_config_only_when_a_file_changes(fake_data):
+    from benchmark_fakes.target_service import app as target_mod
+
+    first = target_mod._config()
+    assert target_mod._config() is first
+    profiles = fake_data / "profiles" / "offering_profiles.json"
+    data = json.loads(profiles.read_text())
+    data["offerings"]["stratus--aurora-4"]["ttft_base_ms"] = 1
+    profiles.write_text(json.dumps(data))
+    os.utime(profiles, ns=(profiles.stat().st_atime_ns, profiles.stat().st_mtime_ns + 1_000_000))
+    assert target_mod._config()["profiles"]["offerings"]["stratus--aurora-4"]["ttft_base_ms"] == 1
+
+
+def test_target_service_keeps_only_recent_run_rngs(fake_data):
+    from benchmark_fakes.target_service import app as target_mod
+
+    first = target_mod._rng("r0")
+    assert target_mod._rng("r0") is first  # one reproducible stream per run
+    for i in range(1, target_mod.MAX_RUN_RNGS + 10):
+        target_mod._rng(f"r{i}")
+    assert len(target_mod._rngs) == target_mod.MAX_RUN_RNGS and "r0" not in target_mod._rngs
+
+
+async def test_splunk_search_jobs_expire_after_their_last_access(fake_clients, monkeypatch):
+    sp = fake_clients.splunk
+    monkeypatch.setenv("SPLUNK_JOB_TTL_S", "0.1")
+    sid = (await sp.post("/services/search/jobs", data={"search": "search run_id=r1"})).json()["sid"]
+    for _ in range(3):  # paging through results keeps the job alive past its TTL from creation
+        await asyncio.sleep(0.06)
+        assert (await sp.get(f"/services/search/jobs/{sid}")).status_code == 200
+    await asyncio.sleep(0.15)
+    assert (await sp.get(f"/services/search/jobs/{sid}")).status_code == 404

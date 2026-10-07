@@ -190,7 +190,7 @@ POST /api/runs                             <- { service_id, routing: {mode:"fixe
 GET  /api/runs?service_id&status&limit     -> Run[] newest first
 GET  /api/runs/{id}                        -> Run { status, progress, routing, load, blazemeter{test_id, master_id, report_url},
                                                     splunk{sid, search, search_url, events}, headline{requests, error_rate, e2e_p95_ms, ...} }
-POST /api/runs/{id}/cancel                 -> Run (queued: cancelled at once; running: stopped, partial results kept)
+POST /api/runs/{id}/cancel                 -> Run (queued/starting: never started; running: stopped, partial results kept; collecting: no-op)
 GET  /api/runs/{id}/results                -> { blazemeter{summary, interval_s, timeline[]}, splunk{events, overall: Perf, by_offering[]},
                                                 perf: Perf (merged), cost }
 GET  /api/services/{id}/leaderboard?profile -> { service, profiles[+runs], profile, rows: LeaderboardRow[], conditions }

@@ -22,11 +22,13 @@ A run goes **queued → starting → running → collecting → completed** (or 
 
 1. The API saves the run through the DB service.
 2. It creates and starts a BlazeMeter test. The test carries `X-Run-Id` and the routing headers (`X-Routing`, `X-Offering-Id`, `X-Model-Pool`).
-3. It polls BlazeMeter until the test ends.
-4. It pulls BlazeMeter's summary and timeline, and searches Splunk for `run_id=<id>`.
-5. It aggregates both and saves the results.
+3. It polls BlazeMeter until the test ends. Brief BlazeMeter errors are retried; a test still running long past its planned duration fails the run.
+4. It pulls BlazeMeter's summary and timeline, and searches Splunk for `run_id=<id>`. Splunk indexes with a lag, so it waits a moment first and searches again (up to 3 times) while fewer than 98% of BlazeMeter's requests have shown up.
+5. It aggregates both and saves the results. A test that sent no requests fails instead of completing.
 
-Each service has its own queue. Unfinished runs resume after a restart.
+Each service has its own queue. Unfinished runs resume after a restart. A run that fails while its test is still generating load stops that test first, so the next run in the queue never overlaps it.
+
+Cancel works until the load test ends. A run cancelled before its test exists is never started, and a running one is stopped and keeps its partial results. Once the run is collecting, the test is over and its results are kept, so cancel is no longer offered; a cancel that arrives just as the test ends doesn't change that. The cancel is saved before BlazeMeter is asked to stop, and a failed stop is retried, so it's never lost.
 
 ## Quick start
 
@@ -86,6 +88,7 @@ Point the backend at the real systems with `BENCH_*` environment variables (see 
 - `BENCH_SPLUNK_URL`, `BENCH_SPLUNK_WEB_URL`, `BENCH_SPLUNK_TOKEN`, `BENCH_SPLUNK_INDEX`
 - `BENCH_DB_URL`, `BENCH_DB_API_KEY`
 - `BENCH_TARGET_URL_TEMPLATE`: where BlazeMeter sends traffic, e.g. `https://{service_id}.internal/{endpoint_path}`
+- Tuning: `BENCH_POLL_RETRIES`, `BENCH_WAIT_GRACE_S` (how long past its duration a test may run), `BENCH_SPLUNK_SETTLE_S`, `BENCH_SPLUNK_ATTEMPTS`, `BENCH_SPLUNK_MIN_COVERAGE`
 
 For the merge to work, the services must:
 

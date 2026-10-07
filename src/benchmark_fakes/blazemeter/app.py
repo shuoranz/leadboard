@@ -328,7 +328,9 @@ async def start_test(test_id: int):
         headers={str(k): str(v) for k, v in (cfg.get("headers") or {}).items()},
     )
     _masters[master.id] = master
-    _tasks[master.id] = asyncio.get_running_loop().create_task(_run(master))
+    task = asyncio.get_running_loop().create_task(_run(master))
+    _tasks[master.id] = task
+    task.add_done_callback(lambda _, mid=master.id: _tasks.pop(mid, None))
     _save_state()
     return render(
         "blazemeter",

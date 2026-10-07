@@ -24,8 +24,17 @@ class Settings(BaseSettings):
     target_url_template: str = "http://127.0.0.1:8104/svc/{service_id}/invoke"
 
     poll_interval_s: float = 2.0
+    #: Consecutive failed BlazeMeter status polls tolerated before a run fails.
+    poll_retries: int = 5
+    #: How long past a test's nominal duration to wait for it to end before giving up.
+    wait_grace_s: float = 900.0
     splunk_poll_interval_s: float = 0.5
     splunk_timeout_s: float = 120.0
+    #: Splunk indexes with a lag: wait this long after the test ends before searching, and between
+    #: re-searches while fewer than ``splunk_min_coverage`` of BlazeMeter's requests have shown up.
+    splunk_settle_s: float = 2.0
+    splunk_attempts: int = 3
+    splunk_min_coverage: float = 0.98
 
     # Reported with every run as its test conditions.
     client_region: str = "us-east (BlazeMeter cloud)"

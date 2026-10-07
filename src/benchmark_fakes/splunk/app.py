@@ -44,6 +44,17 @@ def _job_delay() -> float:
     return float(os.environ.get("SPLUNK_JOB_DELAY_S", "0.6"))
 
 
+def _job_ttl() -> float:
+    """Like Splunk's default dispatch TTL: a job expires 10 minutes after it was last accessed."""
+    return float(os.environ.get("SPLUNK_JOB_TTL_S", "600"))
+
+
+def _expire_jobs() -> None:
+    cutoff = time.monotonic() - _job_ttl()
+    for sid in [sid for sid, job in _jobs.items() if job["accessed"] < cutoff]:
+        del _jobs[sid]
+
+
 def _error(status: int, message: str) -> JSONResponse:
     return JSONResponse(render("splunk", "error", message=message), status_code=status)
 
@@ -133,15 +144,18 @@ async def create_job(request: Request):
         filters = parse_search(search)
     except ValueError as e:
         return _error(400, str(e))
+    _expire_jobs()
     sid = f"{time.time():.3f}_{uuid.uuid4().hex[:8]}"
-    _jobs[sid] = {"sid": sid, "search": search, "filters": filters, "created": time.monotonic(), "rows": None}
+    _jobs[sid] = {"sid": sid, "search": search, "filters": filters, "created": time.monotonic(), "accessed": time.monotonic(), "rows": None}
     return render("splunk", "search_job", sid=sid)
 
 
 def _job(sid: str) -> dict[str, Any]:
+    _expire_jobs()
     job = _jobs.get(sid)
     if not job:
         raise HTTPException(404, f"Unknown sid {sid}")
+    job["accessed"] = time.monotonic()
     elapsed = time.monotonic() - job["created"]
     if elapsed >= _job_delay() and job["rows"] is None:
         job["rows"] = search_events(job["filters"])

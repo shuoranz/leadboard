@@ -85,8 +85,17 @@ def _matches(doc: dict, flt: dict[str, Any]) -> bool:
 
 
 def _sort_key(field: str):
-    # None sorts first ascending; values of mixed types compare as strings.
-    return lambda d: (d.get(field) is not None, str(d.get(field)) if d.get(field) is not None else "")
+    """None sorts first ascending; numbers compare as numbers, then everything else as strings."""
+
+    def key(d: dict) -> tuple:
+        v = d.get(field)
+        if v is None:
+            return (0, 0, "")
+        if isinstance(v, int | float) and not isinstance(v, bool):
+            return (1, 0, v)
+        return (1, 1, str(v))
+
+    return key
 
 
 class Query(BaseModel):

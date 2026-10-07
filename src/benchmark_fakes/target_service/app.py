@@ -34,7 +34,10 @@ from ..common.paths import data_dir
 
 app = FastAPI(title="Fake target services", version="1.0")
 
+#: One RNG per run id, most recently used last; old runs are dropped.
 _rngs: dict[str, random.Random] = {}
+MAX_RUN_RNGS = 64
+_config_cache: tuple[tuple, dict[str, Any]] | None = None
 _buffer: list[dict[str, Any]] = []
 _last_flush = 0.0
 _flusher: asyncio.Task | None = None
@@ -49,13 +52,34 @@ def _flush_interval() -> float:
 
 
 def _config() -> dict[str, Any]:
+    """The JSON the service runs on, re-read only when a file changes (so edits still apply live)."""
+    global _config_cache
     d = data_dir()
-    return {
-        "offerings": {o["id"]: o for o in read_json(d / "seed" / "offerings.json", [])},
-        "services": {s["id"]: s for s in read_json(d / "seed" / "services.json", [])},
-        "profiles": read_json(d / "profiles" / "offering_profiles.json", {}),
-        "traffic": read_json(d / "profiles" / "service_profiles.json", {}).get("services", {}),
+    files = {
+        "offerings": d / "seed" / "offerings.json",
+        "services": d / "seed" / "services.json",
+        "profiles": d / "profiles" / "offering_profiles.json",
+        "traffic": d / "profiles" / "service_profiles.json",
     }
+    stamp = tuple((str(f), f.stat().st_mtime_ns if f.exists() else None) for f in files.values())
+    if _config_cache is None or _config_cache[0] != stamp:
+        cfg = {
+            "offerings": {o["id"]: o for o in read_json(files["offerings"], [])},
+            "services": {s["id"]: s for s in read_json(files["services"], [])},
+            "profiles": read_json(files["profiles"], {}),
+            "traffic": read_json(files["traffic"], {}).get("services", {}),
+        }
+        _config_cache = (stamp, cfg)
+    return _config_cache[1]
+
+
+def _rng(run_id: str) -> random.Random:
+    """A run's RNG (seeded by its id, so runs are reproducible), keeping only the latest few runs'."""
+    rng = _rngs.pop(run_id, None) or random.Random(run_id)
+    _rngs[run_id] = rng
+    while len(_rngs) > MAX_RUN_RNGS:
+        del _rngs[next(iter(_rngs))]
+    return rng
 
 
 def _pool(cfg: dict, service: dict) -> list[str]:
@@ -102,7 +126,7 @@ async def invoke(
     if not service:
         return JSONResponse({"error": f"unknown service {service_id}"}, status_code=404)
     run_id = x_run_id or "adhoc"
-    rng = _rngs.setdefault(run_id, random.Random(run_id))
+    rng = _rng(run_id)
 
     if x_routing == "auto":
         pool = [p for p in (x_model_pool or "").split(",") if p] or _pool(cfg, service)

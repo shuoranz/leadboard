@@ -52,7 +52,7 @@ async def main() -> None:
     http.override("http://127.0.0.1:8103", asgi(splunk))
     http.override("http://127.0.0.1:8104", asgi(target))
     app = create_app(
-        Settings(poll_interval_s=0.01, splunk_poll_interval_s=0.01, serve_static=False, _env_file=None),
+        Settings(poll_interval_s=0.01, splunk_poll_interval_s=0.01, splunk_settle_s=0, serve_static=False, _env_file=None),
         transports={"db": asgi(db), "blazemeter": asgi(bm), "splunk": asgi(splunk)},
     )
     async with app.router.lifespan_context(app), httpx.AsyncClient(transport=asgi(app), base_url="http://api") as api:
