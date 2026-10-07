@@ -56,9 +56,10 @@ async def test_malformed_ids_in_the_path_are_rejected(system, path):
         ({"service_id": "ticket-triage?x"}, ["service_id"]),
         ({"routing": {"mode": "fixed", "offering_ids": ["../x"]}}, ["routing", "offering_ids", 0]),
         ({"load_profile_id": "smoke/../x"}, ["load_profile_id"]),
+        ({"routing": {"mode": "auto", "pool": [f"o{i}" for i in range(101)]}}, ["routing", "pool"]),
     ],
 )
-async def test_malformed_ids_in_a_new_run_are_rejected(system, change, field):
+async def test_malformed_ids_and_oversized_pools_in_a_new_run_are_rejected(system, change, field):
     body = {"service_id": "ticket-triage", "routing": {"mode": "auto"}, "load_profile_id": "smoke", **change}
     res = await system.client.post("/api/runs", json=body)
     assert res.status_code == 422 and res.json()["detail"][0]["loc"] == ["body", *field], res.text

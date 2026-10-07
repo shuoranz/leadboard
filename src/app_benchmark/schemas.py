@@ -109,7 +109,7 @@ class RoutingIn(Model):
     #: fixed: one run is created per offering (a batch).
     offering_ids: list[Id] = Field(default_factory=list, max_length=20)
     #: auto: the offerings to route between; default every usable offering of the service.
-    pool: list[Id] | None = None
+    pool: list[Id] | None = Field(default=None, max_length=100)
 
 
 class LoadIn(Model):
