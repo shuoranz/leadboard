@@ -4,6 +4,19 @@ You are working on this project, copying the frontend into another one, or swapp
 
 The source of truth is the code (`frontend/`, `src/`, `fake_data/`). When this file and the code disagree, the code wins. Update this file if you change a rule.
 
+The detailed specification is in `doc/`. Together with this file, it is enough to rebuild the app without the code:
+
+| File | Covers |
+|---|---|
+| [doc/contract.md](doc/contract.md) | every endpoint, request and response type, validation rule, stored document and Splunk event field |
+| [doc/backend.md](doc/backend.md) | the clients, the orchestrator step by step, settings and defaults, the dev runner and scripts |
+| [doc/metrics.md](doc/metrics.md) | how every number is computed (percentiles, server view, merge, cost) and how leaderboard rows are picked |
+| [doc/fakes.md](doc/fakes.md) | the four fake systems' APIs and behaviour, and the latency and error model |
+| [doc/seed-data.md](doc/seed-data.md) | the fictional catalog, services, load profiles, latency profiles and how the seed run history is generated |
+| [doc/frontend-ui.md](doc/frontend-ui.md) | the frontend setup, design tokens, UI kit, data layer, URL state, and every screen with its copy and behaviour |
+| [doc/tests.md](doc/tests.md) | every test case, as a checklist, with the expected counts |
+| [doc/TODO.md](doc/TODO.md) | planned improvements (not built yet) |
+
 ---
 
 ## 1. What the app is
@@ -46,17 +59,19 @@ Then work through the **adaptation checklist in §8**, run `npm install`, and ru
 
 ### B. Rebuild from scratch
 
-Build in this order, verifying each layer before starting the next:
+Build in this order. Don't start a step until the tests listed for the one before it (in [doc/tests.md](doc/tests.md)) pass.
 
-1. Scaffold: Vite + React 18 + TS (project references: `tsconfig.app.json` for `src`, `tsconfig.node.json` for config/mock/e2e), Tailwind v4 through `@tailwindcss/vite`.
-2. `src/api/types.ts` (the zod schemas) and `src/api/client.ts`.
-3. The mock API (`mock/world.ts`, `mock/plugin.ts`), wired into dev and preview.
-4. `src/shared/` (board index + context, URL state, lib, UI kit).
-5. `src/features/leaderboard/`, `insights/`, `runs/`, `catalog/`.
-6. `src/app/App.tsx` and `src/main.tsx`.
-7. Tests, e2e, lint, CI.
+1. **Data.** Write `fake_data/` from [doc/seed-data.md](doc/seed-data.md): the catalog, services, load profiles, latency and traffic profiles, and the BlazeMeter and Splunk response templates in [doc/fakes.md](doc/fakes.md).
+2. **Fakes.** Write `src/benchmark_fakes/`: `common/` first, then the DB, Splunk, target-service and BlazeMeter apps ([doc/fakes.md](doc/fakes.md)). Check: `tests/test_fakes.py`.
+3. **Backend core.** Write `schemas.py` ([doc/contract.md](doc/contract.md)), then the pure `runs/aggregate.py` and `runs/leaderboard.py` ([doc/metrics.md](doc/metrics.md)). Check: `test_aggregate.py`, `test_leaderboard.py`.
+4. **Backend service.** Write `settings.py`, `clients/`, `runs/orchestrator.py`, `api/`, `deps.py` and `main.py` ([doc/backend.md](doc/backend.md)). Check: `test_orchestrator.py`, `test_e2e.py`, `test_leaderboard_api.py`, `test_security.py`.
+5. **Scripts.** Write `scripts/generate_seed_runs.py` and run it to produce the seed history, then `scripts/dev.py`, `scripts/snapshot_fixtures.py` and the Makefile. Run `make snapshot-fixtures`.
+6. **Frontend scaffold.** Vite + React 18 + TS project references + Tailwind v4, `index.css` tokens and the UI kit ([doc/frontend-ui.md](doc/frontend-ui.md) §1–4).
+7. **Frontend data.** Write `src/api/types.ts` and `client.ts`, `shared/state/searchParams.ts`, the board and catalog indexes, and the mock API (§5–7, §9). Check: `types.test.ts`, `client.test.tsx`, `searchParams.test.ts`, `boardIndex.test.ts`, `world.test.ts`.
+8. **Screens.** The shell, then the leaderboard, insights, runs and catalog (§8). Check: the remaining Vitest files, then the 4 Playwright tests.
+9. **CI and docs:** `.github/workflows/` (§8 checklist), README.
 
-Use the existing files as the reference implementation for every step.
+Exact parity with the current numbers needs the same algorithms *and* the same order of random calls (see [doc/fakes.md](doc/fakes.md) §5 and [doc/seed-data.md](doc/seed-data.md) §5). Otherwise the structure and behaviour match, but the seeded numbers differ.
 
 ---
 
@@ -111,6 +126,7 @@ fake_data/                       ALL fake data, as JSON
   blazemeter/, splunk/           response templates ({{placeholder}} leaves)
   db/, blazemeter/state/, splunk/events/   live state (git-ignored; `make reset-data` clears it)
 tests/                           pytest: aggregate, leaderboard, each fake, end-to-end through all fakes in-process
+doc/                             the detailed specification (see the table at the top) and the to-do list
 frontend/
   mock/world.ts, plugin.ts       Vite mock: serves fake_data/seed + fixtures/leaderboards.json; simulates new runs
   mock/world.test.ts             the mock must satisfy the contract
@@ -182,7 +198,7 @@ frontend/
 
 ---
 
-## 7. API contract (summary; the full definition is `src/app_benchmark/schemas.py` = `frontend/src/api/types.ts`)
+## 7. API contract (summary; the full contract is [doc/contract.md](doc/contract.md), and the code is `src/app_benchmark/schemas.py` = `frontend/src/api/types.ts`)
 
 ```
 GET  /api/services                         -> Service[]  { id, name, description?, endpoint_path, allowed_offering_ids? } (first = default)
@@ -240,12 +256,12 @@ GET  /api/services/{id}/leaderboard?profile -> { service, profiles[+runs], profi
 ## 10. Verification (all must pass)
 
 ```sh
-make lint test          # ruff + pytest (aggregation, leaderboard, each fake, end-to-end through all fakes)
+make lint test          # ruff + pytest (aggregation, leaderboard, each fake, end-to-end through all fakes; 57 tests at time of writing)
 cd frontend
 npm ci
 npm run typecheck       # no output = pass
 npm run lint            # 0 problems
-npm test                # vitest: logic, schema + backend contract samples, URL state, components, mock (96 tests at time of writing)
+npm test                # vitest: logic, schema + backend contract samples, URL state, components, mock (108 tests at time of writing)
 npm run build           # writes OUT_DIR; no source maps
 npm run test:e2e        # builds, serves via `vite preview` + mock, 4 Playwright smoke tests
 npm audit               # 0 vulnerabilities expected
@@ -291,7 +307,7 @@ Then check by hand with `make dev` (the real stack, http://localhost:5176):
 - **In-process tests don't run lifespans:** `httpx.ASGITransport` skips startup hooks, so the fakes initialise lazily (the DB seeds on first access) and fakes that call fakes go through `benchmark_fakes.common.http.client()`, which tests point at in-process transports with `override()`.
 - **Splunk returns strings:** every result value is a string (blank for null). `aggregate.py` parses with `_num`; a blank TTFT is skipped, not counted as 0.
 - **Client overhead is a difference of percentiles** (BlazeMeter p95 − Splunk p95, all requests on both sides), so p95 can come out below p50. Comparing against successful requests only made it collapse to 0 when fast 429s were common.
-- **Bundle size:** about 114 KB gzipped for the main chunk; Radix is the largest addition. Insights is lazy-loaded, but it shares Radix with the table, so it only splits off about 6 KB.
+- **Bundle size:** about 128 KB gzipped for the main chunk; Radix is the largest addition. Insights is lazy-loaded, but it shares Radix with the table, so it only splits off about 6 KB.
 
 ---
 
