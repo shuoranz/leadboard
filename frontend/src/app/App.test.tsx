@@ -108,6 +108,21 @@ describe('App', () => {
     await waitFor(() => expect(alert).toHaveTextContent('rows.0.perf'))
   })
 
+  it('runs and the catalog stay usable while the leaderboard fails to load', async () => {
+    stub({ '/services/summ/leaderboard': () => [502, { detail: 'DB service unreachable' }] })
+    renderWithProviders(<App />, { url: '/?service=summ&tab=runs' })
+    // The page comes from the services list, not the leaderboard.
+    expect(await screen.findByRole('heading', { level: 1, name: 'Summarize API' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'r_1' })).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('link', { name: 'Models catalog' }))
+    expect(await screen.findByRole('table', { name: 'Catalog' })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('link', { name: 'Leaderboard' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('DB service unreachable')
+  })
+
   it('says so when the URL names an unknown service', async () => {
     stub()
     renderWithProviders(<App />, { url: '/?service=ghost' })

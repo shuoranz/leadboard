@@ -1,10 +1,11 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useEffect, type MouseEvent } from 'react'
 import { useRuns, useServiceLeaderboard, useServices } from '../api/client'
 import { CatalogSection } from '../features/catalog/CatalogSection'
 import { LeaderboardSection } from '../features/leaderboard/LeaderboardSection'
 import { RunsSection } from '../features/runs/RunsSection'
 import { BoardProvider } from '../shared/board/BoardContext'
-import type { BoardIndex } from '../shared/board/boardIndex'
+import type { Service } from '../api/types'
 import { cn } from '../shared/lib/cn'
 import { formatDate } from '../shared/lib/format'
 import { searchHref, updateSearch, useSearch, type Tab } from '../shared/state/searchParams'
@@ -18,6 +19,7 @@ const InsightsSection = lazy(() => import('../features/insights/InsightsSection'
 const selectService = (id: string) => updateSearch({ service: id }, { push: true, reset: true })
 
 export default function App() {
+  const queryClient = useQueryClient()
   const services = useServices()
   const search = useSearch()
   const service = search.service ? services.data?.find((s) => s.id === search.service) : services.data?.[0]
@@ -64,25 +66,21 @@ export default function App() {
             Unknown service <code className="font-mono">{search.service}</code>.
           </p>
         )}
-        {board.isPending && service && <LoadingState />}
-        {board.isError && <ErrorPanel message="Couldn't load this service's leaderboard." detail={board.error.message} onRetry={() => board.refetch()} />}
-        {board.data && (
+        {service && (
           // Keyed by service so local filters and selections start fresh on switch.
           <ErrorBoundary
-            key={board.data.service.id}
+            key={service.id}
             fallback={(error, reset) => (
               <ErrorPanel
                 message="This page couldn't be displayed."
                 detail={error.message}
                 actionLabel="Reload data"
                 // Re-rendering the same data would fail the same way, so fetch fresh data first.
-                onRetry={() => board.refetch().then(reset)}
+                onRetry={() => queryClient.refetchQueries().then(reset)}
               />
             )}
           >
-            <BoardProvider value={board.data}>
-              <ServicePage board={board.data} tab={tab} />
-            </BoardProvider>
+            <ServicePage service={service} board={board} tab={tab} />
           </ErrorBoundary>
         )}
       </main>
@@ -132,9 +130,15 @@ function SectionTabs({ tab }: { tab: Tab }) {
   )
 }
 
-function ServicePage({ board, tab }: { board: BoardIndex; tab: Tab }) {
-  const updated = formatDate(board.updatedAt)
-  const s = board.service
+type BoardQuery = ReturnType<typeof useServiceLeaderboard>
+
+/**
+ * One service's page. Only the leaderboard tab needs the leaderboard: Runs and
+ * Catalog work from the service alone, so you can still see and cancel runs
+ * while the leaderboard fails to load.
+ */
+function ServicePage({ service: s, board, tab }: { service: Service; board: BoardQuery; tab: Tab }) {
+  const updated = formatDate(board.data?.updatedAt)
   return (
     <>
       <div className="mb-10">
@@ -146,30 +150,30 @@ function ServicePage({ board, tab }: { board: BoardIndex; tab: Tab }) {
           {updated && ` · last run ${updated}`}
         </p>
       </div>
-      {tab === 'leaderboard' && (
-        <>
-          <LeaderboardSection />
-          <div className="mt-20">
-            <Suspense fallback={<div aria-busy="true" aria-label="Loading insights" className="h-96 animate-pulse rounded-2xl bg-line/70" />}>
-              <InsightsSection />
-            </Suspense>
-          </div>
-        </>
-      )}
+      {tab === 'leaderboard' && <LeaderboardTab board={board} />}
       {tab === 'runs' && <RunsSection service={s} />}
       {tab === 'catalog' && <CatalogSection service={s} />}
     </>
   )
 }
 
-function LoadingState() {
+function LeaderboardTab({ board }: { board: BoardQuery }) {
+  if (board.isError) return <ErrorPanel message="Couldn't load this service's leaderboard." detail={board.error.message} onRetry={() => board.refetch()} />
+  if (!board.data) return <LoadingState />
   return (
-    <div aria-busy="true" aria-label="Loading leaderboard" className="animate-pulse space-y-4">
-      <div className="h-10 w-80 rounded-lg bg-line" />
-      <div className="h-5 w-[32rem] max-w-full rounded bg-line" />
-      <div className="mt-10 h-96 rounded-2xl bg-line/70" />
-    </div>
+    <BoardProvider value={board.data}>
+      <LeaderboardSection />
+      <div className="mt-20">
+        <Suspense fallback={<div aria-busy="true" aria-label="Loading insights" className="h-96 animate-pulse rounded-2xl bg-line/70" />}>
+          <InsightsSection />
+        </Suspense>
+      </div>
+    </BoardProvider>
   )
+}
+
+function LoadingState() {
+  return <div aria-busy="true" aria-label="Loading leaderboard" className="h-96 animate-pulse rounded-2xl bg-line/70" />
 }
 
 function ErrorPanel({ message, detail, onRetry, actionLabel = 'Retry' }: { message: string; detail: string; onRetry: () => void; actionLabel?: string }) {
