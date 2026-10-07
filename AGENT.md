@@ -160,6 +160,7 @@ frontend/
     - Every client error is an `UpstreamError`: `str(e)` (paths, upstream response text) is logged, and only `e.public` reaches API callers (502 `detail`) and a run's `error`.
     - Failure reasons written for users are `RunFailed`; any other exception shows as a generic internal error.
     - Ids from requests are checked against `ID_PATTERN` (`Id` in bodies, `PathId` in paths), and clients put ids into URLs only through `segment()` (BlazeMeter ids through `int()`).
+    - Links from other systems are kept only if they are http(s) (`externalUrl` in `types.ts`).
 
 ---
 

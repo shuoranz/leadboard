@@ -62,6 +62,29 @@ describe('normalization', () => {
     expect(r.headline).toBeUndefined()
   })
 
+  it('keeps only http(s) links into other systems', () => {
+    const withLinks = (report_url: string, search_url: string) =>
+      RunSchema.parse({
+        id: 'r1',
+        batch_id: 'b',
+        service_id: 's',
+        routing: { mode: 'fixed', offering_id: 'o' },
+        load: { profile_id: 'custom', name: 'Custom', concurrency: 2, ramp_up_s: 0, duration_s: 30, think_time_s: 1 },
+        status: 'completed',
+        created_at: '2026-10-05T00:00:00Z',
+        blazemeter: { report_url },
+        splunk: { search_url },
+      })
+    const ok = withLinks('https://a.blazemeter.com/app/#/masters/1', 'http://splunk:8000/en-US/app/search/search?q=x')
+    expect(ok.blazemeter.report_url).toBe('https://a.blazemeter.com/app/#/masters/1')
+    expect(ok.splunk.search_url).toBe('http://splunk:8000/en-US/app/search/search?q=x')
+    for (const bad of ['javascript:alert(1)', ' JavaScript:alert(1)', 'data:text/html,<script>alert(1)</script>', '/relative', 'not a url']) {
+      const r = withLinks(bad, bad)
+      expect(r.blazemeter.report_url).toBeUndefined()
+      expect(r.splunk.search_url).toBeUndefined()
+    }
+  })
+
   it('rejects unknown statuses', () => {
     expect(RunSchema.safeParse({ ...RunSchema.parse(run), status: 'exploded' }).success).toBe(false)
   })

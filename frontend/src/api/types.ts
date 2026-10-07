@@ -30,6 +30,17 @@ const list = <T extends z.ZodMiniType>(schema: T) =>
 
 const id = z.string().check(z.minLength(1))
 
+const isWebUrl = (v: string) => {
+  try {
+    return ['http:', 'https:'].includes(new URL(v).protocol)
+  } catch {
+    return false
+  }
+}
+
+/** A link into another system, rendered as an href: anything but http(s) (e.g. javascript:) is dropped. */
+const externalUrl = optional(z.pipe(z.string(), z.transform((v) => (isWebUrl(v) ? v : undefined))))
+
 // ---- services --------------------------------------------------------------
 
 /** An LLM-backed API service: the unit a benchmark targets. */
@@ -84,7 +95,7 @@ export const ProviderSchema = z.object({
   name: z.string(),
   kind: ProviderKindSchema,
   description: optional(z.string()),
-  console_url: optional(z.string()),
+  console_url: externalUrl,
 })
 
 export const OfferingStatusSchema = z.enum(['available', 'degraded', 'unavailable'])
@@ -160,7 +171,7 @@ export const RunSchema = z.object({
     z.object({
       test_id: optional(z.number()),
       master_id: optional(z.number()),
-      report_url: optional(z.string()),
+      report_url: externalUrl,
       status: optional(z.string()),
     }),
     {},
@@ -169,7 +180,7 @@ export const RunSchema = z.object({
     z.object({
       sid: optional(z.string()),
       search: optional(z.string()),
-      search_url: optional(z.string()),
+      search_url: externalUrl,
       events: optional(z.number()),
     }),
     {},
