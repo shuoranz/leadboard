@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from ..deps import Deps
-from ..runs.leaderboard import build_leaderboard
+from ..runs.leaderboard import build_leaderboard, latest_run_ids
 from ..schemas import Leaderboard
 from .catalog import load_catalog
 
@@ -16,12 +16,19 @@ async def leaderboard(service_id: str, deps: Deps, profile: str | None = None):
     if not service:
         raise HTTPException(404, "Unknown service")
     runs = await db.query("runs", {"service_id": service_id, "status": "completed"})
-    ids = [r["id"] for r in runs]
-    results = {r["id"]: r for r in await db.query("run_results", {"id": {"$in": ids}})} if ids else {}
+    profiles = await db.all("load_profiles")
+    # Load results only for the runs shown. A completed run should always have them; if one
+    # doesn't, drop it and pick again, so its row falls back to the offering's previous run.
+    results: dict[str, dict] = {}
+    while wanted := [i for i in latest_run_ids(runs=runs, profiles=profiles, profile=profile) if i not in results]:
+        found = {r["id"]: r for r in await db.query("run_results", {"id": {"$in": wanted}})}
+        results |= found
+        missing = set(wanted) - found.keys()
+        runs = [r for r in runs if r["id"] not in missing]
     s = deps.settings
     return build_leaderboard(
         service=service,
-        profiles=await db.all("load_profiles"),
+        profiles=profiles,
         runs=runs,
         results=results,
         catalog=await load_catalog(db),

@@ -1,4 +1,4 @@
-from app_benchmark.runs.leaderboard import build_leaderboard
+from app_benchmark.runs.leaderboard import build_leaderboard, latest_run_ids
 
 CATALOG = {
     "providers": {"p": {"id": "p", "name": "Prov P"}, "q": {"id": "q", "name": "Prov Q"}},
@@ -94,3 +94,16 @@ def test_auto_runs_add_one_row_with_routing_mix_and_failed_runs_are_ignored():
     assert [r["id"] for r in b["rows"]] == ["auto"]
     assert b["rows"][0]["routing_mix"][0] == {"offering_id": "p--a", "share": 0.5}
     assert b["conditions"]["concurrency"] == [20]
+
+
+def test_only_the_latest_runs_results_are_needed():
+    runs = [
+        run("old", "p--a", ended="2026-09-01T00:00:00Z"),
+        run("new", "p--a", ended="2026-10-02T00:00:00Z"),
+        run("q", "q--a"),
+        run("sm", "p--a", "smoke", ended="2026-08-01T00:00:00Z"),
+    ]
+    assert latest_run_ids(runs=runs, profiles=PROFILES, profile=None) == ["new", "q"]
+    assert latest_run_ids(runs=runs, profiles=PROFILES, profile="smoke") == ["sm"]
+    every = {"old": result(100), "new": result(900), "q": result(500), "sm": result(1)}
+    assert board(runs, {k: every[k] for k in ("new", "q")}) == board(runs, every)  # history comes from the run docs

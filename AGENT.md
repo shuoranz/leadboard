@@ -96,7 +96,7 @@ src/app_benchmark/               the backend (FastAPI)
   clients/                       db.py, blazemeter.py, splunk.py: thin httpx clients
   runs/orchestrator.py           per-service queue; queued -> starting -> running -> collecting -> completed|failed|cancelled
   runs/aggregate.py              pure: BlazeMeter summary + Splunk rows -> results (unit-tested)
-  runs/leaderboard.py            pure: completed runs -> leaderboard rows (unit-tested)
+  runs/leaderboard.py            pure: completed runs -> leaderboard rows; results loaded only for the shown runs
   static/                        build output
 src/benchmark_fakes/             the fake external systems (never imported by app_benchmark)
   db/app.py                      document store over HTTP, one JSON file per collection        :8101
