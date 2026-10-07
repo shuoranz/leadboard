@@ -1,45 +1,29 @@
-# AGENT.md: replicating the App Benchmark Leaderboard frontend
+# AGENT.md: the LLM Service Benchmark (frontend, backend and fakes)
 
-You are copying this frontend into another project, or rebuilding it for another backend. This file tells you what the app is, how it's put together, what to change when you copy it, and the traps we already hit. Read it all before you start; the "Gotchas" section will save you hours.
+You are working on this project, copying the frontend into another one, or swapping the fakes for real systems. This file tells you what the app is, how it's put together, what to change when you copy it, and the traps we already hit. Read it all before you start; the "Gotchas" section will save you hours.
 
-The source of truth is the code in `frontend/`. When this file and the code disagree, the code wins. Update this file if you change a rule.
+The source of truth is the code (`frontend/`, `src/`, `fake_data/`). When this file and the code disagree, the code wins. Update this file if you change a rule.
 
 ---
 
 ## 1. What the app is
 
-A single-page leaderboard that benchmarks LLM-backed API services **per API app**. One backend can host several "apps" (e.g. Chat Completions API, Code Assist API). Each app has its own categories, models, scores, costs and client-side performance metrics.
+A leaderboard of LLM deployments **per service**. Teams own LLM-backed API services (e.g. "Summarize Profile API"); the service is the only unit of organisation (there are no projects). Each service is a black box: BlazeMeter can load-test it, and it logs one event per request to Splunk (TTFT, tokens, end-to-end time, error cause, which model served it).
 
-**A row is a deployment: one model served by one provider.** A model offered by several providers appears once per provider. Rows share a `model_id`, and each has a `provider`.
+- **Users start benchmarks from the app.** A run is a BlazeMeter test against the service. They pick models from a two-layer **provider → LLM** catalog (one LLM is often served by several providers: an *offering* is one LLM at one provider), or pick **auto routing**, where the service routes each request to a random model from a pool. Picking several fixed models creates a batch: one run per offering, executed one after another.
+- **Results merge two vantage points:** BlazeMeter (client side: hits, failures, response-time percentiles, timeline) and Splunk (server side: TTFT, ITL, tokens, error causes, per-model split for auto runs).
+- Runs are persisted through a **DB service** (a document store over HTTP).
+- BlazeMeter, Splunk, the DB and the target services **don't exist yet, so all four are faked** as separate HTTP services whose data and canned responses are JSON files under `fake_data/`.
 
-The page has two sections:
+**A leaderboard row is an offering (provider × LLM)** on its latest completed run under the selected **load profile** (Smoke / Baseline / Stress / Custom); results are only comparable within one profile, so profiles are tabs. Auto-routed runs add one "Auto routing" row. There are no quality scores: ranking is by client-side E2E p95.
 
-- **01 Leaderboard**: a sortable table.
-  - Above it, a collapsible **Test conditions** panel: window, client region, RTT baseline, concurrency, streaming, stall threshold, timeout, retry policy, requests per model, traffic mix.
-  - The **All** view's columns sit under a group header row:
-    - **Quality:** Overall.
-    - **Reliability:** requests, success rate, success after retries, errors, truncated.
-    - **Latency:** TTFT p50/p95, TTFT p99, ITL p50/p95, stall rate, E2E p50/p95, E2E p99*, client overhead p50/p95.
-    - **Throughput:** throughput, tokens/min avg/peak, per-request decode, prefill*.
-    - **Cost:** reasoning share of output, tokens per 1K chars*, blended $/1M (3:1), cached input $/1M*, billing drift*, cost per successful task.
-    - Columns marked * start hidden.
-  - Each **category** tab shows that category's average plus its subtask scores.
-  - Rows expand to show:
-    - provenance and prices (input / cached / output);
-    - capability badges;
-    - errors by cause;
-    - TTFT by prompt length;
-    - every subtask score.
-  - Filters: search (models, organizations and providers), open weights, include finetunes, show org, **one row per model** (keeps the best provider under the current sort), organization, **provider**, compare, and choose columns (grouped, with whole-group toggles).
-  - The best 5 values in each column are shaded.
-- **02 Insights** (lazy-loaded):
-  - Quality-vs-cost scatter: log cost axis, a Pareto "value frontier", and click-to-show "kill zone".
-  - Cost ranking: bars, with a tooltip for $/1M output and verbosity.
-  - Category radar: 2–3 models, plus a comparison table.
+The service page has three tabs (`?tab=`):
 
-Categories are **data-driven**: nothing hard-codes category ids. Only the metric columns (`PERF_COLUMNS`) are fixed in code.
+- **Leaderboard**: 01 Leaderboard (profile tabs, test conditions, grouped columns: Latency / Reliability / Throughput / Cost, filters, compare, column chooser, expandable rows with capabilities, error causes, TTFT by prompt length, recent runs, routing mix) and 02 Insights (latency-vs-cost scatter with frontier and kill zone, cost per 1K requests ranked, performance radar).
+- **Runs**: the run list (live status, polling while in flight, cancel, report links), the new-run form, and the run detail page (`?run=`): stepper, KPIs, BlazeMeter card with timeline chart, Splunk card, routing mix.
+- **Models catalog**: provider → LLM or LLM → provider, with prices, status, regions, capabilities.
 
-The built bundle is written into a Python package (`src/app_benchmark/static/`), and the backend serves it. There is no backend in this repo; a dev-only mock API stands in for it.
+The built bundle is written into the Python package (`src/app_benchmark/static/`), which the FastAPI backend serves.
 
 ---
 
@@ -51,7 +35,8 @@ Copy these paths into the target repo. Skip `node_modules/`, `test-results/`, `p
 
 ```
 frontend/                         the whole app
-.github/workflows/frontend.yml    CI
+src/, fake_data/, tests/, scripts/, pyproject.toml, Makefile   backend + fakes (skip if the target has its own backend)
+.github/workflows/                CI (frontend.yml, backend.yml)
 README.md                         (optional) user-facing docs; merge into the target's README
 AGENT.md                          this file
 ```
@@ -64,9 +49,9 @@ Build in this order, verifying each layer before starting the next:
 
 1. Scaffold: Vite + React 18 + TS (project references: `tsconfig.app.json` for `src`, `tsconfig.node.json` for config/mock/e2e), Tailwind v4 through `@tailwindcss/vite`.
 2. `src/api/types.ts` (the zod schemas) and `src/api/client.ts`.
-3. The mock API (`mock/data.ts`, `mock/plugin.ts`), wired into dev and preview.
+3. The mock API (`mock/world.ts`, `mock/plugin.ts`), wired into dev and preview.
 4. `src/shared/` (board index + context, URL state, lib, UI kit).
-5. `src/features/leaderboard/`, then `src/features/insights/`.
+5. `src/features/leaderboard/`, `insights/`, `runs/`, `catalog/`.
 6. `src/app/App.tsx` and `src/main.tsx`.
 7. Tests, e2e, lint, CI.
 
@@ -88,6 +73,7 @@ Use the existing files as the reference implementation for every step.
 | Charts | Hand-written SVG. **No chart library.** |
 | Tests | Vitest 5 + jsdom + Testing Library; Playwright 1.63 for e2e |
 | Lint | ESLint 10 flat config + `typescript-eslint` + `eslint-plugin-react-hooks` |
+| Backend | Python ≥ 3.11, FastAPI, httpx, Pydantic 2 / pydantic-settings; pytest + pytest-asyncio; ruff |
 
 Exact versions are in `frontend/package.json` and `package-lock.json`. Install with `npm ci` to reproduce them.
 
@@ -96,66 +82,80 @@ Exact versions are in `frontend/package.json` and `package-lock.json`. Install w
 ## 4. Layout
 
 ```
+pyproject.toml, Makefile         Python package + dev commands (make dev / test / lint / reset-data / seed-runs / snapshot-fixtures)
+scripts/
+  dev.py                         runs the API, the four fakes and Vite together
+  generate_seed_runs.py          regenerates fake_data/seed/runs.json + run_results.json (deterministic)
+  snapshot_fixtures.py           refreshes frontend/mock/fixtures + frontend/src/test/contract from the real API
+src/app_benchmark/               the backend (FastAPI)
+  main.py                        create_app(): /api routers, error mapping, lifespan (resume runs), static mount
+  settings.py                    URLs + credentials of every external system (env prefix BENCH_)
+  schemas.py                     Pydantic contract (mirrored by frontend/src/api/types.ts)
+  deps.py                        Container: clients + orchestrator per app
+  api/                           services, catalog, runs, leaderboard routers
+  clients/                       db.py, blazemeter.py, splunk.py: thin httpx clients
+  runs/orchestrator.py           per-service queue; queued -> starting -> running -> collecting -> completed|failed|cancelled
+  runs/aggregate.py              pure: BlazeMeter summary + Splunk rows -> results (unit-tested)
+  runs/leaderboard.py            pure: completed runs -> leaderboard rows (unit-tested)
+  static/                        build output
+src/benchmark_fakes/             the fake external systems (never imported by app_benchmark)
+  db/app.py                      document store over HTTP, one JSON file per collection        :8101
+  blazemeter/app.py              BlazeMeter v4 slice + async load engine (time-scaled VUs)     :8102
+  splunk/app.py                  HEC ingest + search jobs over JSON-lines event files          :8103
+  target_service/app.py          the black-box services under test; logs to Splunk HEC         :8104
+  common/                        paths (FAKE_DATA_DIR, TIME_SCALE), jsonstore, templates, http, latency model
+fake_data/                       ALL fake data, as JSON
+  seed/                          services, providers, llms, offerings, load_profiles, runs, run_results
+  profiles/                      offering_profiles.json (latency/error model), service_profiles.json (token sizes)
+  blazemeter/, splunk/           response templates ({{placeholder}} leaves)
+  db/, blazemeter/state/, splunk/events/   live state (git-ignored; `make reset-data` clears it)
+tests/                           pytest: aggregate, leaderboard, each fake, end-to-end through all fakes in-process
 frontend/
-  index.html                 shell; inline SVG favicon (data: URI)
-  vite.config.ts             OUT_DIR, cleanOwnedOutput plugin, mock wiring, proxy, vitest config
-  eslint.config.js
-  playwright.config.ts       e2e against `vite preview` of the production build
-  .env.example               documents VITE_API_BASE / VITE_API_PROXY
-  mock/
-    data.ts                  deterministic FICTIONAL data (seeded PRNG); 3 apps, ~85 rows each
-                             (models x providers), run conditions
-    data.test.ts             the mock must satisfy the real schema
-    plugin.ts                middleware for both dev and preview servers
+  mock/world.ts, plugin.ts       Vite mock: serves fake_data/seed + fixtures/leaderboards.json; simulates new runs
+  mock/world.test.ts             the mock must satisfy the contract
   e2e/smoke.spec.ts
   src/
-    main.tsx                 QueryClient + TooltipProvider + App
-    index.css                design tokens (light-dark()), Tailwind @theme, type scale
-    api/
-      types.ts               zod schemas -> TS types (THE contract)
-      client.ts              fetch + parse; useApps(); useLeaderboard() (select: buildBoardIndex)
-    app/App.tsx              header/app switcher, loading/error, ErrorBoundary, lazy Insights
+    api/types.ts, client.ts      zod contract; queries + mutations (useStartRun, useCancelRun), polling while active
+    app/App.tsx                  service switcher, service header, tabs, loading/error, ErrorBoundary
     features/
-      leaderboard/           LeaderboardSection, LeaderboardTable, ModelDetail,
-                             TestConditions, table.ts (columns, groups, filter, sort, rank,
-                             best-per-model; pure), useLeaderboardView.ts
-      insights/              InsightsSection (default export, lazy), QualityCostScatter,
-                             scatterLayout.ts (pure: scales, frontier, labels, nearestPoint),
-                             CostRanked, CategoryRadar
+      leaderboard/               LeaderboardSection, LeaderboardTable, OfferingDetail, TestConditions, table.ts, useLeaderboardView
+      insights/                  InsightsSection (lazy), LatencyCostScatter, scatterLayout.ts, CostRanked, PerfRadar
+      runs/                      RunsSection, RunsTable, NewRunForm, OfferingPicker, RunDetail, TimelineChart, runs.ts (pure)
+      catalog/                   CatalogSection
     shared/
-      board/                 boardIndex.ts (derived data), BoardContext.tsx (useBoard),
-                             model.ts (accessors), orgPalette.ts
-      state/searchParams.ts  typed URL state (the only place URL params are defined)
-      ui/                    pill.ts (cva), Chip, ChipRadioGroup, SelectPill, TextInput,
-                             PopoverMenu, Tooltip, Card, marks, ChartFrame, ErrorBoundary
-      lib/                   cn.ts, format.ts (Intl), tokens.ts (cssVar map), hooks.ts
-    test/                    setup.ts (jsdom stubs), fixtures.ts, render.tsx
-../src/app_benchmark/static/ build output (owned by the backend package)
-../.github/workflows/frontend.yml
+      board/                     boardIndex.ts, BoardContext.tsx, model.ts, orgPalette.ts
+      catalog/catalogIndex.ts    catalog lookups, provider<->LLM grouping, usable offerings
+      perf/PerfPanels.tsx        error causes, TTFT by input, capabilities, status/source badges, KPI grid
+      state/searchParams.ts      typed URL state
+      ui/, lib/                  UI kit and helpers (unchanged design system)
+    test/                        setup.ts, fixtures.ts, render.tsx (renderWithProviders, fetchStub), contract/*.json
 ```
 
 ---
 
 ## 5. Architecture rules (keep these when you copy)
 
-1. **Validate at the boundary.** Every response goes through its zod schema in `getJSON`. A payload that breaks the contract shows an error naming the field (e.g. `models.0.overall`) instead of crashing. Optional fields accept `null` or absence and come out as `undefined`; `null` entries in score maps are dropped.
-2. **Derive once.** `useLeaderboard` uses `select: buildBoardIndex`. That produces `BoardIndex` (models sorted, `modelsById`, `categoriesById`, `organizations`, `providers`, `palette`, `run`), which is shared through `<BoardProvider>` and read with `useBoard()`. Components never rebuild lookups; add a field to `BoardIndex` instead. `buildBoardIndex` must stay a stable module-level function, so TanStack Query memoizes the result.
-3. **URL state has one definition.** `shared/state/searchParams.ts` owns the keys (`app`, `cat`, `sort`, `compare`, `cost`) and parses them against a schema; malformed values fall back. Features check ids against the board (see `useLeaderboardView`).
+1. **Validate at the boundary.** Every response goes through its zod schema in `request()` (`getJSON` / `sendJSON`). A payload that breaks the contract shows an error naming the field (e.g. `rows.0.perf`) instead of crashing. Optional fields accept `null` or absence and come out as `undefined`; nullable lists come out as `[]`. Error responses surface FastAPI's `detail` (`ApiError.detail`).
+2. **Derive once.** `useServiceLeaderboard` uses `select: buildBoardIndex`. That produces `BoardIndex` (rows sorted fastest first, `rowsById`, `profiles`, `profile`, `organizations`, `providers`, `palette`, `conditions`), which is shared through `<BoardProvider>` and read with `useBoard()`. Components never rebuild lookups; add a field to `BoardIndex` instead. The same goes for the catalog: `useCatalog` uses `select: buildCatalogIndex`. Both must stay stable module-level functions, so TanStack Query memoizes the result.
+3. **URL state has one definition.** `shared/state/searchParams.ts` owns the keys (`service`, `tab`, `run`, `new`, `profile`, `sort`, `compare`, `lat`) and parses them against a schema; malformed values fall back. Features check ids against the board (see `useLeaderboardView`).
    - *Shareable* (goes in the URL): what the view **is**.
-   - *Local* (component state): how you're **exploring** it: search, filter chips, hidden columns, expanded rows, hover, kill zone, radar and cost-list picks.
-   - Switching apps pushes a history entry with `reset: true`; view tweaks use `replaceState`.
-4. **"Overall" is `null`, not a string.** `View = string | null`; `OVERALL = null`. The contract keeps overall separate from categories (`overall` + `categories: {}`, and `cost.per_success: { overall, categories }`). Table column ids are namespaced (`overall`, `cat:<id>`, `sub:<id>`, `perf:<key>`, `cost`), so a category literally named `overall` can't collide.
+   - *Local* (component state): how you're **exploring** it: search, filter chips, hidden columns, expanded rows, hover, kill zone, radar and cost-list picks, run-list status filter, form inputs.
+   - Switching service pushes a history entry with `reset: true`; changing tab, opening a run or the new-run form pushes too (Back closes them); view tweaks use `replaceState`.
+4. **Server state polls only while something is in flight.** `useRuns` / `useRun` poll every 2 s while any run is queued/starting/running/collecting (`isActive`), then stop. When a watched run finishes, `RunDetail` invalidates the leaderboard and run list. Results never change once written (`staleTime: Infinity`).
 5. **Columns are data** (`features/leaderboard/table.ts`). Each `Column` has:
    - `get` (the sort key) and `format` (the cell text);
    - `group` (one of `COLUMN_GROUPS`): it drives the group header row, the dividers (`groupSpans`, `startsGroup`) and the grouped "Choose columns";
-   - `better: 'higher' | 'lower' | null`: drives the first-click sort direction and which end gets shaded. `null` means neither direction is better (Requests, reasoning share), so the column isn't shaded;
-   - `shade`, `primary` and `defaultHidden` (collected into `DEFAULT_HIDDEN`).
+   - `better: 'higher' | 'lower' | null`: drives the first-click sort direction and which end gets shaded. `null` means neither direction is better (Requests, avg tokens), so the column isn't shaded;
+   - `shade`, `primary` and `defaultHidden` (collected into `DEFAULT_HIDDEN`);
+   - `source` (`BlazeMeter` / `Splunk` / `Catalog`), shown as the header's tooltip. Keep it honest: client-side numbers come from BlazeMeter, server-side from Splunk.
 
-   Paired cells (p50 / p95, avg / peak) sort by their first value. Billing drift sorts by its size and displays its sign.
-6. **Pure logic lives outside components** (`table.ts`, `scatterLayout.ts`, `model.ts`, `format.ts`, `boardIndex.ts`) and is unit-tested.
-7. **Color follows the entity.** Organizations get palette slots once per leaderboard (strongest first); past 8 slots they fold into "Other". The radar colors models by organization too, and tells picks apart by dash pattern (solid, dashed, dotted), not by a second color.
+   Paired cells (p50 / p95, avg / peak) sort by their first value. Ties fall back to E2E p95.
+6. **Pure logic lives outside components** (`table.ts`, `scatterLayout.ts`, `runs.ts`, `catalogIndex.ts`, `model.ts`, `format.ts`, `boardIndex.ts`; backend: `aggregate.py`, `leaderboard.py`) and is unit-tested.
+7. **Color follows the entity.** Organizations (model makers) get palette slots once per leaderboard (fastest first); past 8 slots they fold into "Other". The radar colors models by organization too, and tells picks apart by dash pattern (solid, dashed, dotted), not by a second color.
 8. **All formatting goes through `shared/lib/format.ts`** (Intl, locale `en-US`). Missing values render as `—` and sort last.
-9. **Rows are deployments.** Identity across providers is `modelKey(m)` (`model_id ?? id`). Use `displayName(m)` (name · provider) anywhere rows appear outside the table (selects, tooltips, chart labels), or rows for the same model become indistinguishable. Org color is the model maker's, not the provider's.
+9. **Rows are offerings.** Identity across providers is `modelKey(r)` (the LLM id). Use `displayName(r)` (name · provider; just the name for the auto row) anywhere rows appear outside the table (selects, tooltips, chart labels), or rows for the same model become indistinguishable. Org color is the model maker's, not the provider's. Elsewhere, name an offering id with `offeringLabel(catalog, id)`.
+10. **The backend never talks to the services under test.** It only drives BlazeMeter and reads Splunk, exactly as it will in production; every external system is a URL + credential in `settings.py`. `src/app_benchmark` must not import `src/benchmark_fakes`.
+11. **Fake data is JSON.** Seed data, latency profiles and response templates live in `fake_data/` and are edited by hand. Fake code fills placeholders and computes numbers; it doesn't hold data.
 
 ---
 
@@ -176,34 +176,29 @@ frontend/
 
 ---
 
-## 7. API contract (summary; the full definition is `src/api/types.ts`)
+## 7. API contract (summary; the full definition is `src/app_benchmark/schemas.py` = `frontend/src/api/types.ts`)
 
 ```
-GET {API_BASE}/apps                      -> AppSummary[]   { id, name, description?, updated_at? }
-GET {API_BASE}/apps/{app_id}/leaderboard -> { app, categories, models, run? }
-  categories[]: { id, name, short_name?, abbr?, subtasks: [{ id, name }] }
-  models[]:     { id, model_id?, provider?, name, short_name?, variant?, organization, open_weights, finetune,
-                  base_model?, overall, categories: {cat_id: score}, subtasks: {subtask_id: score},
-                  cost?: { per_success: { overall?, categories: {cat_id: usd} },
-                           input_per_million?, cached_input_per_million?, output_per_million?,
-                           avg_output_tokens? (incl. reasoning), avg_reasoning_tokens?,
-                           tokens_per_1k_chars?, billing_drift? ((billed-counted)/counted) },
-                  perf?: { requests?, success_rate?, success_after_retry?, errors?,
-                           error_breakdown?: { rate_limited?, server_error?, timeout?, dropped_stream?, refused?, other? },
-                           truncation_rate?, ttft_ms?: {p50?, p95?, p99?}, ttft_by_input?: [{ input_tokens, p50_ms }],
-                           itl_ms?: {p50?, p95?, p99?}, stall_rate?, e2e_ms?: {p50?, p95?, p99?},
-                           client_overhead_ms?: {p50?, p95?}, throughput_rps?, tokens_per_min?: {avg?, peak?},
-                           decode_tps_p50?, prefill_tps? },
-                  capabilities?: { context_window?, max_output_tokens?, streaming?, tool_calling?, json_mode?,
-                                   vision?, prompt_caching?, batch_api?, regions?: string[] } }
-  run?:         { started_at?, ended_at?, client_region?, network_rtt_ms?, concurrency?: number[], streaming?,
-                  stall_threshold_ms?, timeout_ms?, retry_policy?, requests_per_model?,
-                  profiles?: [{ name, input_tokens?, output_tokens?, share? }], notes? }
+GET  /api/services                         -> Service[]  { id, name, description?, endpoint_path, allowed_offering_ids? } (first = default)
+GET  /api/services/{id}                    -> Service
+GET  /api/catalog                          -> { providers[{ id, name, kind }], llms[{ id, name, organization, open_weights, context_window? }],
+                                               offerings[{ id, provider_id, llm_id, deployment, regions, status, prices, capabilities }] }
+GET  /api/load-profiles                    -> LoadProfile[] { id, name, concurrency, ramp_up_s, duration_s, think_time_s }
+POST /api/runs                             <- { service_id, routing: {mode:"fixed", offering_ids[]} | {mode:"auto", pool?[]},
+                                                load_profile_id? | load?: {concurrency, ramp_up_s, duration_s, think_time_s}, label? }
+                                           -> Run[] (one per fixed offering, sharing batch_id; or one auto run)
+GET  /api/runs?service_id&status&limit     -> Run[] newest first
+GET  /api/runs/{id}                        -> Run { status, progress, routing, load, blazemeter{test_id, master_id, report_url},
+                                                    splunk{sid, search, search_url, events}, headline{requests, error_rate, e2e_p95_ms, ...} }
+POST /api/runs/{id}/cancel                 -> Run (queued: cancelled at once; running: stopped, partial results kept)
+GET  /api/runs/{id}/results                -> { blazemeter{summary, interval_s, timeline[]}, splunk{events, overall: Perf, by_offering[]},
+                                                perf: Perf (merged), cost }
+GET  /api/services/{id}/leaderboard?profile -> { service, profiles[+runs], profile, rows: LeaderboardRow[], conditions }
 ```
 
-Rates and shares (`success_rate`, `success_after_retry`, `truncation_rate`, `stall_rate`, `profiles[].share`) are 0–1 fractions. The blended price is computed in the frontend at 3:1 input:output (`blendedPrice` in `shared/board/model.ts`).
+`Perf`: `requests`, `errors`, `success_rate`, `error_breakdown` (counts), `truncation_rate`, `ttft_ms`, `itl_ms`, `e2e_ms` (client), `server_e2e_ms`, `client_overhead_ms` (each `{p50, p95, p99}`), `ttft_by_input[]`, `stall_rate`, `throughput_rps`, `tokens_per_min {avg, peak}`, `decode_tps_p50`, `prefill_tps`, `avg_input_tokens`, `avg_output_tokens`. Rates are 0–1; times ms; prices USD per 1M tokens; `cost.per_1k_requests` is list price at the logged token counts.
 
-Scores are 0–100. Ids must be non-empty. `API_BASE` defaults to `api` **resolved relative to the page** (a page at `/benchmark/` calls `/benchmark/api`); override it at build time with `VITE_API_BASE`.
+`API_BASE` defaults to `api` **resolved relative to the page**; override with `VITE_API_BASE`.
 
 ---
 
@@ -212,9 +207,10 @@ Scores are 0–100. Ids must be non-empty. `API_BASE` defaults to `api` **resolv
 - [ ] **Output dir:** `OUT_DIR` in `frontend/vite.config.ts` must point at the target backend's static folder. `cleanOwnedOutput` deletes only `index.html` and `assets/` there. Never set `emptyOutDir: true`.
 - [ ] **Serving:** the backend serves `index.html` at a directory URL (e.g. FastAPI `StaticFiles(..., html=True)`, mounted *after* the `/api` routes). Assets are relative (`base: './'`), so any mount path works.
 - [ ] **API:** implement the contract in §7, or change the schemas in `types.ts` first; everything downstream is typed from them.
-- [ ] **Performance metrics:** if the target measures different metrics, edit `PERF_COLUMNS` in `features/leaderboard/table.ts` and `ModelPerfSchema` in `types.ts`, plus their tests (`table.test.ts` asserts the column titles).
-- [ ] **Branding and copy:** `<title>` in `index.html`, "App Benchmark" in `app/App.tsx`, the section intro text in `LeaderboardSection` and `InsightsSection`, and `name` in `package.json`.
-- [ ] **Mock:** rewrite `mock/data.ts` for the new domain. Keep it **fictional**: invented organization and model names, seeded random numbers. Never put real vendors' names next to fabricated numbers.
+- [ ] **Performance metrics:** if the target measures different metrics, edit `COLUMNS` in `features/leaderboard/table.ts`, `PerfSchema` in `types.ts` and `Perf` in `schemas.py`, plus `aggregate.py` and their tests.
+- [ ] **Branding and copy:** `<title>` in `index.html`, "LLM Service Benchmark" in `app/App.tsx`, the section intro text in `LeaderboardSection` and `InsightsSection`, and `name` in `package.json`.
+- [ ] **Fake data:** edit `fake_data/` (keep it **fictional**: invented provider, organization and model names; never put real vendors' names next to fabricated numbers), then `make seed-runs` and `make snapshot-fixtures` so the seed history and the frontend fixtures match.
+- [ ] **Real systems:** point `BENCH_BLAZEMETER_URL` / `BENCH_SPLUNK_URL` / `BENCH_DB_URL` (+ credentials) at the real ones and `BENCH_TARGET_URL_TEMPLATE` at the real services. The services must copy the `X-Run-Id` header into their Splunk events, and honour `X-Routing` / `X-Offering-Id` / `X-Model-Pool`.
 - [ ] **CI:** fix `working-directory`, `paths` and `cache-dependency-path` in the workflow. Keep `permissions: contents: read`, `persist-credentials: false` and the SHA-pinned actions. When bumping an action, resolve the new SHA with `git ls-remote https://github.com/actions/<name>.git refs/tags/<tag>`.
 - [ ] **Env:** copy `.env.example`; `.env` and `.env.*` stay git-ignored. **Anything prefixed `VITE_` ends up in the public bundle.**
 - [ ] **Backend headers:** the app runs cleanly under this CSP, verified with zero violations. Send it, plus `X-Content-Type-Options: nosniff`, and cache hashed `assets/*` as immutable while serving `index.html` with `no-cache`:
@@ -224,7 +220,9 @@ Scores are 0–100. Ids must be non-empty. `API_BASE` defaults to `api` **resolv
 
 ## 9. Recipes
 
-- **Add a table column:** add an entry to `PERF_COLUMNS` with the `metric(group, key, label, better, get, format, extra?)` helper, inside its group's block so the group stays contiguous. Pass `{ defaultHidden: true }` for secondary metrics. Add its schema field if it's new data, extend `mock/data.ts`, and update `table.test.ts`.
+- **Add a table column:** add an entry to `COLUMNS` with the `metric(group, key, label, better, source, get, format, extra?)` helper, inside its group's block so the group stays contiguous. Pass `{ defaultHidden: true }` for secondary metrics. If it's new data: compute it in `aggregate.py`, add it to `Perf` (Python) and `PerfSchema` (zod), regenerate seed runs and fixtures, and update the tests.
+- **Add a fake field to the logs:** emit it from `common/latency.py` (`simulate_request`), aggregate it in `aggregate.py`.
+- **Add a provider, LLM or service:** edit `fake_data/seed/*.json` (+ a latency profile in `offering_profiles.json` for each new offering, token sizes in `service_profiles.json` for a new service), then `make seed-runs snapshot-fixtures reset-data`.
 - **Add a column group:** add it to `ColumnGroup` and `COLUMN_GROUPS` (order = display order).
 - **Add a URL parameter:** add the key to `SearchSchema` in `searchParams.ts` (use `z.catch(…, fallback)` so bad input degrades gracefully), check it against the board in the feature hook, and add a case to `searchParams.test.ts`.
 - **Add derived data:** add a field to `BoardIndex` and compute it in `buildBoardIndex`, with a test in `boardIndex.test.ts`.
@@ -236,28 +234,27 @@ Scores are 0–100. Ids must be non-empty. `API_BASE` defaults to `api` **resolv
 ## 10. Verification (all must pass)
 
 ```sh
+make lint test          # ruff + pytest (aggregation, leaderboard, each fake, end-to-end through all fakes)
 cd frontend
 npm ci
-npm run typecheck      # no output = pass
-npm run lint           # 0 problems
-npm test               # vitest: pure logic, schema, URL state, components, mock-vs-contract (83 tests at time of writing)
-npm run build          # writes OUT_DIR; no source maps
-npm run test:e2e       # builds, serves via `vite preview` + mock, 4 Playwright smoke tests
-npm audit              # 0 vulnerabilities expected
+npm run typecheck       # no output = pass
+npm run lint            # 0 problems
+npm test                # vitest: logic, schema + backend contract samples, URL state, components, mock (96 tests at time of writing)
+npm run build           # writes OUT_DIR; no source maps
+npm run test:e2e        # builds, serves via `vite preview` + mock, 4 Playwright smoke tests
+npm audit               # 0 vulnerabilities expected
 ```
 
-Locally, Playwright uses the installed Google Chrome (`channel: 'chrome'`); in CI it installs Chromium. Then check by hand in a browser (`npm run dev`, which picks the next free port if 5173 is taken):
+After changing the contract or the seed data, run `make seed-runs snapshot-fixtures` so `frontend/mock/fixtures` and `frontend/src/test/contract` match the backend.
 
-- The All view shows the group header row (Quality / Reliability / Latency / Throughput / Cost), "via <provider>" under each name, and a category tab shows its subtasks.
-- "One row per model" keeps one row per model, and changes which provider wins when you change the sort. The provider filter works.
-- Choose columns: groups toggle as a whole, and partly shown groups appear partly checked (indeterminate). "Defaults" restores the default-hidden set.
-- The expanded row stays inside the visible area even after scrolling the table fully right.
-- The test-conditions panel opens and shows the traffic mix.
-- Sorting, row expansion, compare and "Show all" (the header stays pinned) all work.
-- Reloading keeps `cat`, `sort`, `compare` and `cost`; switching apps clears them; Back restores them.
-- Scatter labels don't overlap each other, the kill zone toggles, and tooltips open on hover **and** on Tab.
-- Dark mode (`prefers-color-scheme: dark`) and `data-theme` overrides both render correctly.
-- At 390px wide the page doesn't scroll sideways (the table scrolls inside its own container), and the radar labels stay 11px.
+Then check by hand with `make dev` (the real stack, http://localhost:5176):
+
+- Start a fixed batch (two providers of the same LLM) and an auto run; they queue, show live progress, and complete. The detail page shows the BlazeMeter timeline, Splunk card and (auto) routing mix; the report links open the fake BlazeMeter/Splunk pages.
+- The leaderboard picks up the new runs under their profile; the expanded row's recent runs link back to the run.
+- `fake_data/db/runs.json` and `fake_data/splunk/events/<run_id>.jsonl` hold the run and its raw logs; restart the stack and the runs are still there.
+- Sorting, compare, column chooser, profile tabs, "Show all" (pinned header) and Back/forward all work; reload keeps the URL view.
+- Scatter labels don't overlap, the kill zone toggles, tooltips open on hover **and** on Tab.
+- Dark mode and `data-theme` overrides render correctly; at 390px the page doesn't scroll sideways.
 - The console has no errors.
 
 ---
@@ -282,7 +279,11 @@ Locally, Playwright uses the installed Google Chrome (`channel: 'chrome'`); in C
 - **The mock must serve both servers:** it needs `configureServer` *and* `configurePreviewServer`, or `vite preview` (and e2e) has no API.
 - **jsdom lacks ResizeObserver, canvas and pointer capture.** `src/test/setup.ts` stubs them. Don't delete it.
 - **npm 11** warns about `fsevents` install scripts not being allowlisted. The package is optional and not needed.
-- **Mock numbers depend on the random sequence:** adding a `rand()` call anywhere in `mock/data.ts` shifts every later value, so model names and scores change. That's expected.
+- **Seed numbers depend on the random sequence:** `generate_seed_runs.py` is seeded; changing the latency model or the run plan changes every later number. Regenerate fixtures afterwards.
+- **Time is compressed:** the fake load runs at `TIME_SCALE` (default 0.1), so Splunk `_time` stamps are real time. Rates over time (`throughput_rps`, `tokens_per_min`) use BlazeMeter's *nominal* duration, never Splunk timestamps.
+- **In-process tests don't run lifespans:** `httpx.ASGITransport` skips startup hooks, so the fakes initialise lazily (the DB seeds on first access) and fakes that call fakes go through `benchmark_fakes.common.http.client()`, which tests point at in-process transports with `override()`.
+- **Splunk returns strings:** every result value is a string (blank for null). `aggregate.py` parses with `_num`; a blank TTFT is skipped, not counted as 0.
+- **Client overhead is a difference of percentiles** (BlazeMeter p95 − Splunk p95, all requests on both sides), so p95 can come out below p50. Comparing against successful requests only made it collapse to 0 when fast 429s were common.
 - **Bundle size:** about 114 KB gzipped for the main chunk; Radix is the largest addition. Insights is lazy-loaded, but it shares Radix with the table, so it only splits off about 6 KB.
 
 ---
@@ -292,7 +293,9 @@ Locally, Playwright uses the installed Google Chrome (`channel: 'chrome'`); in C
 - Don't add a chart library, CSS-in-JS, or a second styling approach.
 - Don't upgrade React to 19 without the owner's agreement.
 - Don't read `window.location` or define URL keys outside `searchParams.ts`.
-- Don't derive lookups inside components (use `BoardIndex`), and don't write raw `var(--…)` strings (use classes or `cssVar`).
+- Don't derive lookups inside components (use `BoardIndex` / `CatalogIndex`), and don't write raw `var(--…)` strings (use classes or `cssVar`).
+- Don't let `src/app_benchmark` import `src/benchmark_fakes`, or call the target services directly: go through BlazeMeter and Splunk.
+- Don't hard-code fake data in Python or TypeScript: it belongs in `fake_data/` as JSON.
 - Don't use `dangerouslySetInnerHTML` or render API strings as HTML; all API and URL data is rendered as text.
 - Don't make requests to third-party origins (fonts included). That's what keeps the strict CSP above valid.
 - Don't put secrets in any `VITE_` variable, and don't commit `.env` files.
