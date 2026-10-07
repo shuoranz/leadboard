@@ -73,7 +73,7 @@ src/benchmark_fakes/   the fake DB, BlazeMeter, Splunk and target services
 fake_data/             fake data and response templates (JSON)
 tests/                 pytest
 scripts/               dev runner, seed-run generator, fixture snapshotter
-frontend/              React app (see AGENT.md for conventions)
+frontend/              React app (see AGENTS.md for conventions)
 ```
 
 Frontend stack: Vite, React 18, TypeScript, TanStack Query, zod (mini), Tailwind CSS v4, Radix UI primitives, hand-written SVG charts. Backend: FastAPI, httpx, Pydantic. The contract lives in [`schemas.py`](src/app_benchmark/schemas.py) and is mirrored in [`types.ts`](frontend/src/api/types.ts). Real responses from the backend are checked against the zod schemas in the frontend tests.

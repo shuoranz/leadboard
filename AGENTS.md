@@ -1,4 +1,4 @@
-# AGENT.md: the LLM Service Benchmark (frontend, backend and fakes)
+# AGENTS.md: the LLM Service Benchmark (frontend, backend and fakes)
 
 You are working on this project, copying the frontend into another one, or swapping the fakes for real systems. This file tells you what the app is, how it's put together, what to change when you copy it, and the traps we already hit. Read it all before you start; the "Gotchas" section will save you hours.
 
@@ -38,7 +38,8 @@ frontend/                         the whole app
 src/, fake_data/, tests/, scripts/, pyproject.toml, Makefile   backend + fakes (skip if the target has its own backend)
 .github/workflows/                CI (frontend.yml, backend.yml)
 README.md                         (optional) user-facing docs; merge into the target's README
-AGENT.md                          this file
+AGENTS.md                         this file
+CLAUDE.md                         points Claude Code at this file
 ```
 
 Then work through the **adaptation checklist in §8**, run `npm install`, and run the **verification in §10**. Don't commit until every check passes.
