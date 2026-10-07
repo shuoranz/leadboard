@@ -37,6 +37,18 @@ describe('App', () => {
     expect(screen.getByText(/POST \/v1\/summ/)).toBeInTheDocument()
   })
 
+  it('the leaderboard refreshes when a run finishes, even while the Runs tab is closed', async () => {
+    let status: 'running' | 'completed' = 'running'
+    const s = stub({ '/runs?service_id=summ&limit=200': () => [200, [run({ id: 'r_1', service_id: 'summ', status })]] })
+    renderWithProviders(<App />, { url: '/?service=summ' })
+    await screen.findByRole('heading', { level: 1, name: 'Summarize API' })
+    const boardFetches = () => s.calls.filter((c) => c.path === '/services/summ/leaderboard').length
+    await waitFor(() => expect(s.calls.some((c) => c.path.startsWith('/runs'))).toBe(true))
+    expect(boardFetches()).toBe(1)
+    status = 'completed'
+    await waitFor(() => expect(boardFetches()).toBe(2), { timeout: 4000 }) // after the next 2 s poll
+  })
+
   it('switching service pushes history and drops the previous view params', async () => {
     stub()
     renderWithProviders(<App />, { url: '/?service=summ&sort=perf:errors:asc' })

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import type * as z from 'zod/mini'
 import { buildBoardIndex } from '../shared/board/boardIndex'
 import { buildCatalogIndex } from '../shared/catalog/catalogIndex'
@@ -132,25 +132,49 @@ const pollWhileActive = (query: { state: { data: Run[] | Run | undefined } }) =>
   return (Array.isArray(data) ? data.some((r) => isActive(r.status)) : isActive(data.status)) ? POLL_MS : false
 }
 
+/**
+ * When a watched run leaves the in-flight states, the leaderboard has new data
+ * (and so may the service's run list): refetch them. Lives in the polling
+ * hooks, so it works whichever view is watching, the run list or one run.
+ */
+function useRefreshWhenFinished(data: Run[] | Run | undefined, { runLists }: { runLists: boolean }) {
+  const qc = useQueryClient()
+  const inFlight = useRef<ReadonlySet<string> | null>(null)
+  useEffect(() => {
+    if (!data) return
+    const runs = Array.isArray(data) ? data : [data]
+    const before = inFlight.current
+    inFlight.current = new Set(runs.filter((r) => isActive(r.status)).map((r) => r.id))
+    const finished = before ? runs.filter((r) => before.has(r.id) && !isActive(r.status)) : []
+    if (!finished.length) return
+    void qc.invalidateQueries({ queryKey: queryKeys.leaderboards })
+    if (runLists) for (const id of new Set(finished.map((r) => r.service_id))) void qc.invalidateQueries({ queryKey: queryKeys.runs(id) })
+  }, [data, qc, runLists])
+}
+
 /** A service's runs, newest first. Polls while any is still in flight. */
 export function useRuns(serviceId: string | undefined) {
-  return useQuery({
+  const query = useQuery({
     queryKey: queryKeys.runs(serviceId),
     queryFn: ({ signal }) => getJSON(`/runs?service_id=${encodeURIComponent(serviceId!)}&limit=200`, RunListSchema, signal),
     enabled: !!serviceId,
     staleTime: 0,
     refetchInterval: pollWhileActive,
   })
+  useRefreshWhenFinished(query.data, { runLists: false })
+  return query
 }
 
 export function useRun(id: string | undefined) {
-  return useQuery({
+  const query = useQuery({
     queryKey: queryKeys.run(id),
     queryFn: ({ signal }) => getJSON(`/runs/${encodeURIComponent(id!)}`, RunSchema, signal),
     enabled: !!id,
     staleTime: 0,
     refetchInterval: pollWhileActive,
   })
+  useRefreshWhenFinished(query.data, { runLists: true })
+  return query
 }
 
 /** Results exist once a run has finished collecting (completed, or cancelled with partial data). */
@@ -183,16 +207,4 @@ export function useCancelRun() {
       void qc.invalidateQueries({ queryKey: queryKeys.runs(run.service_id) })
     },
   })
-}
-
-/** After a run finishes, the leaderboard (and the run lists) may have changed. */
-export function useInvalidateAfterRun() {
-  const qc = useQueryClient()
-  return useCallback(
-    (serviceId: string) => {
-      void qc.invalidateQueries({ queryKey: queryKeys.leaderboards })
-      void qc.invalidateQueries({ queryKey: queryKeys.runs(serviceId) })
-    },
-    [qc],
-  )
 }

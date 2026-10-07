@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react'
-import { useCancelRun, useCatalog, useInvalidateAfterRun, useRun, useRunResults } from '../../api/client'
+import { useCancelRun, useCatalog, useRun, useRunResults } from '../../api/client'
 import type { Run, RunResults, Service } from '../../api/types'
 import { isActive } from '../../api/types'
 import { offeringLabel, type CatalogIndex } from '../../shared/catalog/catalogIndex'
@@ -19,7 +18,7 @@ import { ErrorCauses, FactList, KpiGrid, PanelTitle, SourceBadge, StatusBadge, T
 import { Card } from '../../shared/ui/Card'
 import { SourceLinks } from './RunsTable'
 import { TimelineChart } from './TimelineChart'
-import { elapsedSeconds, routingLabel, stepsFor } from './runs'
+import { canCancel, elapsedSeconds, routingLabel, stepsFor } from './runs'
 
 export function RunDetail({ runId, service, onBack }: { runId: string; service: Service; onBack: () => void }) {
   const run = useRun(runId)
@@ -28,15 +27,6 @@ export function RunDetail({ runId, service, onBack }: { runId: string; service: 
   const ready = !!data && (data.status === 'completed' || (data.status === 'cancelled' && !!data.headline))
   const results = useRunResults(runId, ready)
   const cancel = useCancelRun()
-  const invalidate = useInvalidateAfterRun()
-
-  // When a run we're watching finishes, the leaderboard and run list are stale.
-  const wasActive = useRef(false)
-  useEffect(() => {
-    if (!data) return
-    if (wasActive.current && !isActive(data.status)) invalidate(data.service_id)
-    wasActive.current = isActive(data.status)
-  }, [data, invalidate])
 
   return (
     <section aria-labelledby="run-title">
@@ -99,7 +89,7 @@ function RunHeader({ run, catalog, onCancel, cancelling }: { run: Run; catalog: 
           {run.label ?? 'Run'} <span className="font-mono text-xl font-normal text-muted">{run.id}</span>
         </h2>
         <StatusBadge status={run.status} progress={run.progress} />
-        {isActive(run.status) && !run.cancel_requested && (
+        {canCancel(run) && (
           <button type="button" onClick={onCancel} disabled={cancelling} className="font-mono text-sm text-bad hover:underline disabled:opacity-50">
             Cancel run
           </button>

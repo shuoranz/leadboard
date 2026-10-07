@@ -141,7 +141,7 @@ frontend/
    - *Shareable* (goes in the URL): what the view **is**.
    - *Local* (component state): how you're **exploring** it: search, filter chips, hidden columns, expanded rows, hover, kill zone, radar and cost-list picks, run-list status filter, form inputs.
    - Switching service pushes a history entry with `reset: true`; changing tab, opening a run or the new-run form pushes too (Back closes them); view tweaks use `replaceState`.
-4. **Server state polls only while something is in flight.** `useRuns` / `useRun` poll every 2 s while any run is queued/starting/running/collecting (`isActive`), then stop. When a watched run finishes, `RunDetail` invalidates the leaderboard and run list. Results never change once written (`staleTime: Infinity`).
+4. **Server state polls only while something is in flight.** `useRuns` / `useRun` poll every 2 s while any run is queued/starting/running/collecting (`isActive`), then stop. When a polled run leaves the in-flight states, the polling hook itself invalidates the leaderboard (and, from `useRun`, the service's run list), so it works from the list and the detail page alike. `App` also calls `useRuns` for the current service, so this happens on every tab, including while you sit on the leaderboard. Results never change once written (`staleTime: Infinity`).
 5. **Columns are data** (`features/leaderboard/table.ts`). Each `Column` has:
    - `get` (the sort key) and `format` (the cell text);
    - `group` (one of `COLUMN_GROUPS`): it drives the group header row, the dividers (`groupSpans`, `startsGroup`) and the grouped "Choose columns";

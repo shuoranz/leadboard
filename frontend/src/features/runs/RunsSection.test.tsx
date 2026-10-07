@@ -43,6 +43,27 @@ describe('runs list', () => {
     expect(screen.getByText('Refreshing every 2 s while runs are in flight')).toBeInTheDocument()
   })
 
+  it('opening a run from its id is one history entry, so Back returns to the list', async () => {
+    stub()
+    renderWithProviders(<RunsSection service={service} />, { url: '/?tab=runs' })
+    await screen.findByRole('table', { name: 'Runs' })
+    const before = window.history.length
+    await userEvent.click(screen.getByRole('button', { name: 'r_done' }))
+    expect(window.location.search).toBe('?tab=runs&run=r_done')
+    expect(window.history.length).toBe(before + 1)
+  })
+
+  it('does not offer cancel once the load test has ended', async () => {
+    stub({
+      '/runs?service_id=svc&limit=200': [run({ id: 'r_run', status: 'running' }), run({ id: 'r_col', status: 'collecting', progress: 92 })],
+    })
+    renderWithProviders(<RunsSection service={service} />)
+    const table = await screen.findByRole('table', { name: 'Runs' })
+    const row = (id: string) => within(table).getByRole('button', { name: id }).closest('tr')!
+    expect(within(row('r_run')).getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
+    expect(within(row('r_col')).queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
+  })
+
   it('filters by status', async () => {
     stub()
     renderWithProviders(<RunsSection service={service} />)

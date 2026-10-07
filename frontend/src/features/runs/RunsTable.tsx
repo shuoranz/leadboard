@@ -1,10 +1,9 @@
 import type { Run } from '../../api/types'
-import { isActive } from '../../api/types'
 import type { CatalogIndex } from '../../shared/catalog/catalogIndex'
 import { cn } from '../../shared/lib/cn'
 import { formatCost1k, formatDateTime, formatDuration, formatInt, formatPercent } from '../../shared/lib/format'
 import { StatusBadge } from '../../shared/perf/PerfPanels'
-import { elapsedSeconds, routingLabel } from './runs'
+import { canCancel, elapsedSeconds, routingLabel } from './runs'
 
 const th = 'sticky top-0 z-10 bg-surface px-3 py-3 font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase shadow-[inset_0_-1px_0_var(--line)]'
 const td = 'px-3 py-3 whitespace-nowrap'
@@ -90,7 +89,8 @@ export function RunsTable({
                   )}
                 </td>
                 <th scope="row" className={cn(td, 'text-left font-normal')}>
-                  <button type="button" onClick={() => onOpen(r.id)} className="font-mono text-ink group-hover:text-accent">
+                  {/* The row's click handler opens the run; a second one here would push it twice. */}
+                  <button type="button" className="font-mono text-ink group-hover:text-accent">
                     {r.id}
                   </button>
                   {r.label && <div className="max-w-56 truncate text-xs text-muted">{r.label}</div>}
@@ -110,7 +110,7 @@ export function RunsTable({
                   <SourceLinks run={r} />
                 </td>
                 <td className={cn(td, 'pr-5 text-right')}>
-                  {isActive(r.status) && !r.cancel_requested && (
+                  {canCancel(r) && (
                     <button
                       type="button"
                       disabled={cancelling === r.id}

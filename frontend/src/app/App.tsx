@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { useServiceLeaderboard, useServices } from '../api/client'
+import { useRuns, useServiceLeaderboard, useServices } from '../api/client'
 import { CatalogSection } from '../features/catalog/CatalogSection'
 import { LeaderboardSection } from '../features/leaderboard/LeaderboardSection'
 import { RunsSection } from '../features/runs/RunsSection'
@@ -22,6 +22,9 @@ export default function App() {
   const search = useSearch()
   const service = search.service ? services.data?.find((s) => s.id === search.service) : services.data?.[0]
   const board = useServiceLeaderboard(service?.id, search.profile)
+  // Watched on every tab, not just Runs: it polls while any run is in flight and
+  // refreshes the leaderboard when one finishes (see useRuns).
+  useRuns(service?.id)
 
   // Pin the default service in the URL, so a copied link keeps pointing at it.
   useEffect(() => {

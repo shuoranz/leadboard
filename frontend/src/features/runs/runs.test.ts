@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { buildCatalogIndex } from '../../shared/catalog/catalogIndex'
 import { catalog, run } from '../../test/fixtures'
-import { CUSTOM, buildRunPayload, elapsedSeconds, filterRuns, parseCustomLoad, routingLabel, runCount, stepsFor, type RunForm } from './runs'
+import { CUSTOM, buildRunPayload, canCancel, elapsedSeconds, filterRuns, parseCustomLoad, routingLabel, runCount, stepsFor, type RunForm } from './runs'
 
 const form = (patch: Partial<RunForm> = {}): RunForm => ({
   mode: 'fixed',
@@ -99,5 +99,14 @@ describe('stepsFor', () => {
   it('explains cancellation', () => {
     expect(stepsFor(run({ id: 'r', status: 'cancelled' }))[0].label).toBe('Cancelled before start')
     expect(stepsFor(run({ id: 'r', status: 'cancelled', blazemeter: { master_id: 1 } }))[4].label).toMatch(/partial results/)
+  })
+})
+
+describe('canCancel', () => {
+  it('offers cancel until the load test ends, and only once', () => {
+    for (const status of ['queued', 'starting', 'running'] as const) expect(canCancel(run({ id: 'r', status }))).toBe(true)
+    // Collecting: the test is over and its results are on the way.
+    for (const status of ['collecting', 'completed', 'failed', 'cancelled'] as const) expect(canCancel(run({ id: 'r', status }))).toBe(false)
+    expect(canCancel(run({ id: 'r', status: 'running', cancel_requested: true }))).toBe(false)
   })
 })

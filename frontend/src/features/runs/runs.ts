@@ -89,6 +89,13 @@ export function elapsedSeconds(run: Pick<Run, 'started_at' | 'ended_at'>, now = 
   return Number.isNaN(start) || Number.isNaN(end) ? undefined : Math.max(0, (end - start) / 1000)
 }
 
+/**
+ * Whether Cancel is offered. Not once the load test has ended (collecting): its
+ * results are on the way and cancelling would only throw them away.
+ */
+export const canCancel = (run: Pick<Run, 'status' | 'cancel_requested'>) =>
+  (run.status === 'queued' || run.status === 'starting' || run.status === 'running') && !run.cancel_requested
+
 export type StatusFilter = 'all' | 'active' | 'completed' | 'failed'
 
 export function filterRuns(runs: Run[], f: StatusFilter): Run[] {
