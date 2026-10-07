@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { board, catalog, row, run } from '../test/fixtures'
@@ -58,16 +58,44 @@ describe('App', () => {
     expect(window.location.search).toBe('?service=head')
   })
 
-  it('tabs are navigation: runs and catalog', async () => {
+  it('section tabs in the header are navigation: runs and catalog', async () => {
     stub()
     renderWithProviders(<App />, { url: '/?service=summ' })
     await screen.findByRole('heading', { level: 1, name: 'Summarize API' })
-    await userEvent.click(screen.getByRole('radio', { name: 'Runs' }))
+    const tabs = screen.getByRole('navigation', { name: 'Service sections' })
+    expect(within(tabs).getByRole('link', { name: 'Leaderboard' })).toHaveAttribute('aria-current', 'page')
+    // Real links, so they also open in a new tab.
+    expect(within(tabs).getByRole('link', { name: 'Runs' })).toHaveAttribute('href', '/?service=summ&tab=runs')
+
+    const before = window.history.length
+    await userEvent.click(within(tabs).getByRole('link', { name: 'Runs' }))
     expect(window.location.search).toBe('?service=summ&tab=runs')
+    expect(window.history.length).toBe(before + 1)
+    expect(within(tabs).getByRole('link', { name: 'Runs' })).toHaveAttribute('aria-current', 'page')
     expect(await screen.findByRole('button', { name: 'r_1' })).toBeInTheDocument()
     expect(screen.getByRole('cell', { name: '1,234' })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('radio', { name: 'Models catalog' }))
+    await userEvent.click(within(tabs).getByRole('link', { name: 'Models catalog' }))
     expect(await screen.findByRole('table', { name: 'Catalog' })).toBeInTheDocument()
+  })
+
+  it('the current tab leads back to its top: Runs closes an open run', async () => {
+    stub({ '/runs/r_1': run({ id: 'r_1', service_id: 'summ', status: 'queued' }) })
+    renderWithProviders(<App />, { url: '/?service=summ&tab=runs&run=r_1' })
+    expect(await screen.findByRole('heading', { name: /r_1/ })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('link', { name: 'Runs' }))
+    expect(window.location.search).toBe('?service=summ&tab=runs')
+    expect(await screen.findByRole('table', { name: 'Runs' })).toBeInTheDocument()
+  })
+
+  it('a modified click is left to the browser (new tab), not handled in place', async () => {
+    stub()
+    renderWithProviders(<App />, { url: '/?service=summ' })
+    await screen.findByRole('heading', { level: 1, name: 'Summarize API' })
+    const link = screen.getByRole('link', { name: 'Runs' })
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true, metaKey: true })
+    link.dispatchEvent(click)
+    expect(click.defaultPrevented).toBe(false)
+    expect(window.location.search).toBe('?service=summ')
   })
 
   it('reports a contract violation with the offending field instead of crashing', async () => {

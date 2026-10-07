@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { parseSearch, updateSearch } from './searchParams'
+import { parseSearch, searchHref, updateSearch } from './searchParams'
 
 describe('parseSearch', () => {
   it('parses every key', () => {
@@ -42,5 +42,21 @@ describe('updateSearch', () => {
     updateSearch({ service: 'b' }, { push: true, reset: true })
     expect(window.location.search).toBe('?service=b')
     expect(window.history.length).toBe(before + 1)
+  })
+
+  it('pushing the current URL again adds no history entry', () => {
+    const before = window.history.length
+    updateSearch({ tab: 'runs' }, { push: true })
+    expect(window.history.length).toBe(before)
+  })
+})
+
+describe('searchHref', () => {
+  beforeEach(() => window.history.replaceState(null, '', '/app/?service=s&tab=runs&run=r1'))
+
+  it('is the URL updateSearch would navigate to, without navigating', () => {
+    expect(searchHref({ tab: 'catalog', run: null })).toBe('/app/?service=s&tab=catalog')
+    expect(searchHref({ service: 'b' }, { reset: true })).toBe('/app/?service=b')
+    expect(window.location.search).toBe('?service=s&tab=runs&run=r1')
   })
 })

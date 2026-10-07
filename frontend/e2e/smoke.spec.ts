@@ -102,13 +102,13 @@ test('auto routing run shows its routing mix; switching service navigates and ba
   await expect(page.getByRole('table', { name: 'Routing mix' })).toBeVisible({ timeout: 20_000 })
 
   await page.goto('/?service=summarize-profile&profile=smoke')
-  await page.getByLabel('Service').selectOption('headline-rewrite')
+  await page.getByRole('combobox', { name: /^Service/ }).selectOption('headline-rewrite')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Headline Rewrite API')
   await page.goBack()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Summarize Profile API')
   await expect(page.getByRole('radio', { name: /^Smoke/ })).toBeChecked()
 
-  await page.getByRole('radio', { name: 'Models catalog' }).click()
+  await page.getByRole('navigation', { name: 'Service sections' }).getByRole('link', { name: 'Models catalog' }).click()
   const catalog = page.getByRole('table', { name: 'Catalog' })
   const groupHeads = catalog.locator('th[scope=rowgroup]')
   await expect(groupHeads.first()).toContainText('Aurora Labs API')

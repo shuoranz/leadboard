@@ -17,7 +17,7 @@ A leaderboard of LLM deployments **per service**. Teams own LLM-backed API servi
 
 **A leaderboard row is an offering (provider × LLM)** on its latest completed run under the selected **load profile** (Smoke / Baseline / Stress / Custom); results are only comparable within one profile, so profiles are tabs. Auto-routed runs add one "Auto routing" row. There are no quality scores: ranking is by client-side E2E p95.
 
-The service page has three tabs (`?tab=`):
+The service page has three sections (`?tab=`), shown as tabs in the header's second row, under the wordmark and the service picker:
 
 - **Leaderboard**: 01 Leaderboard (profile tabs, test conditions, grouped columns: Latency / Reliability / Throughput / Cost, filters, compare, column chooser, expandable rows with capabilities, error causes, TTFT by prompt length, recent runs, routing mix) and 02 Insights (latency-vs-cost scatter with frontier and kill zone, cost per 1K successful requests ranked, performance radar).
 - **Runs**: the run list (live status, polling while in flight, cancel, report links), the new-run form, and the run detail page (`?run=`): stepper, KPIs, BlazeMeter card with timeline chart, Splunk card, routing mix.
@@ -116,7 +116,7 @@ frontend/
   e2e/smoke.spec.ts
   src/
     api/types.ts, client.ts      zod contract; queries + mutations (useStartRun, useCancelRun), polling while active
-    app/App.tsx                  service switcher, service header, tabs, loading/error, ErrorBoundary
+    app/App.tsx                  header (service switcher + section tabs, sticky from sm), service title, loading/error, ErrorBoundary
     features/
       leaderboard/               LeaderboardSection, LeaderboardTable, OfferingDetail, TestConditions, table.ts, useLeaderboardView
       insights/                  InsightsSection (lazy), LatencyCostScatter, scatterLayout.ts, CostRanked, PerfRadar
@@ -171,7 +171,7 @@ frontend/
   - Render inside `ChartFrame`, which measures the container and passes the real pixel width, so text never scales. Keep legends *outside* the frame, which has a fixed height.
   - Chart type sizes come from `CHART_TEXT`.
   - The scatter measures label widths with the same font values it draws with, and waits for `document.fonts.ready` first.
-- **Accessibility:** one-of-many choices use `ChipRadioGroup` (a Radix radio group: arrow keys, a single tab stop); on/off filters use `Chip` (`aria-pressed`). Menus use `PopoverMenu`, which moves focus in and returns it on close. Tooltips use `Tip`, which opens on hover and on Tab focus and repositions at screen edges; its trigger must be focusable.
+- **Accessibility:** the section tabs are navigation, so they're links (`aria-current="page"`, a real `href` from `searchHref`, so they open in a new tab too) and are styled as underlined tabs, never as pills. Pills mean "filter what this section shows". One-of-many choices use `ChipRadioGroup` (a Radix radio group: arrow keys, a single tab stop); on/off filters use `Chip` (`aria-pressed`). Menus use `PopoverMenu`, which moves focus in and returns it on close. Tooltips use `Tip`, which opens on hover and on Tab focus and repositions at screen edges; its trigger must be focusable.
 - **The categorical palette** (8 slots, light and dark steps) is validated for colorblind separation. Don't reorder the slots or invent new ones.
 
 ---
@@ -274,6 +274,7 @@ Then check by hand with `make dev` (the real stack, http://localhost:5176):
 - **Radix RadioGroup** selects on arrow keys only while the key is held (it moves focus in a `setTimeout`). Playwright's `keyboard.press` is too fast; use `down` → wait ~60ms → `up`. Real users are fine.
 - **Playwright locators:**
   - `name: 'All'` also matches "Overall"; use `exact: true`.
+  - `getByLabel('Service')` also matches the "Service sections" nav, and `exact` can't help: the picker's name includes the selected option. Use `getByRole('combobox', { name: /^Service/ })`.
   - `/1K requests/` matches every "Cost / 1K successful requests" label (column, radar axis, tooltips); anchor or scope it.
   - Selecting a scatter point re-orders the points (dominated ones are drawn first), so `.first()` changes. Pin the point by its exact `aria-label`.
 - **The mock must serve both servers:** it needs `configureServer` *and* `configurePreviewServer`, or `vite preview` (and e2e) has no API.

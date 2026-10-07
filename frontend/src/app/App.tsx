@@ -1,13 +1,13 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, type MouseEvent } from 'react'
 import { useRuns, useServiceLeaderboard, useServices } from '../api/client'
 import { CatalogSection } from '../features/catalog/CatalogSection'
 import { LeaderboardSection } from '../features/leaderboard/LeaderboardSection'
 import { RunsSection } from '../features/runs/RunsSection'
 import { BoardProvider } from '../shared/board/BoardContext'
 import type { BoardIndex } from '../shared/board/boardIndex'
+import { cn } from '../shared/lib/cn'
 import { formatDate } from '../shared/lib/format'
-import { updateSearch, useSearch, type Tab } from '../shared/state/searchParams'
-import { ChipRadioGroup } from '../shared/ui/ChipRadioGroup'
+import { searchHref, updateSearch, useSearch, type Tab } from '../shared/state/searchParams'
 import { ErrorBoundary } from '../shared/ui/ErrorBoundary'
 import { SelectPill } from '../shared/ui/SelectPill'
 
@@ -22,6 +22,7 @@ export default function App() {
   const search = useSearch()
   const service = search.service ? services.data?.find((s) => s.id === search.service) : services.data?.[0]
   const board = useServiceLeaderboard(service?.id, search.profile)
+  const tab = search.tab ?? 'leaderboard'
   // Watched on every tab, not just Runs: it polls while any run is in flight and
   // refreshes the leaderboard when one finishes (see useRuns).
   useRuns(service?.id)
@@ -33,21 +34,25 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-line bg-surface">
-        <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-8">
-          <span className="font-mono text-sm font-semibold tracking-wide text-ink">
-            <span className="text-accent">▍</span>LLM Service Benchmark
-          </span>
-          {services.data && services.data.length > 0 && (
-            <SelectPill label="Service" value={service?.id ?? ''} onChange={selectService} className="min-w-64" mono={false}>
-              {!service && <option value="">Choose a service…</option>}
-              {services.data.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </SelectPill>
-          )}
+      {/* Sticky from sm up; on a phone the two rows would cover too much of the screen. */}
+      <header className="border-b border-line bg-surface sm:sticky sm:top-0 sm:z-30">
+        <div className="mx-auto max-w-page px-4 sm:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-3 py-3">
+            <span className="font-mono text-sm font-semibold tracking-wide text-ink">
+              <span className="text-accent">▍</span>LLM Service Benchmark
+            </span>
+            {services.data && services.data.length > 0 && (
+              <SelectPill label="Service" value={service?.id ?? ''} onChange={selectService} className="min-w-64" mono={false}>
+                {!service && <option value="">Choose a service…</option>}
+                {services.data.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </SelectPill>
+            )}
+          </div>
+          {service && <SectionTabs tab={tab} />}
         </div>
       </header>
 
@@ -76,7 +81,7 @@ export default function App() {
             )}
           >
             <BoardProvider value={board.data}>
-              <ServicePage board={board.data} tab={search.tab ?? 'leaderboard'} />
+              <ServicePage board={board.data} tab={tab} />
             </BoardProvider>
           </ErrorBoundary>
         )}
@@ -85,14 +90,47 @@ export default function App() {
   )
 }
 
-const TAB_OPTIONS: { value: Tab; label: string }[] = [
+const TABS: { value: Tab; label: string }[] = [
   { value: 'leaderboard', label: 'Leaderboard' },
   { value: 'runs', label: 'Runs' },
   { value: 'catalog', label: 'Models catalog' },
 ]
 
-// Changing tab is navigation; it closes any open run or form.
-const selectTab = (t: Tab) => updateSearch({ tab: t === 'leaderboard' ? null : t, run: null, new: null }, { push: true })
+// Changing tab is navigation; it closes any open run or form (so the current tab leads back to its top).
+const tabPatch = (t: Tab) => ({ tab: t === 'leaderboard' ? null : t, run: null, new: null })
+
+/**
+ * The service's sections, as links: real URLs, so they open in a new tab too,
+ * while a plain click navigates in place. Styled as tabs, unlike the pill
+ * chips below them, which filter what a section shows.
+ */
+function SectionTabs({ tab }: { tab: Tab }) {
+  const go = (e: MouseEvent, t: Tab) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+    e.preventDefault()
+    updateSearch(tabPatch(t), { push: true })
+  }
+  return (
+    <nav aria-label="Service sections" className="-mx-1.5 -mb-px flex gap-3 overflow-x-auto">
+      {TABS.map((t) => (
+        <a
+          key={t.value}
+          href={searchHref(tabPatch(t.value))}
+          aria-current={t.value === tab ? 'page' : undefined}
+          onClick={(e) => go(e, t.value)}
+          className={cn(
+            // Inset focus ring: the nav scrolls sideways on narrow screens and would clip an outer one.
+            // px + the nav's -mx keep the labels aligned with the page while giving the ring room.
+            'rounded-t-md border-b-2 px-1.5 pt-1 pb-2.5 font-mono text-sm whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent',
+            t.value === tab ? 'border-accent font-semibold text-ink' : 'border-transparent text-ink-2 hover:border-line-strong hover:text-ink',
+          )}
+        >
+          {t.label}
+        </a>
+      ))}
+    </nav>
+  )
+}
 
 function ServicePage({ board, tab }: { board: BoardIndex; tab: Tab }) {
   const updated = formatDate(board.updatedAt)
@@ -107,9 +145,6 @@ function ServicePage({ board, tab }: { board: BoardIndex; tab: Tab }) {
           {s.allowed_offering_ids ? ` · ${s.allowed_offering_ids.length} allowed models` : ' · any catalog model'}
           {updated && ` · last run ${updated}`}
         </p>
-        <nav aria-label="Service sections" className="mt-6">
-          <ChipRadioGroup<Tab> label="View" value={tab} onChange={selectTab} options={TAB_OPTIONS} />
-        </nav>
       </div>
       {tab === 'leaderboard' && (
         <>

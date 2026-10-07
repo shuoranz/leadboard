@@ -75,7 +75,8 @@ export interface UpdateOptions {
   reset?: boolean
 }
 
-export function updateSearch(patch: SearchPatch, { push = false, reset = false }: UpdateOptions = {}) {
+/** The URL the current one becomes with `patch` applied: for links, so they open in a new tab too. */
+export function searchHref(patch: SearchPatch, { reset = false }: Pick<UpdateOptions, 'reset'> = {}): string {
   const params = reset ? new URLSearchParams() : new URLSearchParams(window.location.search)
   for (const [key, value] of Object.entries(patch) as [SearchKey, SearchPatch[SearchKey]][]) {
     const s = serialize(value)
@@ -83,8 +84,14 @@ export function updateSearch(patch: SearchPatch, { push = false, reset = false }
     else params.set(key, s)
   }
   const qs = params.toString()
-  const url = `${window.location.pathname}${qs ? `?${qs}` : ''}${window.location.hash}`
-  if (push) window.history.pushState(null, '', url)
+  return `${window.location.pathname}${qs ? `?${qs}` : ''}${window.location.hash}`
+}
+
+export function updateSearch(patch: SearchPatch, { push = false, reset = false }: UpdateOptions = {}) {
+  const url = searchHref(patch, { reset })
+  const current = `${window.location.pathname}${window.location.search}${window.location.hash}`
+  // Navigating to where you already are isn't a new place: Back shouldn't stop there twice.
+  if (push && url !== current) window.history.pushState(null, '', url)
   else window.history.replaceState(null, '', url)
   listeners.forEach((l) => l())
 }
