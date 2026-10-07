@@ -1,4 +1,10 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Locator } from '@playwright/test'
+
+/** Tables grow with their rows: the wrapper may scroll sideways, never up and down. */
+async function expectNoInnerScroll(table: Locator) {
+  const overflow = await table.evaluate((t) => t.parentElement!.scrollHeight - t.parentElement!.clientHeight)
+  expect(overflow).toBeLessThanOrEqual(1)
+}
 
 // Runs against the production bundle served by `vite preview` with the mock API
 // (seed data from fake_data/, runs simulated on a wall clock).
@@ -13,6 +19,7 @@ test('leaderboard loads, sorts, switches profile and keeps its view in the URL',
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Summarize Profile API')
   const table = page.getByRole('table', { name: 'Leaderboard' })
   await expect(table.locator('tbody tr').first()).toBeVisible()
+  await expectNoInnerScroll(table)
   for (const g of ['Latency', 'Reliability', 'Throughput', 'Cost']) {
     await expect(table.getByRole('columnheader', { name: g, exact: true })).toBeVisible()
   }
@@ -79,6 +86,7 @@ test('start a fixed batch: runs queue, progress, finish, and show both sources',
   const runs = page.getByRole('table', { name: 'Runs' })
   const mine = runs.locator('tbody tr', { hasText: 'e2e smoke' })
   await expect(mine).toHaveCount(2)
+  await expectNoInnerScroll(runs)
   await expect(mine.filter({ hasText: /Running|Starting|Queued/ }).first()).toBeVisible()
 
   await mine.first().getByRole('button').first().click()
@@ -112,6 +120,7 @@ test('auto routing run shows its routing mix; switching service navigates and ba
   const catalog = page.getByRole('table', { name: 'Catalog' })
   const groupHeads = catalog.locator('th[scope=rowgroup]')
   await expect(groupHeads.first()).toContainText('Aurora Labs API')
+  await expectNoInnerScroll(catalog)
   await page.getByRole('radio', { name: 'LLM → provider' }).click()
   await expect(groupHeads.first()).toContainText('Aurora 4')
 })

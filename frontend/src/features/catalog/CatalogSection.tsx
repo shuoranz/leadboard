@@ -36,7 +36,7 @@ export function CatalogSection({ service }: { service: Service }) {
   const cat = catalog.data
   const offerings = onlyService ? serviceOfferings(cat, service) : cat.offerings
   const groups = groupOfferings(cat, offerings, by)
-  const th = 'sticky top-0 z-10 bg-surface px-4 py-3 font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase shadow-[inset_0_-1px_0_var(--line)]'
+  const th = 'bg-surface px-4 py-3 font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase shadow-[inset_0_-1px_0_var(--line)]'
 
   return (
     <section aria-labelledby="catalog-title">
@@ -60,7 +60,8 @@ export function CatalogSection({ service }: { service: Service }) {
         </Chip>
       </div>
 
-      <div className="mt-5 max-h-[80vh] overflow-auto rounded-2xl border border-line bg-surface">
+      {/* As tall as its rows; scrolls only sideways. */}
+      <div className="mt-5 overflow-x-auto rounded-2xl border border-line bg-surface">
         <table aria-label="Catalog" className="w-full border-separate border-spacing-0 text-sm">
           <thead>
             <tr>

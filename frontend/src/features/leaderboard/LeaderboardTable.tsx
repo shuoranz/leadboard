@@ -54,20 +54,17 @@ export function LeaderboardTable({
   // column's own border, so it doesn't get one.
   const divider = (i: number) => i > 0 && startsGroup(columns, i) && 'border-l border-line'
   const spans = groupSpans(columns)
-  // Both header rows stick to the top of the scroll area: the group row at 0, the
-  // titles just below it (GROUP_ROW is the group row's fixed height).
-  const headCell = 'sticky z-20 bg-surface shadow-[inset_0_-1px_0_var(--line)]'
-  const GROUP_ROW = 'h-9'
+  const headCell = 'bg-surface shadow-[inset_0_-1px_0_var(--line)]'
   const stickyLeft = 'sticky z-10 bg-surface group-hover:bg-surface-2'
 
   return (
-    // When every row is shown the table scrolls inside a bounded area, so the
-    // header can stay pinned (sticky can't escape a horizontal scroll container).
-    <div ref={scrollRef} className={cn('overflow-auto rounded-2xl border border-line bg-surface', limit == null && 'max-h-[80vh]')}>
+    // As tall as its rows: no inner vertical scroll. It only scrolls sideways, when
+    // the columns don't fit, with the expand and Model columns pinned on the left.
+    <div ref={scrollRef} className="overflow-x-auto rounded-2xl border border-line bg-surface">
       <table aria-label="Leaderboard" className="w-full border-separate border-spacing-0 text-body">
         <thead>
           <tr>
-            <th scope="col" rowSpan={2} className={cn(headCell, 'top-0 left-0 z-30 w-10')}>
+            <th scope="col" rowSpan={2} className={cn(headCell, 'sticky left-0 z-30 w-10')}>
               <span className="sr-only">Expand</span>
             </th>
             <th
@@ -75,7 +72,7 @@ export function LeaderboardTable({
               rowSpan={2}
               className={cn(
                 headCell,
-                'top-0 left-10 z-30 min-w-56 border-r border-line py-4 pr-4 text-left align-bottom font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase',
+                'sticky left-10 z-30 min-w-56 border-r border-line py-4 pr-4 text-left align-bottom font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase',
               )}
             >
               Model
@@ -87,8 +84,7 @@ export function LeaderboardTable({
                 colSpan={g.span}
                 className={cn(
                   headCell,
-                  GROUP_ROW,
-                  'top-0 px-4 text-left font-mono text-micro font-semibold tracking-widest text-muted uppercase',
+                  'h-9 px-4 text-left font-mono text-micro font-semibold tracking-widest text-muted uppercase',
                   i > 0 && 'border-l border-line',
                 )}
               >
@@ -104,7 +100,7 @@ export function LeaderboardTable({
                   key={col.id}
                   scope="col"
                   aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
-                  className={cn(headCell, 'top-9 px-4 py-3 text-right align-bottom', divider(i))}
+                  className={cn(headCell, 'px-4 py-3 text-right align-bottom', divider(i))}
                 >
                   <button
                     type="button"

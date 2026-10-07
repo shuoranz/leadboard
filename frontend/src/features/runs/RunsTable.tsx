@@ -5,7 +5,7 @@ import { formatCost1k, formatDateTime, formatDuration, formatInt, formatPercent 
 import { StatusBadge } from '../../shared/perf/PerfPanels'
 import { canCancel, elapsedSeconds, routingLabel } from './runs'
 
-const th = 'sticky top-0 z-10 bg-surface px-3 py-3 font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase shadow-[inset_0_-1px_0_var(--line)]'
+const th = 'bg-surface px-3 py-3 font-mono text-xs font-semibold tracking-wider text-ink-2 uppercase shadow-[inset_0_-1px_0_var(--line)]'
 const td = 'px-3 py-3 whitespace-nowrap'
 
 /** External report links open in a new tab; the fake systems serve simple pages for them. */
@@ -47,7 +47,8 @@ export function RunsTable({
   cancelling?: string
 }) {
   return (
-    <div className="max-h-[75vh] overflow-auto rounded-2xl border border-line bg-surface">
+    // As tall as its rows (the list shows 50 until "Show all"); scrolls only sideways.
+    <div className="overflow-x-auto rounded-2xl border border-line bg-surface">
       <table aria-label="Runs" className="w-full border-separate border-spacing-0 text-sm">
         <thead>
           <tr>
