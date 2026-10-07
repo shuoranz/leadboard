@@ -1,0 +1,29 @@
+[
+  {
+    "id": "smoke",
+    "name": "Smoke",
+    "description": "Sanity check at light load.",
+    "concurrency": 5,
+    "ramp_up_s": 10,
+    "duration_s": 60,
+    "think_time_s": 1.0
+  },
+  {
+    "id": "baseline",
+    "name": "Baseline",
+    "description": "Typical production load.",
+    "concurrency": 20,
+    "ramp_up_s": 30,
+    "duration_s": 300,
+    "think_time_s": 2.0
+  },
+  {
+    "id": "stress",
+    "name": "Stress",
+    "description": "Peak load, past most deployments' saturation point.",
+    "concurrency": 80,
+    "ramp_up_s": 60,
+    "duration_s": 600,
+    "think_time_s": 2.0
+  }
+]

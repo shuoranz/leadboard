@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    paths: ['frontend/**', '.github/workflows/frontend.yml']
+    paths: ['frontend/**', 'fake_data/seed/**', '.github/workflows/frontend.yml']
 
 # Least privilege: the job only needs to read the repo. Every step (including
 # dependency install scripts) sees this token, so it must not be able to write.

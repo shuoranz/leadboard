@@ -38,7 +38,12 @@ export default defineConfig(({ command, mode }) => {
     // The API client resolves `api/` relative to the page the same way.
     base: './',
     plugins: [react(), tailwindcss(), cleanOwnedOutput(), command === 'serve' && !proxyTarget && mockApi(apiBase)],
-    server: proxyTarget ? { proxy: { [apiBase]: { target: proxyTarget, changeOrigin: true } } } : undefined,
+    // Always 5176: fail loudly if it's taken rather than drifting to another port.
+    server: {
+      port: 5176,
+      strictPort: true,
+      ...(proxyTarget && { proxy: { [apiBase]: { target: proxyTarget, changeOrigin: true } } }),
+    },
     preview: proxyTarget ? { proxy: { [apiBase]: { target: proxyTarget, changeOrigin: true } } } : undefined,
     build: {
       outDir: OUT_DIR,

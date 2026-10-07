@@ -1,48 +1,38 @@
-// Pure table logic: which columns a view has, which models pass the filters,
-// and how rows sort. Kept free of React so it can be unit-tested.
-import type { ModelEntry } from '../../api/types'
-import type { BoardIndex } from '../../shared/board/boardIndex'
-import { OVERALL, blendedPrice, costFor, modelKey, passesFinetune, reasoningShare, type View } from '../../shared/board/model'
-import {
-  formatCompact,
-  formatCost,
-  formatDecimal,
-  formatInt,
-  formatPair,
-  formatPercent,
-  formatPrice,
-  formatScore,
-  formatSignedPercent,
-} from '../../shared/lib/format'
+// Pure table logic: which columns the leaderboard has, which rows pass the
+// filters, and how rows sort. Kept free of React so it can be unit-tested.
+import type { LeaderboardRow } from '../../api/types'
+import { blendedPrice, costPer1k, e2eP95, modelKey } from '../../shared/board/model'
+import { formatCompact, formatCost1k, formatDecimal, formatInt, formatPair, formatPercent, formatPrice } from '../../shared/lib/format'
 
-export type ColumnGroup = 'quality' | 'reliability' | 'latency' | 'throughput' | 'cost'
+export type ColumnGroup = 'reliability' | 'latency' | 'throughput' | 'cost'
 
 /** Header row above the columns, in display order. */
 export const COLUMN_GROUPS: { id: ColumnGroup; label: string }[] = [
-  { id: 'quality', label: 'Quality' },
-  { id: 'reliability', label: 'Reliability' },
   { id: 'latency', label: 'Latency' },
+  { id: 'reliability', label: 'Reliability' },
   { id: 'throughput', label: 'Throughput' },
   { id: 'cost', label: 'Cost' },
 ]
 
 export interface Column {
-  /** Namespaced so category, subtask, metric and cost ids can never collide. */
+  /** Namespaced (`perf:<key>`), so ids stay stable in shared URLs. */
   id: string
   label: string
   group: ColumnGroup
   /** Sort key, and the value shading ranks by. */
-  get: (m: ModelEntry) => number | undefined
+  get: (r: LeaderboardRow) => number | undefined
   /** Cell text. */
-  format: (m: ModelEntry) => string
+  format: (r: LeaderboardRow) => string
   /** Which direction is better: sets the first-click sort and which end gets shaded. null = neither. */
   better: 'higher' | 'lower' | null
   /** Shade the best 5 in this column. */
   shade: boolean
-  /** The column the current view is ranked by; rendered bold. */
+  /** The column the board is ranked by by default; rendered bold. */
   primary?: boolean
   /** Starts hidden; available from "Choose columns". */
   defaultHidden?: boolean
+  /** Hover text for the header: where the number comes from. */
+  source?: 'BlazeMeter' | 'Splunk' | 'Catalog'
 }
 
 export type SortDir = 'asc' | 'desc'
@@ -51,26 +41,8 @@ export interface SortState {
   dir: SortDir
 }
 
-export const colId = {
-  overall: 'overall',
-  category: (id: string) => `cat:${id}`,
-  subtask: (id: string) => `sub:${id}`,
-  perf: (key: string) => `perf:${key}`,
-  cost: 'cost',
-}
-
-export const primaryColumnId = (view: View) => (view === OVERALL ? colId.overall : colId.category(view))
-
-const scoreColumn = (id: string, label: string, get: Column['get'], extra: Partial<Column> = {}): Column => ({
-  id,
-  label,
-  group: 'quality',
-  get,
-  format: (m) => formatScore(get(m)),
-  better: 'higher',
-  shade: true,
-  ...extra,
-})
+export const colId = (key: string) => `perf:${key}`
+export const PRIMARY_COLUMN = colId('e2e_p95')
 
 /** A measured metric. `better: null` means neither direction is better, so it isn't shaded. */
 const metric = (
@@ -78,107 +50,66 @@ const metric = (
   key: string,
   label: string,
   better: Column['better'],
+  source: Column['source'],
   get: Column['get'],
-  format: (m: ModelEntry) => string,
+  format: (r: LeaderboardRow) => string,
   extra: Partial<Column> = {},
-): Column => ({ id: colId.perf(key), label, group, get, format, better, shade: better != null, ...extra })
+): Column => ({ id: colId(key), label, group, get, format, better, shade: better != null, source, ...extra })
 
 type Pct = { p50?: number; p95?: number; p99?: number } | undefined
-const ms = (p: Pct) => formatPair(p?.p50, p?.p95, formatInt)
+const ms = (p: Pct, a: 'p50' | 'p95' = 'p50', b: 'p95' | 'p99' = 'p95') => formatPair(p?.[a], p?.[b], formatInt)
 
-/**
- * Client-side API performance and true cost, shown in the overall view, grouped
- * as they appear in the header. Paired cells sort by their first value.
- */
-export const PERF_COLUMNS: Column[] = [
+/** Grouped as they appear in the header. Paired cells sort by their first value. */
+export const COLUMNS: Column[] = [
+  // Latency — client side (BlazeMeter) unless marked server.
+  metric('latency', 'e2e_p95', 'E2E p95 · client (ms)', 'lower', 'BlazeMeter', e2eP95, (r) => formatInt(e2eP95(r)), { primary: true }),
+  metric('latency', 'e2e', 'E2E p50 / p99 · client (ms)', 'lower', 'BlazeMeter', (r) => r.perf.e2e_ms?.p50, (r) => ms(r.perf.e2e_ms, 'p50', 'p99')),
+  metric('latency', 'ttft', 'TTFT p50 / p95 (ms)', 'lower', 'Splunk', (r) => r.perf.ttft_ms?.p50, (r) => ms(r.perf.ttft_ms)),
+  metric('latency', 'ttft_p99', 'TTFT p99 (ms)', 'lower', 'Splunk', (r) => r.perf.ttft_ms?.p99, (r) => formatInt(r.perf.ttft_ms?.p99), {
+    defaultHidden: true,
+  }),
+  metric('latency', 'itl', 'ITL p50 / p95 (ms)', 'lower', 'Splunk', (r) => r.perf.itl_ms?.p50, (r) => ms(r.perf.itl_ms)),
+  metric('latency', 'server_e2e', 'E2E p50 / p95 · server (ms)', 'lower', 'Splunk', (r) => r.perf.server_e2e_ms?.p50, (r) => ms(r.perf.server_e2e_ms), {
+    defaultHidden: true,
+  }),
+  metric('latency', 'overhead', 'Network overhead p50 / p95 (ms)', 'lower', 'BlazeMeter', (r) => r.perf.client_overhead_ms?.p50, (r) =>
+    ms(r.perf.client_overhead_ms),
+  ),
+  metric('latency', 'stall_rate', 'Stall rate', 'lower', 'Splunk', (r) => r.perf.stall_rate, (r) => formatPercent(r.perf.stall_rate), {
+    defaultHidden: true,
+  }),
   // Reliability
-  metric('reliability', 'requests', 'Requests', null, (m) => m.perf?.requests, (m) => formatInt(m.perf?.requests)),
-  metric('reliability', 'success_rate', 'Success rate', 'higher', (m) => m.perf?.success_rate, (m) => formatPercent(m.perf?.success_rate)),
-  metric('reliability', 'success_after_retry', 'Success after retries', 'higher', (m) => m.perf?.success_after_retry, (m) =>
-    formatPercent(m.perf?.success_after_retry),
-  ),
-  metric('reliability', 'errors', 'Errors', 'lower', (m) => m.perf?.errors, (m) => formatInt(m.perf?.errors)),
-  metric('reliability', 'truncation', 'Truncated', 'lower', (m) => m.perf?.truncation_rate, (m) => formatPercent(m.perf?.truncation_rate)),
-  // Latency
-  metric('latency', 'ttft', 'TTFT client p50 / p95 (ms)', 'lower', (m) => m.perf?.ttft_ms?.p50, (m) => ms(m.perf?.ttft_ms)),
-  metric('latency', 'ttft_p99', 'TTFT client p99 (ms)', 'lower', (m) => m.perf?.ttft_ms?.p99, (m) => formatInt(m.perf?.ttft_ms?.p99)),
-  metric('latency', 'itl', 'ITL p50 / p95 (ms)', 'lower', (m) => m.perf?.itl_ms?.p50, (m) => ms(m.perf?.itl_ms)),
-  metric('latency', 'stall_rate', 'Stall rate', 'lower', (m) => m.perf?.stall_rate, (m) => formatPercent(m.perf?.stall_rate)),
-  metric('latency', 'e2e', 'E2E client p50 / p95 (ms)', 'lower', (m) => m.perf?.e2e_ms?.p50, (m) => ms(m.perf?.e2e_ms)),
-  metric('latency', 'e2e_p99', 'E2E client p99 (ms)', 'lower', (m) => m.perf?.e2e_ms?.p99, (m) => formatInt(m.perf?.e2e_ms?.p99), {
+  metric('reliability', 'success_rate', 'Success rate', 'higher', 'BlazeMeter', (r) => r.perf.success_rate, (r) => formatPercent(r.perf.success_rate)),
+  metric('reliability', 'requests', 'Requests', null, 'BlazeMeter', (r) => r.perf.requests, (r) => formatInt(r.perf.requests)),
+  metric('reliability', 'errors', 'Errors', 'lower', 'BlazeMeter', (r) => r.perf.errors, (r) => formatInt(r.perf.errors)),
+  metric('reliability', 'truncation', 'Truncated', 'lower', 'Splunk', (r) => r.perf.truncation_rate, (r) => formatPercent(r.perf.truncation_rate), {
     defaultHidden: true,
   }),
-  metric('latency', 'client_overhead', 'Client overhead p50 / p95 (ms)', 'lower', (m) => m.perf?.client_overhead_ms?.p50, (m) =>
-    ms(m.perf?.client_overhead_ms),
-  ),
   // Throughput
-  metric('throughput', 'throughput', 'Throughput (req/s)', 'higher', (m) => m.perf?.throughput_rps, (m) => formatDecimal(m.perf?.throughput_rps)),
-  metric('throughput', 'tokens_per_min', 'Tokens/min avg / peak', 'higher', (m) => m.perf?.tokens_per_min?.avg, (m) =>
-    formatPair(m.perf?.tokens_per_min?.avg, m.perf?.tokens_per_min?.peak, formatCompact),
+  metric('throughput', 'throughput', 'Throughput (req/s)', 'higher', 'BlazeMeter', (r) => r.perf.throughput_rps, (r) =>
+    formatDecimal(r.perf.throughput_rps),
   ),
-  metric('throughput', 'decode', 'Per-request decode (tok/s, p50)', 'higher', (m) => m.perf?.decode_tps_p50, (m) =>
-    formatDecimal(m.perf?.decode_tps_p50),
+  metric('throughput', 'tokens_per_min', 'Output tokens/min avg / peak', 'higher', 'Splunk', (r) => r.perf.tokens_per_min?.avg, (r) =>
+    formatPair(r.perf.tokens_per_min?.avg, r.perf.tokens_per_min?.peak, formatCompact),
   ),
-  metric('throughput', 'prefill', 'Prefill (tok/s)', 'higher', (m) => m.perf?.prefill_tps, (m) => formatInt(m.perf?.prefill_tps), {
+  metric('throughput', 'decode', 'Decode (tok/s, p50)', 'higher', 'Splunk', (r) => r.perf.decode_tps_p50, (r) => formatDecimal(r.perf.decode_tps_p50)),
+  metric('throughput', 'prefill', 'Prefill (tok/s)', 'higher', 'Splunk', (r) => r.perf.prefill_tps, (r) => formatInt(r.perf.prefill_tps), {
     defaultHidden: true,
   }),
-  // Cost. Reasoning share is informational: more thinking costs more but may buy quality.
-  metric('cost', 'reasoning_share', 'Reasoning share of output', null, reasoningShare, (m) => formatPercent(reasoningShare(m))),
-  metric(
-    'cost',
-    'tokens_per_1k_chars',
-    'Tokens / 1K chars',
-    'lower',
-    (m) => m.cost?.tokens_per_1k_chars,
-    (m) => formatInt(m.cost?.tokens_per_1k_chars),
-    { defaultHidden: true },
+  // Cost
+  metric('cost', 'cost_1k', 'Cost / 1K requests', 'lower', 'Splunk', costPer1k, (r) => formatCost1k(costPer1k(r))),
+  metric('cost', 'tokens', 'Avg tokens in / out', null, 'Splunk', (r) => r.perf.avg_input_tokens, (r) =>
+    formatPair(r.perf.avg_input_tokens, r.perf.avg_output_tokens, formatCompact),
   ),
-  metric('cost', 'blended_price', 'Blended $/1M (3:1)', 'lower', blendedPrice, (m) => formatPrice(blendedPrice(m))),
-  metric(
-    'cost',
-    'cached_input_price',
-    'Cached input $/1M',
-    'lower',
-    (m) => m.cost?.cached_input_per_million,
-    (m) => formatPrice(m.cost?.cached_input_per_million),
-    { defaultHidden: true },
-  ),
-  // Sorted by the size of the error either way; the cell keeps the sign (+ = over-billed).
-  metric(
-    'cost',
-    'billing_drift',
-    'Billing drift',
-    'lower',
-    (m) => (m.cost?.billing_drift == null ? undefined : Math.abs(m.cost.billing_drift)),
-    (m) => formatSignedPercent(m.cost?.billing_drift),
+  metric('cost', 'blended_price', 'Blended $/1M (3:1)', 'lower', 'Catalog', blendedPrice, (r) => formatPrice(blendedPrice(r))),
+  metric('cost', 'cached_input_price', 'Cached input $/1M', 'lower', 'Catalog', (r) => r.cost.cached_input_per_million, (r) =>
+    formatPrice(r.cost.cached_input_per_million),
     { defaultHidden: true },
   ),
 ]
 
 /** Column ids that start hidden, for the initial "Choose columns" state. */
-export const DEFAULT_HIDDEN: ReadonlySet<string> = new Set(PERF_COLUMNS.filter((c) => c.defaultHidden).map((c) => c.id))
-
-export function columnsFor(board: Pick<BoardIndex, 'categories' | 'categoriesById'>, view: View): Column[] {
-  const cost: Column = {
-    id: colId.cost,
-    label: 'Cost per successful task',
-    group: 'cost',
-    get: (m) => costFor(m, view),
-    format: (m) => formatCost(costFor(m, view)),
-    better: 'lower',
-    shade: false,
-  }
-  if (view === OVERALL) {
-    return [scoreColumn(colId.overall, 'Overall', (m) => m.overall, { primary: true }), ...PERF_COLUMNS, cost]
-  }
-  const cat = board.categoriesById.get(view)
-  if (!cat) return columnsFor(board, OVERALL)
-  return [
-    scoreColumn(colId.category(cat.id), `${cat.name} avg`, (m) => m.categories[cat.id], { primary: true }),
-    ...cat.subtasks.map((st) => scoreColumn(colId.subtask(st.id), st.name, (m) => m.subtasks[st.id])),
-    cost,
-  ]
-}
+export const DEFAULT_HIDDEN: ReadonlySet<string> = new Set(COLUMNS.filter((c) => c.defaultHidden).map((c) => c.id))
 
 export interface GroupSpan {
   group: ColumnGroup
@@ -200,44 +131,44 @@ export function groupSpans(columns: Column[]): GroupSpan[] {
 /** Whether the i-th visible column starts a group (and so gets a divider). */
 export const startsGroup = (columns: Column[], i: number) => i === 0 || columns[i - 1].group !== columns[i].group
 
-export interface ModelFilters {
+export interface RowFilters {
   query?: string
   openOnly?: boolean
-  includeFinetunes?: boolean
   organization?: string
   provider?: string
 }
 
-export function filterModels(models: ModelEntry[], f: ModelFilters): ModelEntry[] {
+/** The auto-routing row has no single provider or maker, so provider/org/open filters leave it out. */
+export function filterRows(rows: LeaderboardRow[], f: RowFilters): LeaderboardRow[] {
   const q = f.query?.trim().toLowerCase()
-  return models.filter(
-    (m) =>
-      (!q || [m.name, m.organization, m.provider ?? ''].some((s) => s.toLowerCase().includes(q))) &&
-      (!f.openOnly || m.open_weights) &&
-      passesFinetune(m, !!f.includeFinetunes) &&
-      (!f.organization || m.organization === f.organization) &&
-      (!f.provider || m.provider === f.provider),
+  return rows.filter(
+    (r) =>
+      (!q || [r.name, r.organization, r.provider].some((s) => s.toLowerCase().includes(q))) &&
+      (!f.openOnly || r.open_weights) &&
+      (!f.organization || r.organization === f.organization) &&
+      (!f.provider || r.provider === f.provider),
   )
 }
 
-/** Sorts by `column`; models missing the value always sink, ties fall back to overall. */
-export function sortModels(models: ModelEntry[], column: Column, dir: SortDir): ModelEntry[] {
+/** Sorts by `column`; rows missing the value always sink, ties fall back to E2E p95. */
+export function sortRows(rows: LeaderboardRow[], column: Column, dir: SortDir): LeaderboardRow[] {
   const sign = dir === 'asc' ? 1 : -1
-  return [...models].sort((a, b) => {
+  const tie = (a: LeaderboardRow, b: LeaderboardRow) => (e2eP95(a) ?? Infinity) - (e2eP95(b) ?? Infinity) || a.id.localeCompare(b.id)
+  return [...rows].sort((a, b) => {
     const va = column.get(a)
     const vb = column.get(b)
-    if (va == null && vb == null) return b.overall - a.overall
+    if (va == null && vb == null) return tie(a, b)
     if (va == null) return 1
     if (vb == null) return -1
-    return (va - vb) * sign || b.overall - a.overall
+    return (va - vb) * sign || tie(a, b)
   })
 }
 
-/** Keeps the first row per underlying model: its best provider under the current sort. */
-export function bestPerModel(sorted: ModelEntry[]): ModelEntry[] {
+/** Keeps the first row per underlying LLM: its best provider under the current sort. */
+export function bestPerModel(sorted: LeaderboardRow[]): LeaderboardRow[] {
   const seen = new Set<string>()
-  return sorted.filter((m) => {
-    const key = modelKey(m)
+  return sorted.filter((r) => {
+    const key = modelKey(r)
     if (seen.has(key)) return false
     seen.add(key)
     return true
@@ -247,20 +178,22 @@ export function bestPerModel(sorted: ModelEntry[]): ModelEntry[] {
 /** First click sorts best-first: ascending when lower is better (cost, latency, errors). */
 export const defaultDir = (column: Column): SortDir => (column.better === 'lower' ? 'asc' : 'desc')
 
-export function parseSort(raw: string | null, columns: Column[], view: View): SortState {
+export const DEFAULT_SORT: SortState = { id: PRIMARY_COLUMN, dir: 'asc' }
+
+export function parseSort(raw: string | null): SortState {
   const match = raw?.match(/^(.+):(asc|desc)$/)
-  if (match && columns.some((c) => c.id === match[1])) return { id: match[1], dir: match[2] as SortDir }
-  return { id: primaryColumnId(view), dir: 'desc' }
+  if (match && COLUMNS.some((c) => c.id === match[1])) return { id: match[1], dir: match[2] as SortDir }
+  return DEFAULT_SORT
 }
 
 export const formatSort = (s: SortState) => `${s.id}:${s.dir}`
 
-/** Rank (0-based) of each model within the best `n` of a column, by its `better` direction. */
-export function topRanks(models: ModelEntry[], column: Column, n: number): Map<string, number> {
+/** Rank (0-based) of each row within the best `n` of a column, by its `better` direction. */
+export function topRanks(rows: LeaderboardRow[], column: Column, n: number): Map<string, number> {
   if (!column.better) return new Map()
   const sign = column.better === 'lower' ? 1 : -1
-  const top = models
-    .map((m) => ({ id: m.id, v: column.get(m) }))
+  const top = rows
+    .map((r) => ({ id: r.id, v: column.get(r) }))
     .filter((x): x is { id: string; v: number } => x.v != null)
     .sort((a, b) => (a.v - b.v) * sign)
     .slice(0, n)

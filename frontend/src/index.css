@@ -21,6 +21,7 @@
   --accent-ink: light-dark(#ffffff, #0f1115);
   --good: light-dark(#16803c, #3fbf6a);
   --bad: light-dark(#c2352f, #f07470);
+  --warn: light-dark(#a15c00, #e0a33a);
   --grid: light-dark(#eceef3, #232731);
   --dim: light-dark(#cfd3dc, #3a3f4b);
 
@@ -59,6 +60,7 @@
   --color-accent-ink: var(--accent-ink);
   --color-good: var(--good);
   --color-bad: var(--bad);
+  --color-warn: var(--warn);
   --color-grid: var(--grid);
   --color-dim: var(--dim);
   --color-series-1: var(--series-1);

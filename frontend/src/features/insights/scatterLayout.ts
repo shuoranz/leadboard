@@ -1,4 +1,4 @@
-// Pure geometry for the quality-vs-cost scatter: log-x / linear-y scales, ticks,
+// Pure geometry for the latency-vs-cost scatter: log-x / linear-y scales, ticks,
 // the value frontier, and collision-avoiding direct labels.
 
 export interface Box {
@@ -11,16 +11,20 @@ export interface Box {
 export interface Datum<T> {
   item: T
   cost: number
-  score: number
+  /** The y metric, e.g. E2E p95 in ms. */
+  value: number
 }
 
 export type Placed<T> = Datum<T> & { x: number; y: number }
+
+/** Which way the y metric improves. Latency: lower. */
+export type Better = 'higher' | 'lower'
 
 export interface ScatterGeometry<T> {
   points: Placed<T>[]
   frontier: Placed<T>[]
   sx: (cost: number) => number
-  sy: (score: number) => number
+  sy: (value: number) => number
   yTicks: number[]
   xTicks: { v: number; major: boolean }[]
   /** Whether the 2x/5x ticks have room for labels, or only the decades do. */
@@ -29,39 +33,58 @@ export interface ScatterGeometry<T> {
 
 const MIN_TICK_LABEL_GAP = 40
 
-/** Points on the cost/quality Pareto frontier, cheapest first: each beats every cheaper point. */
-export function paretoFrontier<T extends { cost: number; score: number }>(points: T[]): T[] {
-  const sorted = [...points].sort((a, b) => a.cost - b.cost || b.score - a.score)
+/** p beats q on the y metric. */
+export const beats = (better: Better, p: number, q: number) => (better === 'higher' ? p > q : p < q)
+
+/** Points on the cost/value Pareto frontier, cheapest first: each beats every cheaper point. */
+export function paretoFrontier<T extends { cost: number; value: number }>(points: T[], better: Better = 'higher'): T[] {
+  const sign = better === 'higher' ? -1 : 1
+  const sorted = [...points].sort((a, b) => a.cost - b.cost || (a.value - b.value) * sign)
   const out: T[] = []
-  let best = -Infinity
+  let best = better === 'higher' ? -Infinity : Infinity
   for (const p of sorted) {
-    if (p.score > best) {
+    if (beats(better, p.value, best)) {
       out.push(p)
-      best = p.score
+      best = p.value
     }
   }
   return out
 }
 
-export function buildScatter<T>(data: Datum<T>[], plot: Box): ScatterGeometry<T> | null {
+/** Points the selection dominates: worse on the y metric and more expensive. */
+export const dominatedBy = <T extends { cost: number; value: number }>(sel: T, better: Better) => (p: T) =>
+  beats(better, sel.value, p.value) && p.cost > sel.cost
+
+/** A 1/2/5 × 10^k step giving roughly `count` intervals over `span`. */
+export function niceStep(span: number, count = 5) {
+  if (!(span > 0)) return 1
+  const raw = span / count
+  const pow = 10 ** Math.floor(Math.log10(raw))
+  const m = raw / pow
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * pow
+}
+
+export function buildScatter<T>(data: Datum<T>[], plot: Box, better: Better = 'higher'): ScatterGeometry<T> | null {
   if (!data.length || plot.w <= 0 || plot.h <= 0) return null
   const logs = data.map((d) => Math.log10(d.cost))
-  const scores = data.map((d) => d.score)
+  const values = data.map((d) => d.value)
   const lo = Math.min(...logs)
   const hi = Math.max(...logs)
   const span = hi - lo || 1
   const x0 = lo - span * 0.06
   const x1 = hi + span * 0.06
-  const y0 = Math.floor((Math.min(...scores) - 1) / 5) * 5
-  const y1 = Math.ceil((Math.max(...scores) + 1) / 5) * 5
+  const vMin = Math.min(...values)
+  const vMax = Math.max(...values)
+  const step = niceStep((vMax - vMin) * 1.1 || Math.abs(vMax) || 1)
+  const y0 = Math.max(vMin >= 0 ? 0 : -Infinity, Math.floor((vMin - step * 0.25) / step) * step)
+  const y1 = Math.ceil((vMax + step * 0.25) / step) * step
   const sx = (c: number) => plot.x + ((Math.log10(c) - x0) / (x1 - x0)) * plot.w
-  const sy = (s: number) => plot.y + ((y1 - s) / (y1 - y0)) * plot.h
+  const sy = (v: number) => plot.y + ((y1 - v) / (y1 - y0)) * plot.h
 
-  const points = data.map((d) => ({ ...d, x: sx(d.cost), y: sy(d.score) }))
+  const points = data.map((d) => ({ ...d, x: sx(d.cost), y: sy(d.value) }))
 
-  const yStep = y1 - y0 > 40 ? 10 : 5
   const yTicks: number[] = []
-  for (let v = y0; v <= y1; v += yStep) yTicks.push(v)
+  for (let v = y0; v <= y1 + step / 1e6; v += step) yTicks.push(Math.round(v * 1e6) / 1e6)
 
   const xTicks: { v: number; major: boolean }[] = []
   for (let d = Math.floor(x0); d <= Math.ceil(x1); d++) {
@@ -73,7 +96,7 @@ export function buildScatter<T>(data: Datum<T>[], plot: Box): ScatterGeometry<T>
   const gaps = xTicks.slice(1).map((t, i) => sx(t.v) - sx(xTicks[i].v))
   const labelMinor = gaps.length === 0 || Math.min(...gaps) >= MIN_TICK_LABEL_GAP
 
-  return { points, frontier: paretoFrontier(points), sx, sy, yTicks, xTicks, labelMinor }
+  return { points, frontier: paretoFrontier(points, better), sx, sy, yTicks, xTicks, labelMinor }
 }
 
 const overlaps = (a: Box, b: Box) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h

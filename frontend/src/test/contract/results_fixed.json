@@ -1,0 +1,248 @@
+{
+  "run_id": "r_3d56a2d268",
+  "blazemeter": {
+    "summary": {
+      "hits": 14,
+      "failed": 1,
+      "error_rate": 0.0714,
+      "avg_ms": 5838.6,
+      "min_ms": 2042.3,
+      "max_ms": 30064.2,
+      "p50_ms": 3795.6,
+      "p90_ms": 6450.7,
+      "p95_ms": 14748.0,
+      "p99_ms": 27001.0,
+      "throughput_rps": 0.471,
+      "duration_s": 29.7,
+      "max_users": 3,
+      "errors_by_code": {
+        "504": 1
+      }
+    },
+    "interval_s": 5.0,
+    "timeline": [
+      {
+        "t_s": 0.0,
+        "users": 2,
+        "hits": 3,
+        "errors": 0,
+        "avg_ms": 4611.5,
+        "p90_ms": 5908.3
+      },
+      {
+        "t_s": 5.0,
+        "users": 3,
+        "hits": 1,
+        "errors": 0,
+        "avg_ms": 4554.0,
+        "p90_ms": 4554.0
+      },
+      {
+        "t_s": 10.0,
+        "users": 3,
+        "hits": 3,
+        "errors": 1,
+        "avg_ms": 12691.4,
+        "p90_ms": 25090.8
+      },
+      {
+        "t_s": 15.0,
+        "users": 3,
+        "hits": 2,
+        "errors": 0,
+        "avg_ms": 2551.8,
+        "p90_ms": 2959.3
+      },
+      {
+        "t_s": 20.0,
+        "users": 3,
+        "hits": 2,
+        "errors": 0,
+        "avg_ms": 3759.6,
+        "p90_ms": 3843.1
+      },
+      {
+        "t_s": 25.0,
+        "users": 3,
+        "hits": 3,
+        "errors": 0,
+        "avg_ms": 4218.4,
+        "p90_ms": 5946.1
+      }
+    ]
+  },
+  "splunk": {
+    "events": 14,
+    "overall": {
+      "requests": 14,
+      "errors": 1,
+      "success_rate": 0.9286,
+      "error_breakdown": {
+        "rate_limited": 0,
+        "server_error": 0,
+        "timeout": 1,
+        "dropped_stream": 0,
+        "refused": 0,
+        "other": 0
+      },
+      "truncation_rate": 0.0,
+      "ttft_ms": {
+        "p50": 472.4,
+        "p95": 713.5,
+        "p99": 781.5
+      },
+      "ttft_by_input": [
+        {
+          "input_tokens": 3517.0,
+          "p50_ms": 508.7
+        }
+      ],
+      "itl_ms": {
+        "p50": 14.5,
+        "p95": 17.9,
+        "p99": 19.5
+      },
+      "stall_rate": 0.0,
+      "e2e_ms": null,
+      "server_e2e_ms": {
+        "p50": 3739.5,
+        "p95": 14700.2,
+        "p99": 26940.0
+      },
+      "client_overhead_ms": null,
+      "throughput_rps": 0.471,
+      "tokens_per_min": {
+        "avg": 6265.0,
+        "peak": 8352.0
+      },
+      "decode_tps_p50": 69.2,
+      "prefill_tps": 5838.0,
+      "avg_input_tokens": 2971.0,
+      "avg_output_tokens": 232.0
+    },
+    "by_offering": [
+      {
+        "offering_id": "stratus--aurora-4",
+        "provider_id": "stratus",
+        "llm_id": "aurora-4",
+        "share": 1.0,
+        "perf": {
+          "requests": 14,
+          "errors": 1,
+          "success_rate": 0.9286,
+          "error_breakdown": {
+            "rate_limited": 0,
+            "server_error": 0,
+            "timeout": 1,
+            "dropped_stream": 0,
+            "refused": 0,
+            "other": 0
+          },
+          "truncation_rate": 0.0,
+          "ttft_ms": {
+            "p50": 472.4,
+            "p95": 713.5,
+            "p99": 781.5
+          },
+          "ttft_by_input": [
+            {
+              "input_tokens": 3517.0,
+              "p50_ms": 508.7
+            }
+          ],
+          "itl_ms": {
+            "p50": 14.5,
+            "p95": 17.9,
+            "p99": 19.5
+          },
+          "stall_rate": 0.0,
+          "e2e_ms": null,
+          "server_e2e_ms": {
+            "p50": 3739.5,
+            "p95": 14700.2,
+            "p99": 26940.0
+          },
+          "client_overhead_ms": null,
+          "throughput_rps": 0.471,
+          "tokens_per_min": {
+            "avg": 6265.0,
+            "peak": null
+          },
+          "decode_tps_p50": 69.2,
+          "prefill_tps": 5838.0,
+          "avg_input_tokens": 2971.0,
+          "avg_output_tokens": 232.0
+        },
+        "cost": {
+          "input_per_million": 3.0,
+          "cached_input_per_million": 0.3,
+          "output_per_million": 15.0,
+          "per_request": 0.009478,
+          "per_1k_requests": 9.4781
+        }
+      }
+    ]
+  },
+  "perf": {
+    "requests": 14,
+    "errors": 1,
+    "success_rate": 0.9286,
+    "error_breakdown": {
+      "rate_limited": 0,
+      "server_error": 0,
+      "timeout": 1,
+      "dropped_stream": 0,
+      "refused": 0,
+      "other": 0
+    },
+    "truncation_rate": 0.0,
+    "ttft_ms": {
+      "p50": 472.4,
+      "p95": 713.5,
+      "p99": 781.5
+    },
+    "ttft_by_input": [
+      {
+        "input_tokens": 3517.0,
+        "p50_ms": 508.7
+      }
+    ],
+    "itl_ms": {
+      "p50": 14.5,
+      "p95": 17.9,
+      "p99": 19.5
+    },
+    "stall_rate": 0.0,
+    "e2e_ms": {
+      "p50": 3795.6,
+      "p95": 14748.0,
+      "p99": 27001.0
+    },
+    "server_e2e_ms": {
+      "p50": 3739.5,
+      "p95": 14700.2,
+      "p99": 26940.0
+    },
+    "client_overhead_ms": {
+      "p50": 56.1,
+      "p95": 47.8,
+      "p99": null
+    },
+    "throughput_rps": 0.471,
+    "tokens_per_min": {
+      "avg": 6265.0,
+      "peak": 8352.0
+    },
+    "decode_tps_p50": 69.2,
+    "prefill_tps": 5838.0,
+    "avg_input_tokens": 2971.0,
+    "avg_output_tokens": 232.0
+  },
+  "cost": {
+    "input_per_million": 3.0,
+    "cached_input_per_million": 0.3,
+    "output_per_million": 15.0,
+    "per_request": 0.009478,
+    "per_1k_requests": 9.4781
+  }
+}

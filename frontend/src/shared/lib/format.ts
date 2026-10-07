@@ -78,3 +78,34 @@ export function formatSignedPercent(v: number | undefined) {
 export function formatTokens(v: number | undefined) {
   return v == null ? EMPTY : nf('tok', { notation: 'compact', maximumFractionDigits: 1 }).format(v)
 }
+
+const dateTimeFormat = new Intl.DateTimeFormat(LOCALE, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+/** e.g. "Oct 5, 6:04 PM" (local time). */
+export function formatDateTime(iso: string | undefined) {
+  if (!iso) return EMPTY
+  const d = new Date(iso)
+  return isNaN(+d) ? EMPTY : dateTimeFormat.format(d)
+}
+
+/** Seconds as a short duration, e.g. 45 -> "45s", 90 -> "1m 30s", 600 -> "10m", 3720 -> "1h 2m". */
+export function formatDuration(seconds: number | undefined) {
+  if (seconds == null || !isFinite(seconds)) return EMPTY
+  const s = Math.max(0, Math.round(seconds))
+  if (s < 60) return `${s}s`
+  const h = Math.floor(s / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  const rest = s % 60
+  if (h) return m ? `${h}h ${m}m` : `${h}h`
+  return rest ? `${m}m ${rest}s` : `${m}m`
+}
+
+/** Milliseconds with the unit, e.g. "1,234 ms". */
+export function formatMs(v: number | undefined) {
+  return v == null ? EMPTY : `${formatInt(v)} ms`
+}
+
+/** Cost per 1K requests: cents need two decimals, sub-cent amounts three. */
+export function formatCost1k(v: number | undefined) {
+  if (v == null) return EMPTY
+  return usd(v >= 100 ? 0 : v >= 1 ? 2 : 3).format(v)
+}

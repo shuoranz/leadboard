@@ -1,18 +1,24 @@
 import { useMemo, useState, type MouseEvent, type PointerEvent } from 'react'
-import type { ModelEntry } from '../../api/types'
+import type { LeaderboardRow } from '../../api/types'
 import { useBoard } from '../../shared/board/BoardContext'
-import { viewLabel } from '../../shared/board/boardIndex'
-import { costFor, displayName, scoreFor, shortName, type View } from '../../shared/board/model'
-import { formatCost, formatCostTick, formatScore } from '../../shared/lib/format'
+import { costPer1k, displayName, shortName } from '../../shared/board/model'
+import { formatCost1k, formatCostTick, formatInt } from '../../shared/lib/format'
 import { measureText, useFontsReady } from '../../shared/lib/hooks'
 import { cssVar } from '../../shared/lib/tokens'
+import type { LatencyMetric } from '../../shared/state/searchParams'
 import { CHART_TEXT, ChartFrame } from '../../shared/ui/ChartFrame'
 import { LineKey, OrgDot } from '../../shared/ui/marks'
 import { Tip, TooltipRows } from '../../shared/ui/Tooltip'
-import { buildScatter, nearestPoint, placeLabels, type Datum, type Placed } from './scatterLayout'
+import { buildScatter, dominatedBy, nearestPoint, placeLabels, type Datum, type Placed } from './scatterLayout'
+
+export const LATENCY: Record<LatencyMetric, { label: string; short: string; get: (r: LeaderboardRow) => number | undefined }> = {
+  e2e_p95: { label: 'E2E p95 · client', short: 'E2E p95', get: (r) => r.perf.e2e_ms?.p95 },
+  e2e_p50: { label: 'E2E p50 · client', short: 'E2E p50', get: (r) => r.perf.e2e_ms?.p50 },
+  ttft_p50: { label: 'TTFT p50 · server', short: 'TTFT p50', get: (r) => r.perf.ttft_ms?.p50 },
+}
 
 const HEIGHT = 440
-const M = { top: 16, right: 24, bottom: 52, left: 60 }
+const M = { top: 16, right: 24, bottom: 52, left: 64 }
 const R = 6
 /** How far from a dot the pointer may be and still hover or click it. */
 const HIT = 14
@@ -27,31 +33,31 @@ const LABEL_TYPE = {
 const fontFamily = () => getComputedStyle(document.documentElement).getPropertyValue('--font-sans') || 'sans-serif'
 const cssFont = (t: { fontSize: number; fontWeight: number }) => `${t.fontWeight} ${t.fontSize}px ${fontFamily()}`
 
-type Point = Placed<ModelEntry>
+type Point = Placed<LeaderboardRow>
 
-export function QualityCostScatter({ models, view }: { models: ModelEntry[]; view: View }) {
+export function LatencyCostScatter({ rows, metric }: { rows: LeaderboardRow[]; metric: LatencyMetric }) {
   const board = useBoard()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const data = useMemo(
     () =>
-      models.flatMap<Datum<ModelEntry>>((m) => {
-        const cost = costFor(m, view)
-        const score = scoreFor(m, view)
-        return cost != null && score != null ? [{ item: m, cost, score }] : []
+      rows.flatMap<Datum<LeaderboardRow>>((r) => {
+        const cost = costPer1k(r)
+        const value = LATENCY[metric].get(r)
+        return cost != null && value != null ? [{ item: r, cost, value }] : []
       }),
-    [models, view],
+    [rows, metric],
   )
 
   const presentColors = new Set(data.map((d) => board.palette.color(d.item.organization)))
   const legend = board.palette.legend.filter((l) => presentColors.has(l.color))
   const selected = data.find((d) => d.item.id === selectedId)
-  const beaten = selected ? data.filter((d) => d.score < selected.score && d.cost > selected.cost).length : 0
+  const beaten = selected ? data.filter(dominatedBy(selected, 'lower')).length : 0
 
-  if (data.length === 0) return <p className="py-24 text-center text-ink-2">No models report cost for this view.</p>
+  if (data.length === 0) return <p className="py-24 text-center text-ink-2">No rows report both cost and latency.</p>
   return (
     <div>
       <ChartFrame height={HEIGHT}>
-        {(width) => <ScatterPlot data={data} view={view} width={width} selectedId={selectedId} onSelect={setSelectedId} />}
+        {(width) => <ScatterPlot data={data} metric={metric} width={width} selectedId={selectedId} onSelect={setSelectedId} />}
       </ChartFrame>
       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-meta text-ink-2">
         {legend.map((l) => (
@@ -77,13 +83,13 @@ export function QualityCostScatter({ models, view }: { models: ModelEntry[]; vie
 
 function ScatterPlot({
   data,
-  view,
+  metric,
   width,
   selectedId,
   onSelect,
 }: {
-  data: Datum<ModelEntry>[]
-  view: View
+  data: Datum<LeaderboardRow>[]
+  metric: LatencyMetric
   width: number
   selectedId: string | null
   onSelect: (id: string | null) => void
@@ -97,27 +103,23 @@ function ScatterPlot({
   const activeId = focusId ?? pointerId
 
   const plot = useMemo(() => ({ x: M.left, y: M.top, w: Math.max(0, width - M.left - M.right), h: HEIGHT - M.top - M.bottom }), [width])
-  const chart = useMemo(() => buildScatter(data, plot), [data, plot])
+  const chart = useMemo(() => buildScatter(data, plot, 'lower'), [data, plot])
 
   const selected = chart?.points.find((p) => p.item.id === selectedId)
-  const dominated = (p: Point) => !!selected && p.score < selected.score && p.cost > selected.cost
+  // Slower and more expensive than the selection (inlined: the compiler can't see through dominatedBy here).
+  const dominated = (p: Point) => !!selected && p.value > selected.value && p.cost > selected.cost
 
   const labels = useMemo(() => {
     // Measuring before the web font loads would lay labels out with fallback metrics.
     if (!chart || !fontsReady) return []
     const frontierIds = new Set(chart.frontier.map((p) => p.item.id))
-    const wanted = [
-      ...(selected && !frontierIds.has(selected.item.id) ? [selected] : []),
-      ...[...chart.frontier].sort((a, b) => b.score - a.score),
-    ]
+    const wanted = [...(selected && !frontierIds.has(selected.item.id) ? [selected] : []), ...[...chart.frontier].sort((a, b) => a.value - b.value)]
     const nameFont = cssFont(LABEL_TYPE.name)
     const variantFont = cssFont(LABEL_TYPE.variant)
     const sized = wanted.map((p) => {
       const name = shortName(p.item)
-      // Second line: configuration and provider, e.g. "(max · Swiftserve)". Several
-      // providers can serve one model, so the provider tells their points apart.
-      const detail = [p.item.variant, p.item.provider].filter(Boolean).join(' · ')
-      const variant = detail ? `(${detail})` : undefined
+      // Second line: the provider. Several providers serve one model, so it tells their points apart.
+      const variant = p.item.routing === 'fixed' ? `(${p.item.provider})` : undefined
       const w = Math.max(measureText(name, nameFont), variant ? measureText(variant, variantFont) : 0)
       return { x: p.x, y: p.y, w, h: variant ? LINE_H * 2 + 2 : LINE_H + 2, id: p.item.id, name, variant }
     })
@@ -125,7 +127,7 @@ function ScatterPlot({
   }, [chart, selected, plot, fontsReady])
 
   if (!chart) return null
-  const label = viewLabel(board, view)
+  const label = LATENCY[metric].label
   const toggleSelect = (id: string) => onSelect(selectedId === id ? null : id)
 
   // Pointer input goes through one overlay that picks the nearest dot, so a click
@@ -140,14 +142,14 @@ function ScatterPlot({
       width={width}
       height={HEIGHT}
       role="img"
-      aria-label={`Scatter of ${label} score versus cost per successful task for ${data.length} models`}
+      aria-label={`Scatter of ${label} latency versus cost per 1K requests for ${data.length} rows`}
       className="block overflow-visible select-none"
     >
       {chart.yTicks.map((v) => (
         <g key={`y${v}`}>
           <line x1={plot.x} x2={plot.x + plot.w} y1={chart.sy(v)} y2={chart.sy(v)} className="stroke-grid" />
           <text x={plot.x - 12} y={chart.sy(v)} dy="0.32em" textAnchor="end" fontSize={CHART_TEXT.tick} className="fill-muted font-mono tabular-nums">
-            {v}
+            {formatInt(v)}
           </text>
         </g>
       ))}
@@ -162,21 +164,15 @@ function ScatterPlot({
         </g>
       ))}
       <text x={plot.x + plot.w} y={HEIGHT - 6} textAnchor="end" fontSize={CHART_TEXT.tick} className="fill-muted font-mono">
-        Cost per successful task (log) →
+        Cost per 1K requests (log) →
       </text>
       <text transform={`translate(16 ${plot.y + plot.h}) rotate(-90)`} fontSize={CHART_TEXT.tick} className="fill-muted font-mono">
-        {label} score ↑
+        {label} (ms) — lower is better
       </text>
 
-      {/* kill zone: everything that scores lower and costs more than the selection */}
+      {/* kill zone: everything slower and more expensive than the selection (up and right) */}
       {selected && (
-        <rect
-          x={selected.x}
-          y={selected.y}
-          width={plot.x + plot.w - selected.x}
-          height={plot.y + plot.h - selected.y}
-          className="fill-ink/[0.045] stroke-line-strong"
-        />
+        <rect x={selected.x} y={plot.y} width={plot.x + plot.w - selected.x} height={selected.y - plot.y} className="fill-ink/[0.045] stroke-line-strong" />
       )}
 
       <polyline
@@ -193,23 +189,23 @@ function ScatterPlot({
       {[...chart.points]
         .sort((a, b) => Number(dominated(b)) - Number(dominated(a)))
         .map((p) => {
-          const m = p.item
-          const isSel = m.id === selectedId
+          const r = p.item
+          const isSel = r.id === selectedId
           return (
             <Tip
-              key={m.id}
-              open={m.id === activeId}
+              key={r.id}
+              open={r.id === activeId}
               content={
                 <>
                   <div className="flex items-center gap-2 font-semibold text-ink">
-                    <OrgDot color={board.palette.color(m.organization)} />
-                    <span className="truncate">{displayName(m)}</span>
+                    <OrgDot color={board.palette.color(r.organization)} />
+                    <span className="truncate">{displayName(r)}</span>
                   </div>
-                  <div className="mt-0.5 mb-2 text-xs text-muted">{m.organization}</div>
+                  <div className="mt-0.5 mb-2 text-xs text-muted">{r.organization}</div>
                   <TooltipRows
                     rows={[
-                      [label, formatScore(p.score)],
-                      ['Cost / success', formatCost(p.cost)],
+                      [LATENCY[metric].short, `${formatInt(p.value)} ms`],
+                      ['Cost / 1K requests', formatCost1k(p.cost)],
                     ]}
                   />
                   <div className="mt-2 text-micro text-muted">{isSel ? 'Click to clear kill zone' : 'Click to show kill zone'}</div>
@@ -222,23 +218,23 @@ function ScatterPlot({
                 tabIndex={0}
                 role="button"
                 aria-pressed={isSel}
-                aria-label={`${displayName(m)}: ${formatScore(p.score)} at ${formatCost(p.cost)}`}
+                aria-label={`${displayName(r)}: ${formatInt(p.value)} ms at ${formatCost1k(p.cost)}`}
                 className="pointer-events-none outline-none"
-                onFocus={() => setFocusId(m.id)}
+                onFocus={() => setFocusId(r.id)}
                 onBlur={() => setFocusId(null)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
-                    toggleSelect(m.id)
+                    toggleSelect(r.id)
                   }
                 }}
               >
-                {(isSel || m.id === activeId) && <circle cx={p.x} cy={p.y} r={R + 4} fill="none" strokeWidth={1.5} className="stroke-ink" />}
+                {(isSel || r.id === activeId) && <circle cx={p.x} cy={p.y} r={R + 4} fill="none" strokeWidth={1.5} className="stroke-ink" />}
                 <circle
                   cx={p.x}
                   cy={p.y}
                   r={R}
-                  fill={dominated(p) ? cssVar.dim : board.palette.color(m.organization)}
+                  fill={dominated(p) ? cssVar.dim : board.palette.color(r.organization)}
                   strokeWidth={2}
                   className="stroke-surface"
                 />

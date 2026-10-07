@@ -1,80 +1,73 @@
 import { describe, expect, it } from 'vitest'
-import { LeaderboardSchema } from './types'
+import catalog from '../test/contract/catalog.json'
+import leaderboard from '../test/contract/leaderboard.json'
+import loadProfiles from '../test/contract/load_profiles.json'
+import resultsAuto from '../test/contract/results_auto.json'
+import resultsFixed from '../test/contract/results_fixed.json'
+import run from '../test/contract/run.json'
+import runs from '../test/contract/runs.json'
+import services from '../test/contract/services.json'
+import {
+  CatalogSchema,
+  LoadProfileListSchema,
+  RunListSchema,
+  RunResultsSchema,
+  RunSchema,
+  ServiceLeaderboardSchema,
+  ServiceListSchema,
+  isActive,
+} from './types'
 
-const payload = {
-  app: { id: 'chat', name: 'Chat', description: null },
-  categories: [{ id: 'math', name: 'Mathematics', short_name: null, subtasks: [{ id: 'math.a', name: 'a' }] }],
-  models: [
-    {
-      id: 'm1',
-      name: 'Model 1',
-      short_name: null,
-      organization: 'Org',
-      open_weights: false,
-      finetune: false,
-      overall: 71.2,
-      categories: { math: 80 },
-      subtasks: { 'math.a': 80, 'math.b': null },
-      cost: { per_success: { overall: 0.4, categories: { math: 0.2 } }, output_per_million: null },
-    },
-  ],
-}
+// Real responses from the backend (scripts/snapshot_fixtures.py), so the two
+// sides of the contract can't drift apart unnoticed.
+describe('contract samples from the backend', () => {
+  const cases: [string, { safeParse: (v: unknown) => { error?: { issues: unknown[] } } }, unknown][] = [
+    ['services', ServiceListSchema, services],
+    ['catalog', CatalogSchema, catalog],
+    ['load profiles', LoadProfileListSchema, loadProfiles],
+    ['runs', RunListSchema, runs],
+    ['run', RunSchema, run],
+    ['fixed results', RunResultsSchema, resultsFixed],
+    ['auto results', RunResultsSchema, resultsAuto],
+    ['leaderboard', ServiceLeaderboardSchema, leaderboard],
+  ]
+  for (const [name, schema, sample] of cases) {
+    it(`${name} parses`, () => expect(schema.safeParse(sample).error?.issues ?? []).toEqual([]))
+  }
 
-describe('LeaderboardSchema', () => {
-  it('normalizes nulls from the backend to undefined and drops null scores', () => {
-    const board = LeaderboardSchema.parse(payload)
-    const m = board.models[0]
-    expect(board.app.description).toBeUndefined()
-    expect(m.short_name).toBeUndefined()
-    expect(m.cost?.output_per_million).toBeUndefined()
-    expect(m.subtasks).toEqual({ 'math.a': 80 })
+  it('an auto run is split per offering', () => {
+    const r = RunResultsSchema.parse(resultsAuto)
+    expect(r.splunk.by_offering.length).toBeGreaterThan(1)
+    expect(r.splunk.by_offering.reduce((s, b) => s + b.share, 0)).toBeCloseTo(1, 2)
   })
+})
 
-  it('defaults missing per-category costs and allows no cost at all', () => {
-    const noCats = structuredClone(payload)
-    noCats.models[0].cost = { per_success: { overall: 0.4 } } as never
-    expect(LeaderboardSchema.parse(noCats).models[0].cost?.per_success.categories).toEqual({})
-
-    const noCost = structuredClone(payload) as { models: Record<string, unknown>[] }
-    delete noCost.models[0].cost
-    expect(LeaderboardSchema.parse(noCost).models[0].cost).toBeUndefined()
-  })
-
-  it('rejects contract violations with a path', () => {
-    const bad = structuredClone(payload) as { models: Record<string, unknown>[] }
-    bad.models[0].overall = 'high'
-    const res = LeaderboardSchema.safeParse(bad)
-    expect(res.success).toBe(false)
-    expect(res.error?.issues[0].path).toEqual(['models', 0, 'overall'])
-  })
-
-  it('rejects empty ids', () => {
-    const bad = structuredClone(payload)
-    bad.categories[0].id = ''
-    expect(LeaderboardSchema.safeParse(bad).success).toBe(false)
-  })
-
-  it('accepts providers, the new metrics, capabilities and run conditions', () => {
-    const rich = structuredClone(payload) as Record<string, unknown> & { models: Record<string, unknown>[] }
-    Object.assign(rich.models[0], {
-      provider: 'Swiftserve',
-      model_id: 'm',
-      perf: {
-        ttft_ms: { p50: 300, p95: 900, p99: 1500 },
-        itl_ms: { p50: 12, p95: 30 },
-        stall_rate: 0.01,
-        error_breakdown: { rate_limited: 3, timeout: null },
-        ttft_by_input: [{ input_tokens: 1000, p50_ms: 280 }],
-      },
-      capabilities: { context_window: 128000, tool_calling: true, regions: ['us'] },
+describe('normalization', () => {
+  it('turns nulls into undefined and null lists into []', () => {
+    const r = RunSchema.parse({
+      id: 'r1',
+      batch_id: 'b',
+      service_id: 's',
+      label: null,
+      routing: { mode: 'auto', offering_id: null, pool: ['a', 'b'] },
+      load: { profile_id: 'custom', name: 'Custom', concurrency: 2, ramp_up_s: 0, duration_s: 30, think_time_s: 1 },
+      status: 'queued',
+      created_at: '2026-10-05T00:00:00Z',
+      headline: null,
     })
-    rich.run = { client_region: 'us-east', concurrency: [1, 8], profiles: [{ name: 'Short chat', share: 0.5 }] }
-    const board = LeaderboardSchema.parse(rich)
-    const m = board.models[0]
-    expect(m.provider).toBe('Swiftserve')
-    expect(m.perf?.ttft_ms?.p99).toBe(1500)
-    expect(m.perf?.error_breakdown).toEqual({ rate_limited: 3, timeout: undefined })
-    expect(m.capabilities?.regions).toEqual(['us'])
-    expect(board.run?.concurrency).toEqual([1, 8])
+    expect(r.label).toBeUndefined()
+    expect(r.routing.offering_id).toBeUndefined()
+    expect(r.blazemeter).toEqual({})
+    expect(r.progress).toBe(0)
+    expect(r.headline).toBeUndefined()
+  })
+
+  it('rejects unknown statuses', () => {
+    expect(RunSchema.safeParse({ ...RunSchema.parse(run), status: 'exploded' }).success).toBe(false)
+  })
+
+  it('knows which statuses are in flight', () => {
+    expect(['queued', 'starting', 'running', 'collecting'].every((s) => isActive(s as never))).toBe(true)
+    expect(isActive('completed')).toBe(false)
   })
 })

@@ -9,7 +9,7 @@ const twMerge = extendTailwindMerge({
       text: ['tiny', 'micro', 'meta', 'body'],
       color: [
         'page', 'surface', 'surface-2', 'ink', 'ink-2', 'muted', 'line', 'line-strong',
-        'accent', 'accent-ink', 'good', 'bad', 'grid', 'dim',
+        'accent', 'accent-ink', 'good', 'bad', 'warn', 'grid', 'dim',
         'series-1', 'series-2', 'series-3', 'series-4', 'series-5', 'series-6', 'series-7', 'series-8', 'series-other',
       ],
       container: ['page'],

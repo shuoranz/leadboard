@@ -1,5 +1,5 @@
 {
-  "name": "app-benchmark-leaderboard",
+  "name": "llm-service-benchmark",
   "private": true,
   "version": "0.1.0",
   "type": "module",

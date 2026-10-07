@@ -44,6 +44,7 @@ export function PopoverMenu({
 export function CheckRow({
   checked,
   indeterminate = false,
+  disabled = false,
   onChange,
   children,
   className,
@@ -51,12 +52,19 @@ export function CheckRow({
   checked: boolean
   /** Partly checked, e.g. a group with only some of its items on. */
   indeterminate?: boolean
+  disabled?: boolean
   onChange: () => void
   children: ReactNode
   className?: string
 }) {
   return (
-    <label className={cn('flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-ink hover:bg-surface-2', className)}>
+    <label
+      className={cn(
+        'flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-ink hover:bg-surface-2',
+        disabled && 'cursor-not-allowed text-muted hover:bg-transparent',
+        className,
+      )}
+    >
       <input
         type="checkbox"
         checked={checked}
@@ -66,6 +74,7 @@ export function CheckRow({
           if (el) el.indeterminate = indeterminate
         }}
         onChange={onChange}
+        disabled={disabled}
         className="size-4 accent-accent"
       />
       <span className="min-w-0 flex-1 truncate">{children}</span>

@@ -1,32 +1,32 @@
 import { useMemo, useState } from 'react'
-import type { ModelEntry } from '../../api/types'
+import type { LeaderboardRow } from '../../api/types'
 import { useBoard } from '../../shared/board/BoardContext'
-import { costFor, displayName, scoreFor, type View } from '../../shared/board/model'
-import { formatCost, formatInt, formatPrice, formatScore } from '../../shared/lib/format'
+import { costPer1k, displayName, e2eP95 } from '../../shared/board/model'
+import { formatCost1k, formatInt, formatPrice } from '../../shared/lib/format'
 import { OrgDot } from '../../shared/ui/marks'
 import { SelectPill } from '../../shared/ui/SelectPill'
 import { Tip, TooltipRows } from '../../shared/ui/Tooltip'
 
 const DEFAULT_COUNT = 12
 
-export function CostRanked({ models, view }: { models: ModelEntry[]; view: View }) {
+export function CostRanked({ rows: all }: { rows: LeaderboardRow[] }) {
   const { palette } = useBoard()
-  // null = the default set (top models by score); otherwise an explicit pick
+  // null = the default set (the fastest rows); otherwise an explicit pick
   const [ids, setIds] = useState<string[] | null>(null)
 
-  const withCost = useMemo(() => models.filter((m) => costFor(m, view) != null), [models, view])
+  const withCost = useMemo(() => all.filter((m) => costPer1k(m) != null), [all])
   const defaultIds = useMemo(
     () =>
       [...withCost]
-        .sort((a, b) => (scoreFor(b, view) ?? 0) - (scoreFor(a, view) ?? 0))
+        .sort((a, b) => (e2eP95(a) ?? Infinity) - (e2eP95(b) ?? Infinity))
         .slice(0, DEFAULT_COUNT)
         .map((m) => m.id),
-    [withCost, view],
+    [withCost],
   )
 
   const current = new Set(ids ?? defaultIds)
-  const rows = withCost.filter((m) => current.has(m.id)).sort((a, b) => costFor(a, view)! - costFor(b, view)!)
-  const max = Math.max(...rows.map((m) => costFor(m, view)!), 0)
+  const rows = withCost.filter((m) => current.has(m.id)).sort((a, b) => costPer1k(a)! - costPer1k(b)!)
+  const max = Math.max(...rows.map((m) => costPer1k(m)!), 0)
   const addable = withCost.filter((m) => !current.has(m.id)).sort((a, b) => displayName(a).localeCompare(displayName(b)))
 
   return (
@@ -50,7 +50,7 @@ export function CostRanked({ models, view }: { models: ModelEntry[]; view: View 
       {rows.length === 0 && <p className="py-10 text-center text-ink-2">No models to rank.</p>}
       <ol className="mt-4 grid grid-cols-[minmax(0,12rem)_minmax(0,1fr)_4.5rem_1.25rem] items-center gap-x-3 gap-y-1">
         {rows.map((m) => {
-          const cost = costFor(m, view)!
+          const cost = costPer1k(m)!
           const color = palette.color(m.organization)
           return (
             <li key={m.id} className="group col-span-4 grid grid-cols-subgrid items-center">
@@ -60,29 +60,29 @@ export function CostRanked({ models, view }: { models: ModelEntry[]; view: View 
                 content={
                   <TooltipRows
                     rows={[
-                      ['$ / 1M output', formatPrice(m.cost?.output_per_million)],
-                      ['Avg output tokens', formatInt(m.cost?.avg_output_tokens)],
-                      ['Score', formatScore(scoreFor(m, view))],
+                      ['$ / 1M output', formatPrice(m.cost.output_per_million)],
+                      ['Avg tokens in / out', `${formatInt(m.perf.avg_input_tokens)} / ${formatInt(m.perf.avg_output_tokens)}`],
+                      ['E2E p95', `${formatInt(e2eP95(m))} ms`],
                     ]}
                   />
                 }
               >
                 <button
                   type="button"
-                  aria-label={`${displayName(m)}: ${formatCost(cost)} per successful task`}
+                  aria-label={`${displayName(m)}: ${formatCost1k(cost)} per 1K requests`}
                   className="col-span-3 grid grid-cols-subgrid items-center rounded-md py-1.5 text-left focus-visible:outline-2 focus-visible:outline-accent"
                 >
                   <span className="flex min-w-0 items-center gap-2.5 text-body text-ink">
                     <OrgDot color={color} />
                     <span className="truncate" title={displayName(m)}>
                       {m.name}
-                      {m.provider && <span className="text-muted"> · {m.provider}</span>}
+                      {m.routing === 'fixed' && <span className="text-muted"> · {m.provider}</span>}
                     </span>
                   </span>
                   <span className="h-5 rounded-[4px] bg-surface-2">
                     <span className="block h-5 rounded-r-[4px]" style={{ width: `${Math.max(1.2, (cost / max) * 100)}%`, background: color }} />
                   </span>
-                  <span className="text-right font-mono text-body text-ink tabular-nums">{formatCost(cost)}</span>
+                  <span className="text-right font-mono text-body text-ink tabular-nums">{formatCost1k(cost)}</span>
                 </button>
               </Tip>
               <button

@@ -1,10 +1,11 @@
 import { Fragment, useMemo, useState } from 'react'
-import type { ModelEntry } from '../../api/types'
+import type { LeaderboardRow } from '../../api/types'
 import { cn } from '../../shared/lib/cn'
+import { formatDate } from '../../shared/lib/format'
 import { useElementWidth } from '../../shared/lib/hooks'
 import { cssVar, tint } from '../../shared/lib/tokens'
 import { Badge } from '../../shared/ui/marks'
-import { ModelDetail } from './ModelDetail'
+import { OfferingDetail } from './OfferingDetail'
 import { defaultDir, groupSpans, startsGroup, topRanks, type Column, type SortState } from './table'
 
 // Best-5 shading per column: one hue, stepping lighter with rank.
@@ -17,15 +18,13 @@ export function LeaderboardTable({
   sort,
   onSort,
   showOrg,
-  highlightCategory,
   limit,
 }: {
-  rows: ModelEntry[]
+  rows: LeaderboardRow[]
   columns: Column[]
   sort: SortState
   onSort: (s: SortState) => void
   showOrg: boolean
-  highlightCategory?: string
   /** Render only the first `limit` rows; shading still ranks across all of them. */
   limit?: number
 }) {
@@ -109,6 +108,7 @@ export function LeaderboardTable({
                 >
                   <button
                     type="button"
+                    title={col.source && `Source: ${col.source}`}
                     onClick={() => clickSort(col)}
                     className={cn(
                       'ml-auto inline-flex max-w-44 items-end justify-end gap-1 text-right font-mono text-xs leading-tight font-semibold tracking-wider uppercase',
@@ -142,7 +142,7 @@ export function LeaderboardTable({
                     <button
                       type="button"
                       aria-expanded={open}
-                      aria-label={`${open ? 'Hide' : 'Show'} subtask scores for ${m.name}`}
+                      aria-label={`${open ? 'Hide' : 'Show'} details for ${m.name}${m.routing === 'fixed' ? ` via ${m.provider}` : ''}`}
                       onClick={(e) => {
                         e.stopPropagation()
                         toggle(m.id)
@@ -155,14 +155,19 @@ export function LeaderboardTable({
                   <th scope="row" className={cn(stickyLeft, 'left-10 border-r border-line py-3.5 pr-4 text-left font-semibold text-ink')}>
                     <div className="flex items-center gap-2">
                       <span className="whitespace-nowrap">{m.name}</span>
+                      {m.routing === 'auto' && <Badge tone="muted">random per request</Badge>}
                       {m.open_weights && <Badge>open</Badge>}
-                      {m.finetune && <Badge tone="muted">finetune</Badge>}
+                      {m.status && m.status !== 'available' && <Badge tone="muted">{m.status}</Badge>}
                     </div>
-                    {(m.provider || showOrg) && (
-                      <div className="mt-0.5 text-xs font-normal whitespace-nowrap text-muted">
-                        {[m.provider && `via ${m.provider}`, showOrg && m.organization].filter(Boolean).join(' · ')}
-                      </div>
-                    )}
+                    <div className="mt-0.5 text-xs font-normal whitespace-nowrap text-muted">
+                      {[
+                        m.routing === 'fixed' ? `via ${m.provider}` : `${m.routing_mix?.length ?? 0} models`,
+                        showOrg && m.routing === 'fixed' && m.organization,
+                        m.run_at && `run ${formatDate(m.run_at)}`,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </div>
                   </th>
                   {columns.map((col, i) => {
                     const v = col.get(m)
@@ -186,7 +191,7 @@ export function LeaderboardTable({
                   <tr className="bg-surface-2">
                     <td colSpan={columns.length + 2} className="border-b border-line p-0">
                       <div className="sticky left-0" style={{ width: visibleWidth || undefined }}>
-                        <ModelDetail model={m} highlightCategory={highlightCategory} />
+                        <OfferingDetail row={m} />
                       </div>
                     </td>
                   </tr>

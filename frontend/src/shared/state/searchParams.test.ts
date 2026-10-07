@@ -3,38 +3,44 @@ import { parseSearch, updateSearch } from './searchParams'
 
 describe('parseSearch', () => {
   it('parses every key', () => {
-    expect(parseSearch('?app=a&cat=math&sort=cat%3Amath%3Aasc&compare=x,y&cost=code')).toEqual({
-      app: 'a',
-      cat: 'math',
-      sort: 'cat:math:asc',
+    expect(parseSearch('?service=s&tab=runs&run=r1&new=1&profile=smoke&sort=perf%3Ae2e_p95%3Aasc&compare=x,y&lat=ttft_p50')).toEqual({
+      service: 's',
+      tab: 'runs',
+      run: 'r1',
+      new: '1',
+      profile: 'smoke',
+      sort: 'perf:e2e_p95:asc',
       compare: ['x', 'y'],
-      cost: 'code',
+      lat: 'ttft_p50',
     })
   })
 
   it('drops malformed values instead of failing', () => {
-    expect(parseSearch('?sort=nonsense&cat=&compare=')).toEqual({
-      app: undefined,
-      cat: undefined,
+    expect(parseSearch('?sort=nonsense&tab=bogus&new=yes&lat=fast&profile=&compare=')).toEqual({
+      service: undefined,
+      tab: undefined,
+      run: undefined,
+      new: undefined,
+      profile: undefined,
       sort: undefined,
       compare: [],
-      cost: undefined,
+      lat: undefined,
     })
   })
 })
 
 describe('updateSearch', () => {
-  beforeEach(() => window.history.replaceState(null, '', '/?app=a&cat=math'))
+  beforeEach(() => window.history.replaceState(null, '', '/?service=s&tab=runs&profile=smoke'))
 
   it('patches, serializes arrays and removes cleared keys', () => {
-    updateSearch({ compare: ['x', 'y'], cat: null })
-    expect(window.location.search).toBe('?app=a&compare=x%2Cy')
+    updateSearch({ compare: ['x', 'y'], profile: null })
+    expect(window.location.search).toBe('?service=s&tab=runs&compare=x%2Cy')
   })
 
   it('reset keeps only the patch and push adds a history entry', () => {
     const before = window.history.length
-    updateSearch({ app: 'b' }, { push: true, reset: true })
-    expect(window.location.search).toBe('?app=b')
+    updateSearch({ service: 'b' }, { push: true, reset: true })
+    expect(window.location.search).toBe('?service=b')
     expect(window.history.length).toBe(before + 1)
   })
 })

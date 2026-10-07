@@ -1,5 +1,22 @@
 import { describe, expect, it } from 'vitest'
-import { formatCompact, formatCost, formatCostTick, formatDate, formatDecimal, formatInt, formatPair, formatPercent, formatPrice, formatScore, formatSignedPercent, formatTokens } from './format'
+import {
+  formatCompact,
+  formatCost,
+  formatCost1k,
+  formatCostTick,
+  formatDate,
+  formatDateTime,
+  formatDecimal,
+  formatDuration,
+  formatInt,
+  formatMs,
+  formatPair,
+  formatPercent,
+  formatPrice,
+  formatScore,
+  formatSignedPercent,
+  formatTokens,
+} from './format'
 
 describe('format', () => {
   it('formats costs by magnitude', () => {
@@ -39,5 +56,15 @@ describe('format', () => {
     expect(formatSignedPercent(0)).toBe('0.0%')
     expect(formatTokens(128_000)).toBe('128K')
     expect(formatTokens(1_000_000)).toBe('1M')
+  })
+
+  it('formats durations, times and per-1K costs', () => {
+    expect([45, 90, 600, 3720, 7200].map(formatDuration)).toEqual(['45s', '1m 30s', '10m', '1h 2m', '2h'])
+    expect(formatDuration(undefined)).toBe('—')
+    expect(formatMs(1234.4)).toBe('1,234 ms')
+    expect(formatCost1k(0.2152)).toBe('$0.215')
+    expect(formatCost1k(9.0877)).toBe('$9.09')
+    expect(formatDateTime('nope')).toBe('—')
+    expect(formatDateTime('2026-10-05T18:04:00Z')).toMatch(/^Oct \d+, \d+:04/)
   })
 })

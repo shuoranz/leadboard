@@ -1,33 +1,37 @@
 import { useBoard } from '../../shared/board/BoardContext'
-import { formatDate, formatInt, formatPercent, formatTokens } from '../../shared/lib/format'
+import { formatDate, formatDuration, formatInt } from '../../shared/lib/format'
 
 /**
  * How the numbers were measured. Latency and reliability figures are only
- * comparable within a run, so the conditions sit right above the table.
+ * comparable under the same load, so the conditions sit right above the table.
  */
 export function TestConditions() {
-  const { run } = useBoard()
+  const { conditions: run, profile } = useBoard()
   if (!run) return null
 
   const dates = [formatDate(run.started_at), formatDate(run.ended_at)].filter(Boolean)
   const windowText = dates.length === 2 && dates[0] !== dates[1] ? `${dates[0]} – ${dates[1]}` : dates[0]
+  const vus = run.concurrency.length ? `${run.concurrency.join(' / ')} virtual users` : undefined
   const summary = [
+    profile?.name,
+    vus,
+    run.duration_s != null && formatDuration(run.duration_s),
     windowText,
     run.client_region && `from ${run.client_region}`,
-    run.concurrency?.length && `concurrency ${run.concurrency.join(' / ')}`,
-    run.requests_per_model != null && `${formatInt(run.requests_per_model)} requests per model`,
   ].filter(Boolean)
 
   const facts: [string, string | undefined][] = [
+    ['Load profile', profile && (profile.description ? `${profile.name} — ${profile.description}` : profile.name)],
+    ['Virtual users', run.concurrency.join(', ') || undefined],
+    ['Ramp-up', run.ramp_up_s != null ? formatDuration(run.ramp_up_s) : undefined],
+    ['Duration', run.duration_s != null ? formatDuration(run.duration_s) : undefined],
+    ['Think time', run.think_time_s != null ? `${run.think_time_s}s between requests` : undefined],
     ['Window', windowText],
-    ['Client region', run.client_region],
-    ['Network RTT baseline', run.network_rtt_ms != null ? `${formatInt(run.network_rtt_ms)} ms` : undefined],
-    ['Concurrency levels', run.concurrency?.join(', ')],
+    ['Load generator', run.client_region],
     ['Streaming', run.streaming == null ? undefined : run.streaming ? 'On' : 'Off'],
     ['Stall threshold', run.stall_threshold_ms != null ? `gap > ${formatInt(run.stall_threshold_ms)} ms` : undefined],
     ['Timeout', run.timeout_ms != null ? `${formatInt(run.timeout_ms)} ms` : undefined],
-    ['Retry policy', run.retry_policy],
-    ['Requests per model', run.requests_per_model != null ? formatInt(run.requests_per_model) : undefined],
+    ['Runs on this board', formatInt(run.runs)],
   ]
 
   return (
@@ -50,34 +54,7 @@ export function TestConditions() {
               </div>
             ))}
         </dl>
-        {run.profiles && run.profiles.length > 0 && (
-          <div>
-            <h4 className="mb-2 font-mono text-xs font-semibold tracking-widest text-muted uppercase">Traffic mix</h4>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-line text-left text-xs text-muted">
-                  <th scope="col" className="py-1.5 pr-3 font-medium">Profile</th>
-                  <th scope="col" className="py-1.5 pr-3 text-right font-medium">Input tok</th>
-                  <th scope="col" className="py-1.5 pr-3 text-right font-medium">Output tok</th>
-                  <th scope="col" className="py-1.5 text-right font-medium">Share</th>
-                </tr>
-              </thead>
-              <tbody className="font-mono tabular-nums">
-                {run.profiles.map((p) => (
-                  <tr key={p.name} className="border-b border-line last:border-0">
-                    <th scope="row" className="py-1.5 pr-3 text-left font-sans font-normal text-ink">
-                      {p.name}
-                    </th>
-                    <td className="py-1.5 pr-3 text-right text-ink-2">{formatTokens(p.input_tokens)}</td>
-                    <td className="py-1.5 pr-3 text-right text-ink-2">{formatTokens(p.output_tokens)}</td>
-                    <td className="py-1.5 text-right text-ink-2">{formatPercent(p.share)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {run.notes && <p className="text-sm text-ink-2 lg:col-span-2">{run.notes}</p>}
+        {run.notes && <p className="text-sm leading-relaxed text-ink-2">{run.notes}</p>}
       </div>
     </details>
   )

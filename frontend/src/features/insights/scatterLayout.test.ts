@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { buildScatter, nearestPoint, paretoFrontier, placeLabels } from './scatterLayout'
+import { buildScatter, dominatedBy, nearestPoint, niceStep, paretoFrontier, placeLabels } from './scatterLayout'
 
 const plot = { x: 50, y: 10, w: 500, h: 300 }
 
 describe('buildScatter', () => {
   const data = [
-    { item: 'a', cost: 0.01, score: 60 },
-    { item: 'b', cost: 1, score: 82 },
+    { item: 'a', cost: 0.01, value: 60 },
+    { item: 'b', cost: 1, value: 82 },
   ]
 
   it('maps cost on a log scale inside the plot, cheaper to the left and better upward', () => {
@@ -22,10 +22,14 @@ describe('buildScatter', () => {
     expect(g.sx(0.1) - g.sx(0.01)).toBeCloseTo(g.sx(1) - g.sx(0.1))
   })
 
-  it('pads y to multiples of 5 and puts decade ticks on the x axis', () => {
+  it('pads y to nice ticks and puts decade ticks on the x axis', () => {
     const g = buildScatter(data, plot)!
     expect(g.yTicks[0] % 5).toBe(0)
     expect(g.yTicks.at(-1)).toBeGreaterThanOrEqual(82)
+    const ms = buildScatter([{ item: 'x', cost: 1, value: 840 }, { item: 'y', cost: 2, value: 7_420 }], plot)!
+    expect(ms.yTicks[0]).toBe(0)
+    expect(ms.yTicks.at(-1)).toBeGreaterThanOrEqual(7_420)
+    expect(ms.yTicks.every((t) => t % 1000 === 0)).toBe(true)
     expect(g.xTicks.filter((t) => t.major).map((t) => t.v)).toEqual([0.01, 0.1, 1])
   })
 
@@ -80,13 +84,35 @@ describe('placeLabels', () => {
 describe('paretoFrontier', () => {
   it('keeps each point that beats every cheaper one', () => {
     const pts = [
-      { id: 'cheap', cost: 0.01, score: 60 },
-      { id: 'dominated', cost: 0.1, score: 55 },
-      { id: 'mid', cost: 0.1, score: 70 },
-      { id: 'tie', cost: 1, score: 70 },
-      { id: 'best', cost: 2, score: 85 },
+      { id: 'cheap', cost: 0.01, value: 60 },
+      { id: 'dominated', cost: 0.1, value: 55 },
+      { id: 'mid', cost: 0.1, value: 70 },
+      { id: 'tie', cost: 1, value: 70 },
+      { id: 'best', cost: 2, value: 85 },
     ]
     expect(paretoFrontier(pts).map((p) => p.id)).toEqual(['cheap', 'mid', 'best'])
+  })
+
+  it('handles lower-is-better metrics (latency)', () => {
+    const pts = [
+      { id: 'cheap-slow', cost: 0.5, value: 5000 },
+      { id: 'slower', cost: 1, value: 6000 },
+      { id: 'fast', cost: 2, value: 1200 },
+      { id: 'pricier-same', cost: 3, value: 1200 },
+    ]
+    expect(paretoFrontier(pts, 'lower').map((p) => p.id)).toEqual(['cheap-slow', 'fast'])
+    const killedBy = (id: string) => pts.filter(dominatedBy(pts.find((p) => p.id === id)!, 'lower')).map((p) => p.id)
+    expect(killedBy('cheap-slow')).toEqual(['slower'])
+    expect(killedBy('fast')).toEqual([])
+  })
+})
+
+describe('niceStep', () => {
+  it('rounds to 1/2/5 × 10^k', () => {
+    expect(niceStep(7000)).toBe(2000)
+    expect(niceStep(95)).toBe(20)
+    expect(niceStep(4, 4)).toBe(1)
+    expect(niceStep(0)).toBe(1)
   })
 })
 

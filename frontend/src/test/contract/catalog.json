@@ -1,0 +1,471 @@
+{
+  "providers": [
+    {
+      "id": "aurora-api",
+      "name": "Aurora Labs API",
+      "kind": "first_party",
+      "description": "Aurora Labs' own hosted API.",
+      "console_url": "https://console.aurora.example"
+    },
+    {
+      "id": "northwind-api",
+      "name": "Northwind AI API",
+      "kind": "first_party",
+      "description": "Northwind AI's own hosted API.",
+      "console_url": "https://platform.northwind.example"
+    },
+    {
+      "id": "stratus",
+      "name": "Stratus Cloud",
+      "kind": "cloud",
+      "description": "Hyperscaler model hosting (managed endpoints, provisioned throughput).",
+      "console_url": "https://console.stratus.example"
+    },
+    {
+      "id": "cloudhaven",
+      "name": "Cloudhaven",
+      "kind": "cloud",
+      "description": "Hyperscaler model hosting with regional deployments.",
+      "console_url": "https://portal.cloudhaven.example"
+    },
+    {
+      "id": "swiftserve",
+      "name": "Swiftserve",
+      "kind": "inference_host",
+      "description": "Low-latency inference host for open-weight models.",
+      "console_url": "https://app.swiftserve.example"
+    }
+  ],
+  "llms": [
+    {
+      "id": "aurora-4",
+      "name": "Aurora 4",
+      "organization": "Aurora Labs",
+      "family": "Aurora",
+      "open_weights": false,
+      "context_window": 400000,
+      "max_output_tokens": 64000,
+      "released": "2026-05-12"
+    },
+    {
+      "id": "aurora-4-flash",
+      "name": "Aurora 4 Flash",
+      "organization": "Aurora Labs",
+      "family": "Aurora",
+      "open_weights": false,
+      "context_window": 1000000,
+      "max_output_tokens": 32000,
+      "released": "2026-05-12"
+    },
+    {
+      "id": "gale-3",
+      "name": "Gale 3",
+      "organization": "Northwind AI",
+      "family": "Gale",
+      "open_weights": false,
+      "context_window": 256000,
+      "max_output_tokens": 64000,
+      "released": "2026-03-02"
+    },
+    {
+      "id": "gale-3-mini",
+      "name": "Gale 3 Mini",
+      "organization": "Northwind AI",
+      "family": "Gale",
+      "open_weights": false,
+      "context_window": 128000,
+      "max_output_tokens": 16000,
+      "released": "2026-03-02"
+    },
+    {
+      "id": "helix-2",
+      "name": "Helix 2",
+      "organization": "Helix Research",
+      "family": "Helix",
+      "open_weights": false,
+      "context_window": 200000,
+      "max_output_tokens": 32000,
+      "released": "2026-01-20"
+    },
+    {
+      "id": "forge-70b",
+      "name": "Forge 70B",
+      "organization": "OpenForge",
+      "family": "Forge",
+      "open_weights": true,
+      "context_window": 131072,
+      "max_output_tokens": 16000,
+      "released": "2025-11-08"
+    },
+    {
+      "id": "quanta-8b",
+      "name": "Quanta 8B",
+      "organization": "Quanta",
+      "family": "Quanta",
+      "open_weights": true,
+      "context_window": 65536,
+      "max_output_tokens": 8000,
+      "released": "2026-02-14"
+    }
+  ],
+  "offerings": [
+    {
+      "id": "aurora-api--aurora-4",
+      "provider_id": "aurora-api",
+      "llm_id": "aurora-4",
+      "deployment": "aurora-4-2026-05",
+      "regions": [
+        "us",
+        "eu"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 3.0,
+        "cached_input_per_million": 0.3,
+        "output_per_million": 15.0
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "aurora-api--aurora-4-flash",
+      "provider_id": "aurora-api",
+      "llm_id": "aurora-4-flash",
+      "deployment": "aurora-4-flash-2026-05",
+      "regions": [
+        "us",
+        "eu"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.3,
+        "cached_input_per_million": 0.03,
+        "output_per_million": 2.5
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "northwind-api--gale-3",
+      "provider_id": "northwind-api",
+      "llm_id": "gale-3",
+      "deployment": "gale-3",
+      "regions": [
+        "us",
+        "eu"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 2.5,
+        "cached_input_per_million": 0.25,
+        "output_per_million": 10.0
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "northwind-api--gale-3-mini",
+      "provider_id": "northwind-api",
+      "llm_id": "gale-3-mini",
+      "deployment": "gale-3-mini",
+      "regions": [
+        "us",
+        "eu"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.4,
+        "cached_input_per_million": 0.04,
+        "output_per_million": 1.6
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "stratus--aurora-4",
+      "provider_id": "stratus",
+      "llm_id": "aurora-4",
+      "deployment": "stratus.aurora-4-v1",
+      "regions": [
+        "us-east",
+        "us-west",
+        "eu-central"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 3.0,
+        "cached_input_per_million": 0.3,
+        "output_per_million": 15.0
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "stratus--aurora-4-flash",
+      "provider_id": "stratus",
+      "llm_id": "aurora-4-flash",
+      "deployment": "stratus.aurora-4-flash-v1",
+      "regions": [
+        "us-east",
+        "us-west"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.3,
+        "cached_input_per_million": null,
+        "output_per_million": 2.5
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "stratus--helix-2",
+      "provider_id": "stratus",
+      "llm_id": "helix-2",
+      "deployment": "stratus.helix-2-v1",
+      "regions": [
+        "us-east",
+        "eu-central"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 1.8,
+        "cached_input_per_million": 0.18,
+        "output_per_million": 9.0
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "stratus--forge-70b",
+      "provider_id": "stratus",
+      "llm_id": "forge-70b",
+      "deployment": "stratus.forge-70b-instruct",
+      "regions": [
+        "us-east"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.7,
+        "cached_input_per_million": null,
+        "output_per_million": 0.9
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": false,
+        "prompt_caching": false,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "cloudhaven--gale-3",
+      "provider_id": "cloudhaven",
+      "llm_id": "gale-3",
+      "deployment": "gale-3-prod-eastus",
+      "regions": [
+        "us-east",
+        "eu-west",
+        "apac"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 2.75,
+        "cached_input_per_million": 0.275,
+        "output_per_million": 11.0
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "cloudhaven--gale-3-mini",
+      "provider_id": "cloudhaven",
+      "llm_id": "gale-3-mini",
+      "deployment": "gale-3-mini-prod-eastus",
+      "regions": [
+        "us-east",
+        "eu-west",
+        "apac"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.44,
+        "cached_input_per_million": 0.044,
+        "output_per_million": 1.76
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true
+      }
+    },
+    {
+      "id": "cloudhaven--aurora-4",
+      "provider_id": "cloudhaven",
+      "llm_id": "aurora-4",
+      "deployment": "aurora-4-ptu-westus",
+      "regions": [
+        "us-west"
+      ],
+      "status": "degraded",
+      "prices": {
+        "input_per_million": 3.3,
+        "cached_input_per_million": 0.33,
+        "output_per_million": 16.5
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": false
+      }
+    },
+    {
+      "id": "cloudhaven--helix-2",
+      "provider_id": "cloudhaven",
+      "llm_id": "helix-2",
+      "deployment": "helix-2-preview",
+      "regions": [
+        "us-east"
+      ],
+      "status": "unavailable",
+      "prices": {
+        "input_per_million": 1.8,
+        "cached_input_per_million": 0.18,
+        "output_per_million": 9.0
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": false
+      }
+    },
+    {
+      "id": "swiftserve--forge-70b",
+      "provider_id": "swiftserve",
+      "llm_id": "forge-70b",
+      "deployment": "forge-70b-turbo",
+      "regions": [
+        "us",
+        "eu"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.6,
+        "cached_input_per_million": null,
+        "output_per_million": 0.8
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": false,
+        "prompt_caching": false,
+        "batch_api": false
+      }
+    },
+    {
+      "id": "swiftserve--quanta-8b",
+      "provider_id": "swiftserve",
+      "llm_id": "quanta-8b",
+      "deployment": "quanta-8b-instant",
+      "regions": [
+        "us"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.08,
+        "cached_input_per_million": null,
+        "output_per_million": 0.12
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": false,
+        "prompt_caching": false,
+        "batch_api": false
+      }
+    },
+    {
+      "id": "swiftserve--gale-3-mini",
+      "provider_id": "swiftserve",
+      "llm_id": "gale-3-mini",
+      "deployment": "gale-3-mini-fast",
+      "regions": [
+        "us"
+      ],
+      "status": "available",
+      "prices": {
+        "input_per_million": 0.36,
+        "cached_input_per_million": null,
+        "output_per_million": 1.44
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": false
+      }
+    }
+  ]
+}

@@ -16,12 +16,16 @@ const input = cva('w-full border text-ink placeholder:text-muted focus:border-ac
 export function TextInput({
   label,
   size,
+  showLabel = false,
   className,
   ...props
-}: { label: string; size?: 'sm' | 'md' } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>) {
+}: { label: string; size?: 'sm' | 'md'; /** Show the label above the field (forms) instead of only to screen readers. */ showLabel?: boolean } & Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'size'
+>) {
   return (
     <label className={cn('block', className)}>
-      <span className="sr-only">{label}</span>
+      <span className={showLabel ? 'mb-1.5 block font-mono text-xs tracking-widest text-muted uppercase' : 'sr-only'}>{label}</span>
       <input {...props} className={input({ size })} />
     </label>
   )

@@ -1,91 +1,117 @@
 import { expect, test } from '@playwright/test'
 
-// Runs against the production bundle served by `vite preview` with the mock API.
+// Runs against the production bundle served by `vite preview` with the mock API
+// (seed data from fake_data/, runs simulated on a wall clock).
 
-test('leaderboard loads, sorts, expands and keeps its view in the URL', async ({ page }) => {
+test('leaderboard loads, sorts, switches profile and keeps its view in the URL', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
 
   await page.goto('/')
-  await expect(page).toHaveURL(/\?app=chat-completions/)
+  await expect(page).toHaveURL(/\?service=summarize-profile/)
+  await expect(page.getByLabel('Project')).toHaveCount(0)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Summarize Profile API')
   const table = page.getByRole('table', { name: 'Leaderboard' })
   await expect(table.locator('tbody tr').first()).toBeVisible()
+  for (const g of ['Latency', 'Reliability', 'Throughput', 'Cost']) {
+    await expect(table.getByRole('columnheader', { name: g, exact: true })).toBeVisible()
+  }
 
-  await page.getByRole('radio', { name: 'Coding' }).first().click()
-  await table.getByRole('button', { name: /bug fixing/i }).click()
-  await expect(page).toHaveURL(/cat=coding.*sort=sub%3Acoding\.bug-fixing%3Adesc/)
+  await page.getByRole('radio', { name: /^Baseline/ }).click()
+  await expect(page).toHaveURL(/profile=baseline/)
+  await table.getByRole('button', { name: /^Errors/ }).click()
+  await expect(page).toHaveURL(/sort=perf%3Aerrors%3Aasc/)
 
   await page.reload()
-  await expect(table.getByRole('columnheader', { name: /bug fixing/i })).toHaveAttribute('aria-sort', 'descending')
+  await expect(table.getByRole('columnheader', { name: /^Errors/ })).toHaveAttribute('aria-sort', 'ascending')
+  await expect(page.getByRole('radio', { name: /^Baseline/ })).toBeChecked()
 
-  await table.getByRole('button', { name: /Show subtask scores/ }).first().click()
-  await expect(table.getByText('From:')).toBeVisible()
+  await table.getByRole('button', { name: /Show details for Aurora 4 via Stratus Cloud/ }).click()
+  await expect(table.getByText('Served by:')).toBeVisible()
+  await expect(table.getByRole('region', { name: 'Recent runs' })).toBeVisible()
+
+  await page.getByLabel('Provider').selectOption('Cloudhaven')
+  await expect(table.getByText(/^via /).first()).toHaveText(/via Cloudhaven/)
 
   expect(errors).toEqual([])
 })
 
-test('insights charts render, the kill zone toggles, and tooltips work by keyboard', async ({ page }) => {
-  await page.goto('/?app=chat-completions')
-  const scatter = page.getByRole('img', { name: /Scatter of Overall score/ })
-  await expect(scatter).toBeVisible()
+test('insights render, the kill zone toggles by keyboard and mouse', async ({ page }) => {
+  await page.goto('/?service=summarize-profile&profile=baseline')
+  await expect(page.getByRole('img', { name: /Scatter of E2E p95/ })).toBeVisible()
 
-  // Pin the exact point: selecting re-orders the points (dominated ones drawn first).
-  const name = (await page.getByRole('button', { name: /: .* at \$/ }).first().getAttribute('aria-label'))!
+  const name = (await page.getByRole('button', { name: / ms at \$/ }).first().getAttribute('aria-label'))!
   const point = page.getByRole('button', { name, exact: true })
   const pointName = name.slice(0, name.lastIndexOf(': '))
-  const beaten = page.getByText(`Beaten by ${pointName}`, { exact: false })
 
-  // Keyboard: each point is a button.
   await point.focus()
   await page.keyboard.press('Enter')
-  await expect(beaten).toBeVisible()
+  await expect(page.getByText(`Beaten by ${pointName}`, { exact: false })).toBeVisible()
   await page.keyboard.press('Enter')
   await expect(page.getByText(/Beaten by/)).toHaveCount(0)
 
-  // Mouse: clicking the dot selects that dot, even where another provider's dot
-  // for the same model overlaps it.
   const box = (await point.boundingBox())!
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
-  await expect(beaten).toBeVisible()
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
-  await expect(page.getByText(/Beaten by/)).toHaveCount(0)
+  await expect(page.getByText(`Beaten by ${pointName}`, { exact: false })).toBeVisible()
 
-  // Move the mouse off the chart (as a user heading for the cost list would), then
-  // reach a cost row the way a keyboard user does (Tab), not via element.focus().
-  await page.mouse.move(0, 0)
-  const costRow = page.getByRole('button', { name: /: \$[0-9.]+ per successful task$/ }).first()
-  await costRow.focus()
-  await page.keyboard.press('Shift+Tab')
-  await page.keyboard.press('Tab')
-  await expect(costRow).toBeFocused()
-  await expect(page.getByRole('tooltip')).toContainText('$ / 1M output')
-
+  await page.getByRole('radio', { name: 'TTFT p50' }).click()
+  await expect(page).toHaveURL(/lat=ttft_p50/)
+  await expect(page.getByRole('img', { name: /Scatter of TTFT p50/ })).toBeVisible()
   await expect(page.getByRole('img', { name: /Radar chart/ })).toBeVisible()
 })
 
-test('switching apps navigates and back restores the previous view', async ({ page }) => {
-  await page.goto('/?app=chat-completions&cat=coding')
-  await page.getByLabel('API app').selectOption('code-assist')
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Code Assist API')
-  await expect(page).toHaveURL(/\?app=code-assist$/)
-  await page.goBack()
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Chat Completions API')
-  await expect(page.getByRole('radio', { name: 'Coding' }).first()).toBeChecked()
+test('start a fixed batch: runs queue, progress, finish, and show both sources', async ({ page }) => {
+  await page.goto('/?service=ticket-triage&tab=runs')
+  await page.getByRole('button', { name: '+ New run' }).click()
+  const form = page.getByRole('form', { name: 'New run' })
+
+  // The same LLM from two providers, picked in the LLM → provider view.
+  await form.getByRole('button', { name: /^Models/ }).click()
+  await page.getByRole('radio', { name: 'By LLM' }).click()
+  await page.getByRole('group', { name: 'Gale 3 Mini' }).getByRole('checkbox', { name: /^Gale 3 Mini/ }).check()
+  await page.keyboard.press('Escape')
+  await expect(form.getByRole('list', { name: 'Selected models' }).getByRole('listitem')).toHaveCount(2)
+  await form.getByRole('radio', { name: /^Smoke/ }).click()
+  await form.getByLabel('Label (optional)').fill('e2e smoke')
+  await form.getByRole('button', { name: 'Start 2 runs' }).click()
+
+  await expect(page.getByRole('status')).toContainText('Started 2 runs')
+  const runs = page.getByRole('table', { name: 'Runs' })
+  const mine = runs.locator('tbody tr', { hasText: 'e2e smoke' })
+  await expect(mine).toHaveCount(2)
+  await expect(mine.filter({ hasText: /Running|Starting|Queued/ }).first()).toBeVisible()
+
+  await mine.first().getByRole('button').first().click()
+  await expect(page).toHaveURL(/run=r_mock/)
+  await expect(page.getByRole('heading', { name: /e2e smoke/ })).toBeVisible()
+  await expect(page.getByText('BlazeMeter · client side')).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByRole('img', { name: /BlazeMeter timeline/ })).toBeVisible()
+  await expect(page.getByText(/request events the service logged/)).toBeVisible()
+
+  await page.getByRole('button', { name: '← All runs' }).click()
+  await expect(runs).toBeVisible()
 })
 
-test('providers, column groups and test conditions render from the production bundle', async ({ page }) => {
-  await page.goto('/?app=chat-completions')
-  const table = page.getByRole('table', { name: 'Leaderboard' })
-  for (const g of ['Quality', 'Reliability', 'Latency', 'Throughput', 'Cost']) {
-    await expect(table.getByRole('columnheader', { name: g, exact: true })).toBeVisible()
-  }
-  await expect(table.getByText(/^via /).first()).toBeVisible()
+test('auto routing run shows its routing mix; switching service navigates and back restores', async ({ page }) => {
+  await page.goto('/?service=headline-rewrite&tab=runs&new=1')
+  const form = page.getByRole('form', { name: 'New run' })
+  await form.getByRole('radio', { name: 'Auto routing' }).click()
+  await expect(form.getByRole('list', { name: 'Selected models' }).getByRole('listitem')).toHaveCount(6)
+  await form.getByRole('button', { name: 'Start run' }).click()
+  await page.getByRole('table', { name: 'Runs' }).locator('tbody tr').first().click()
+  await expect(page.getByRole('table', { name: 'Routing mix' })).toBeVisible({ timeout: 20_000 })
 
-  await page.getByText('Test conditions').click()
-  await expect(page.getByRole('cell', { name: /Long-context RAG/ }).or(page.getByRole('rowheader', { name: 'Long-context RAG' }))).toBeVisible()
+  await page.goto('/?service=summarize-profile&profile=smoke')
+  await page.getByLabel('Service').selectOption('headline-rewrite')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Headline Rewrite API')
+  await page.goBack()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Summarize Profile API')
+  await expect(page.getByRole('radio', { name: /^Smoke/ })).toBeChecked()
 
-  const before = await table.locator('tbody > tr').count()
-  await page.getByLabel('Provider').selectOption('Cloudhaven')
-  await expect(table.getByText(/^via /).first()).toHaveText('via Cloudhaven')
-  expect(await table.locator('tbody > tr').count()).toBeLessThan(before)
+  await page.getByRole('radio', { name: 'Models catalog' }).click()
+  const catalog = page.getByRole('table', { name: 'Catalog' })
+  const groupHeads = catalog.locator('th[scope=rowgroup]')
+  await expect(groupHeads.first()).toContainText('Aurora Labs API')
+  await page.getByRole('radio', { name: 'LLM → provider' }).click()
+  await expect(groupHeads.first()).toContainText('Aurora 4')
 })

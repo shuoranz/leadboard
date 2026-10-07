@@ -1,0 +1,1886 @@
+{
+  "service": {
+    "id": "summarize-profile",
+    "name": "Summarize Profile API",
+    "description": "Summarizes a member profile into a short paragraph.",
+    "endpoint_path": "/v1/profile/summarize",
+    "allowed_offering_ids": null
+  },
+  "profiles": [
+    {
+      "id": "smoke",
+      "name": "Smoke",
+      "description": "Sanity check at light load.",
+      "concurrency": 5,
+      "ramp_up_s": 10,
+      "duration_s": 60,
+      "think_time_s": 1.0,
+      "runs": 15
+    },
+    {
+      "id": "baseline",
+      "name": "Baseline",
+      "description": "Typical production load.",
+      "concurrency": 20,
+      "ramp_up_s": 30,
+      "duration_s": 300,
+      "think_time_s": 2.0,
+      "runs": 21
+    },
+    {
+      "id": "stress",
+      "name": "Stress",
+      "description": "Peak load, past most deployments' saturation point.",
+      "concurrency": 80,
+      "ramp_up_s": 60,
+      "duration_s": 600,
+      "think_time_s": 2.0,
+      "runs": 7
+    }
+  ],
+  "profile": "baseline",
+  "rows": [
+    {
+      "id": "swiftserve--quanta-8b",
+      "routing": "fixed",
+      "name": "Quanta 8B",
+      "short_name": null,
+      "provider": "Swiftserve",
+      "provider_id": "swiftserve",
+      "model_id": "quanta-8b",
+      "organization": "Quanta",
+      "open_weights": true,
+      "status": "available",
+      "run_id": "r_seed0024",
+      "run_at": "2026-10-01T13:12:20Z",
+      "perf": {
+        "requests": 1895,
+        "errors": 13,
+        "success_rate": 0.9931,
+        "error_breakdown": {
+          "rate_limited": 4,
+          "server_error": 2,
+          "timeout": 4,
+          "dropped_stream": 2,
+          "refused": 1,
+          "other": 0
+        },
+        "truncation_rate": 0.0021,
+        "ttft_ms": {
+          "p50": 89.1,
+          "p95": 140.8,
+          "p99": 173.4
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 807.0,
+            "p50_ms": 86.6
+          },
+          {
+            "input_tokens": 1514.0,
+            "p50_ms": 87.5
+          },
+          {
+            "input_tokens": 2663.0,
+            "p50_ms": 89.6
+          },
+          {
+            "input_tokens": 4913.0,
+            "p50_ms": 92.7
+          },
+          {
+            "input_tokens": 9808.0,
+            "p50_ms": 102.5
+          }
+        ],
+        "itl_ms": {
+          "p50": 3.2,
+          "p95": 4.2,
+          "p99": 21.5
+        },
+        "stall_rate": 0.0244,
+        "e2e_ms": {
+          "p50": 856.5,
+          "p95": 1544.7,
+          "p99": 4932.4
+        },
+        "server_e2e_ms": {
+          "p50": 791.2,
+          "p95": 1479.3,
+          "p99": 4882.0
+        },
+        "client_overhead_ms": {
+          "p50": 65.3,
+          "p95": 65.4,
+          "p99": null
+        },
+        "throughput_rps": 6.322,
+        "tokens_per_min": {
+          "avg": 82531.0,
+          "peak": 99864.0
+        },
+        "decode_tps_p50": 316.9,
+        "prefill_tps": 22111.0,
+        "avg_input_tokens": 2364.0,
+        "avg_output_tokens": 219.0
+      },
+      "cost": {
+        "input_per_million": 0.08,
+        "cached_input_per_million": null,
+        "output_per_million": 0.12,
+        "per_request": 0.000215,
+        "per_1k_requests": 0.2152
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": false,
+        "prompt_caching": false,
+        "batch_api": false,
+        "context_window": 65536,
+        "max_output_tokens": 8000,
+        "regions": [
+          "us"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0024",
+          "ended_at": "2026-10-01T13:12:20Z",
+          "e2e_p95_ms": 1544.7,
+          "ttft_p50_ms": 89.1,
+          "error_rate": 0.0069
+        }
+      ]
+    },
+    {
+      "id": "swiftserve--forge-70b",
+      "routing": "fixed",
+      "name": "Forge 70B",
+      "short_name": null,
+      "provider": "Swiftserve",
+      "provider_id": "swiftserve",
+      "model_id": "forge-70b",
+      "organization": "OpenForge",
+      "open_weights": true,
+      "status": "available",
+      "run_id": "r_seed0022",
+      "run_at": "2026-10-01T15:36:20Z",
+      "perf": {
+        "requests": 1692,
+        "errors": 14,
+        "success_rate": 0.9917,
+        "error_breakdown": {
+          "rate_limited": 5,
+          "server_error": 4,
+          "timeout": 2,
+          "dropped_stream": 1,
+          "refused": 2,
+          "other": 0
+        },
+        "truncation_rate": 0.0,
+        "ttft_ms": {
+          "p50": 148.8,
+          "p95": 244.6,
+          "p99": 310.0
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 790.0,
+            "p50_ms": 150.8
+          },
+          {
+            "input_tokens": 1492.0,
+            "p50_ms": 147.2
+          },
+          {
+            "input_tokens": 2692.0,
+            "p50_ms": 149.1
+          },
+          {
+            "input_tokens": 4794.0,
+            "p50_ms": 151.7
+          },
+          {
+            "input_tokens": 9468.0,
+            "p50_ms": 165.5
+          }
+        ],
+        "itl_ms": {
+          "p50": 4.8,
+          "p95": 6.3,
+          "p99": 23.7
+        },
+        "stall_rate": 0.028,
+        "e2e_ms": {
+          "p50": 1248.8,
+          "p95": 2292.3,
+          "p99": 5393.2
+        },
+        "server_e2e_ms": {
+          "p50": 1183.8,
+          "p95": 2231.7,
+          "p99": 5319.0
+        },
+        "client_overhead_ms": {
+          "p50": 65.0,
+          "p95": 60.6,
+          "p99": null
+        },
+        "throughput_rps": 5.641,
+        "tokens_per_min": {
+          "avg": 73045.0,
+          "peak": 88944.0
+        },
+        "decode_tps_p50": 208.5,
+        "prefill_tps": 13308.0,
+        "avg_input_tokens": 2353.0,
+        "avg_output_tokens": 218.0
+      },
+      "cost": {
+        "input_per_million": 0.6,
+        "cached_input_per_million": null,
+        "output_per_million": 0.8,
+        "per_request": 0.001584,
+        "per_1k_requests": 1.5843
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": false,
+        "prompt_caching": false,
+        "batch_api": false,
+        "context_window": 131072,
+        "max_output_tokens": 16000,
+        "regions": [
+          "us",
+          "eu"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0022",
+          "ended_at": "2026-10-01T15:36:20Z",
+          "e2e_p95_ms": 2292.3,
+          "ttft_p50_ms": 148.8,
+          "error_rate": 0.0083
+        },
+        {
+          "run_id": "r_seed0129",
+          "ended_at": "2026-09-19T08:24:20Z",
+          "e2e_p95_ms": 2426.1,
+          "ttft_p50_ms": 150.2,
+          "error_rate": 0.0096
+        }
+      ]
+    },
+    {
+      "id": "aurora-api--aurora-4-flash",
+      "routing": "fixed",
+      "name": "Aurora 4 Flash",
+      "short_name": null,
+      "provider": "Aurora Labs API",
+      "provider_id": "aurora-api",
+      "model_id": "aurora-4-flash",
+      "organization": "Aurora Labs",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0002",
+      "run_at": "2026-10-02T15:36:20Z",
+      "perf": {
+        "requests": 1553,
+        "errors": 5,
+        "success_rate": 0.9968,
+        "error_breakdown": {
+          "rate_limited": 3,
+          "server_error": 1,
+          "timeout": 1,
+          "dropped_stream": 0,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0006,
+        "ttft_ms": {
+          "p50": 191.5,
+          "p95": 303.9,
+          "p99": 358.1
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 780.0,
+            "p50_ms": 197.4
+          },
+          {
+            "input_tokens": 1507.0,
+            "p50_ms": 189.1
+          },
+          {
+            "input_tokens": 2711.0,
+            "p50_ms": 191.4
+          },
+          {
+            "input_tokens": 4864.0,
+            "p50_ms": 194.4
+          },
+          {
+            "input_tokens": 9406.0,
+            "p50_ms": 204.9
+          }
+        ],
+        "itl_ms": {
+          "p50": 6.2,
+          "p95": 7.9,
+          "p99": 9.4
+        },
+        "stall_rate": 0.009,
+        "e2e_ms": {
+          "p50": 1586.4,
+          "p95": 2793.6,
+          "p99": 4177.0
+        },
+        "server_e2e_ms": {
+          "p50": 1520.7,
+          "p95": 2730.9,
+          "p99": 4087.2
+        },
+        "client_overhead_ms": {
+          "p50": 65.7,
+          "p95": 62.7,
+          "p99": null
+        },
+        "throughput_rps": 5.183,
+        "tokens_per_min": {
+          "avg": 68621.0,
+          "peak": 84864.0
+        },
+        "decode_tps_p50": 163.4,
+        "prefill_tps": 10817.0,
+        "avg_input_tokens": 2437.0,
+        "avg_output_tokens": 221.0
+      },
+      "cost": {
+        "input_per_million": 0.3,
+        "cached_input_per_million": 0.03,
+        "output_per_million": 2.5,
+        "per_request": 0.001147,
+        "per_1k_requests": 1.1472
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 1000000,
+        "max_output_tokens": 32000,
+        "regions": [
+          "us",
+          "eu"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0002",
+          "ended_at": "2026-10-02T15:36:20Z",
+          "e2e_p95_ms": 2793.6,
+          "ttft_p50_ms": 191.5,
+          "error_rate": 0.0032
+        },
+        {
+          "run_id": "r_seed0131",
+          "ended_at": "2026-09-19T06:00:20Z",
+          "e2e_p95_ms": 2678.6,
+          "ttft_p50_ms": 186.5,
+          "error_rate": 0.0039
+        }
+      ]
+    },
+    {
+      "id": "swiftserve--gale-3-mini",
+      "routing": "fixed",
+      "name": "Gale 3 Mini",
+      "short_name": null,
+      "provider": "Swiftserve",
+      "provider_id": "swiftserve",
+      "model_id": "gale-3-mini",
+      "organization": "Northwind AI",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0026",
+      "run_at": "2026-10-01T10:48:20Z",
+      "perf": {
+        "requests": 1568,
+        "errors": 19,
+        "success_rate": 0.9879,
+        "error_breakdown": {
+          "rate_limited": 5,
+          "server_error": 9,
+          "timeout": 2,
+          "dropped_stream": 2,
+          "refused": 1,
+          "other": 0
+        },
+        "truncation_rate": 0.0013,
+        "ttft_ms": {
+          "p50": 168.3,
+          "p95": 275.3,
+          "p99": 337.3
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 756.0,
+            "p50_ms": 171.5
+          },
+          {
+            "input_tokens": 1510.0,
+            "p50_ms": 168.9
+          },
+          {
+            "input_tokens": 2726.0,
+            "p50_ms": 165.3
+          },
+          {
+            "input_tokens": 5176.0,
+            "p50_ms": 168.3
+          },
+          {
+            "input_tokens": 9144.0,
+            "p50_ms": 205.2
+          }
+        ],
+        "itl_ms": {
+          "p50": 5.8,
+          "p95": 7.6,
+          "p99": 23.7
+        },
+        "stall_rate": 0.0212,
+        "e2e_ms": {
+          "p50": 1481.2,
+          "p95": 2816.5,
+          "p99": 5590.7
+        },
+        "server_e2e_ms": {
+          "p50": 1418.7,
+          "p95": 2735.5,
+          "p99": 5511.6
+        },
+        "client_overhead_ms": {
+          "p50": 62.5,
+          "p95": 81.0,
+          "p99": null
+        },
+        "throughput_rps": 5.228,
+        "tokens_per_min": {
+          "avg": 68896.0,
+          "peak": 85248.0
+        },
+        "decode_tps_p50": 172.8,
+        "prefill_tps": 12110.0,
+        "avg_input_tokens": 2447.0,
+        "avg_output_tokens": 222.0
+      },
+      "cost": {
+        "input_per_million": 0.36,
+        "cached_input_per_million": null,
+        "output_per_million": 1.44,
+        "per_request": 0.001197,
+        "per_1k_requests": 1.1972
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": false,
+        "context_window": 128000,
+        "max_output_tokens": 16000,
+        "regions": [
+          "us"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0026",
+          "ended_at": "2026-10-01T10:48:20Z",
+          "e2e_p95_ms": 2816.5,
+          "ttft_p50_ms": 168.3,
+          "error_rate": 0.0121
+        }
+      ]
+    },
+    {
+      "id": "stratus--aurora-4-flash",
+      "routing": "fixed",
+      "name": "Aurora 4 Flash",
+      "short_name": null,
+      "provider": "Stratus Cloud",
+      "provider_id": "stratus",
+      "model_id": "aurora-4-flash",
+      "organization": "Aurora Labs",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0010",
+      "run_at": "2026-10-02T06:00:20Z",
+      "perf": {
+        "requests": 1464,
+        "errors": 10,
+        "success_rate": 0.9932,
+        "error_breakdown": {
+          "rate_limited": 4,
+          "server_error": 3,
+          "timeout": 2,
+          "dropped_stream": 0,
+          "refused": 1,
+          "other": 0
+        },
+        "truncation_rate": 0.0014,
+        "ttft_ms": {
+          "p50": 252.4,
+          "p95": 402.3,
+          "p99": 479.0
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 774.0,
+            "p50_ms": 232.1
+          },
+          {
+            "input_tokens": 1477.0,
+            "p50_ms": 250.7
+          },
+          {
+            "input_tokens": 2740.0,
+            "p50_ms": 256.4
+          },
+          {
+            "input_tokens": 4983.0,
+            "p50_ms": 268.9
+          },
+          {
+            "input_tokens": 8880.0,
+            "p50_ms": 244.4
+          }
+        ],
+        "itl_ms": {
+          "p50": 6.8,
+          "p95": 8.7,
+          "p99": 21.2
+        },
+        "stall_rate": 0.0172,
+        "e2e_ms": {
+          "p50": 1769.4,
+          "p95": 3146.1,
+          "p99": 5400.3
+        },
+        "server_e2e_ms": {
+          "p50": 1700.4,
+          "p95": 3097.9,
+          "p99": 5342.1
+        },
+        "client_overhead_ms": {
+          "p50": 69.0,
+          "p95": 48.2,
+          "p99": null
+        },
+        "throughput_rps": 4.882,
+        "tokens_per_min": {
+          "avg": 64842.0,
+          "peak": 80280.0
+        },
+        "decode_tps_p50": 149.1,
+        "prefill_tps": 8119.0,
+        "avg_input_tokens": 2440.0,
+        "avg_output_tokens": 223.0
+      },
+      "cost": {
+        "input_per_million": 0.3,
+        "cached_input_per_million": null,
+        "output_per_million": 2.5,
+        "per_request": 0.001285,
+        "per_1k_requests": 1.2853
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": true,
+        "context_window": 1000000,
+        "max_output_tokens": 32000,
+        "regions": [
+          "us-east",
+          "us-west"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0010",
+          "ended_at": "2026-10-02T06:00:20Z",
+          "e2e_p95_ms": 3146.1,
+          "ttft_p50_ms": 252.4,
+          "error_rate": 0.0068
+        }
+      ]
+    },
+    {
+      "id": "northwind-api--gale-3-mini",
+      "routing": "fixed",
+      "name": "Gale 3 Mini",
+      "short_name": null,
+      "provider": "Northwind AI API",
+      "provider_id": "northwind-api",
+      "model_id": "gale-3-mini",
+      "organization": "Northwind AI",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0006",
+      "run_at": "2026-10-02T10:48:20Z",
+      "perf": {
+        "requests": 1454,
+        "errors": 8,
+        "success_rate": 0.9945,
+        "error_breakdown": {
+          "rate_limited": 5,
+          "server_error": 2,
+          "timeout": 0,
+          "dropped_stream": 1,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0007,
+        "ttft_ms": {
+          "p50": 228.6,
+          "p95": 368.0,
+          "p99": 434.9
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 821.0,
+            "p50_ms": 222.9
+          },
+          {
+            "input_tokens": 1495.0,
+            "p50_ms": 226.1
+          },
+          {
+            "input_tokens": 2654.0,
+            "p50_ms": 228.6
+          },
+          {
+            "input_tokens": 4853.0,
+            "p50_ms": 237.8
+          },
+          {
+            "input_tokens": 9662.0,
+            "p50_ms": 236.9
+          }
+        ],
+        "itl_ms": {
+          "p50": 7.3,
+          "p95": 9.3,
+          "p99": 15.9
+        },
+        "stall_rate": 0.0111,
+        "e2e_ms": {
+          "p50": 1817.5,
+          "p95": 3216.9,
+          "p99": 4599.9
+        },
+        "server_e2e_ms": {
+          "p50": 1759.2,
+          "p95": 3165.0,
+          "p99": 4524.3
+        },
+        "client_overhead_ms": {
+          "p50": 58.3,
+          "p95": 51.9,
+          "p99": null
+        },
+        "throughput_rps": 4.848,
+        "tokens_per_min": {
+          "avg": 62964.0,
+          "peak": 78480.0
+        },
+        "decode_tps_p50": 137.6,
+        "prefill_tps": 8578.0,
+        "avg_input_tokens": 2413.0,
+        "avg_output_tokens": 218.0
+      },
+      "cost": {
+        "input_per_million": 0.4,
+        "cached_input_per_million": 0.04,
+        "output_per_million": 1.6,
+        "per_request": 0.001126,
+        "per_1k_requests": 1.1262
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 128000,
+        "max_output_tokens": 16000,
+        "regions": [
+          "us",
+          "eu"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0006",
+          "ended_at": "2026-10-02T10:48:20Z",
+          "e2e_p95_ms": 3216.9,
+          "ttft_p50_ms": 228.6,
+          "error_rate": 0.0055
+        }
+      ]
+    },
+    {
+      "id": "cloudhaven--gale-3-mini",
+      "routing": "fixed",
+      "name": "Gale 3 Mini",
+      "short_name": null,
+      "provider": "Cloudhaven",
+      "provider_id": "cloudhaven",
+      "model_id": "gale-3-mini",
+      "organization": "Northwind AI",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0018",
+      "run_at": "2026-10-01T20:24:20Z",
+      "perf": {
+        "requests": 1389,
+        "errors": 10,
+        "success_rate": 0.9928,
+        "error_breakdown": {
+          "rate_limited": 3,
+          "server_error": 1,
+          "timeout": 3,
+          "dropped_stream": 2,
+          "refused": 1,
+          "other": 0
+        },
+        "truncation_rate": 0.0015,
+        "ttft_ms": {
+          "p50": 256.9,
+          "p95": 412.4,
+          "p99": 501.3
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 785.0,
+            "p50_ms": 244.5
+          },
+          {
+            "input_tokens": 1508.0,
+            "p50_ms": 255.4
+          },
+          {
+            "input_tokens": 2699.0,
+            "p50_ms": 265.6
+          },
+          {
+            "input_tokens": 4868.0,
+            "p50_ms": 255.7
+          },
+          {
+            "input_tokens": 8753.0,
+            "p50_ms": 285.8
+          }
+        ],
+        "itl_ms": {
+          "p50": 7.7,
+          "p95": 10.0,
+          "p99": 17.8
+        },
+        "stall_rate": 0.0116,
+        "e2e_ms": {
+          "p50": 1965.3,
+          "p95": 3377.0,
+          "p99": 4855.7
+        },
+        "server_e2e_ms": {
+          "p50": 1901.2,
+          "p95": 3324.1,
+          "p99": 4790.1
+        },
+        "client_overhead_ms": {
+          "p50": 64.1,
+          "p95": 52.9,
+          "p99": null
+        },
+        "throughput_rps": 4.63,
+        "tokens_per_min": {
+          "avg": 59949.0,
+          "peak": 78120.0
+        },
+        "decode_tps_p50": 131.2,
+        "prefill_tps": 7946.0,
+        "avg_input_tokens": 2474.0,
+        "avg_output_tokens": 217.0
+      },
+      "cost": {
+        "input_per_million": 0.44,
+        "cached_input_per_million": 0.044,
+        "output_per_million": 1.76,
+        "per_request": 0.001261,
+        "per_1k_requests": 1.2615
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 128000,
+        "max_output_tokens": 16000,
+        "regions": [
+          "us-east",
+          "eu-west",
+          "apac"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0018",
+          "ended_at": "2026-10-01T20:24:20Z",
+          "e2e_p95_ms": 3377.0,
+          "ttft_p50_ms": 256.9,
+          "error_rate": 0.0072
+        }
+      ]
+    },
+    {
+      "id": "stratus--forge-70b",
+      "routing": "fixed",
+      "name": "Forge 70B",
+      "short_name": null,
+      "provider": "Stratus Cloud",
+      "provider_id": "stratus",
+      "model_id": "forge-70b",
+      "organization": "OpenForge",
+      "open_weights": true,
+      "status": "available",
+      "run_id": "r_seed0014",
+      "run_at": "2026-10-02T01:12:20Z",
+      "perf": {
+        "requests": 1166,
+        "errors": 8,
+        "success_rate": 0.9931,
+        "error_breakdown": {
+          "rate_limited": 3,
+          "server_error": 1,
+          "timeout": 3,
+          "dropped_stream": 1,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0009,
+        "ttft_ms": {
+          "p50": 337.6,
+          "p95": 543.6,
+          "p99": 651.9
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 772.0,
+            "p50_ms": 335.2
+          },
+          {
+            "input_tokens": 1471.0,
+            "p50_ms": 333.6
+          },
+          {
+            "input_tokens": 2662.0,
+            "p50_ms": 340.1
+          },
+          {
+            "input_tokens": 4920.0,
+            "p50_ms": 346.9
+          },
+          {
+            "input_tokens": 9833.0,
+            "p50_ms": 374.2
+          }
+        ],
+        "itl_ms": {
+          "p50": 10.7,
+          "p95": 13.7,
+          "p99": 28.8
+        },
+        "stall_rate": 0.0207,
+        "e2e_ms": {
+          "p50": 2668.2,
+          "p95": 4913.4,
+          "p99": 6870.2
+        },
+        "server_e2e_ms": {
+          "p50": 2601.8,
+          "p95": 4835.7,
+          "p99": 6800.5
+        },
+        "client_overhead_ms": {
+          "p50": 66.4,
+          "p95": 77.7,
+          "p99": null
+        },
+        "throughput_rps": 3.888,
+        "tokens_per_min": {
+          "avg": 50838.0,
+          "peak": 60444.0
+        },
+        "decode_tps_p50": 94.3,
+        "prefill_tps": 5747.0,
+        "avg_input_tokens": 2403.0,
+        "avg_output_tokens": 219.0
+      },
+      "cost": {
+        "input_per_million": 0.7,
+        "cached_input_per_million": null,
+        "output_per_million": 0.9,
+        "per_request": 0.001878,
+        "per_1k_requests": 1.8784
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": false,
+        "prompt_caching": false,
+        "batch_api": true,
+        "context_window": 131072,
+        "max_output_tokens": 16000,
+        "regions": [
+          "us-east"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0014",
+          "ended_at": "2026-10-02T01:12:20Z",
+          "e2e_p95_ms": 4913.4,
+          "ttft_p50_ms": 337.6,
+          "error_rate": 0.0069
+        }
+      ]
+    },
+    {
+      "id": "northwind-api--gale-3",
+      "routing": "fixed",
+      "name": "Gale 3",
+      "short_name": null,
+      "provider": "Northwind AI API",
+      "provider_id": "northwind-api",
+      "model_id": "gale-3",
+      "organization": "Northwind AI",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0004",
+      "run_at": "2026-10-02T13:12:20Z",
+      "perf": {
+        "requests": 1154,
+        "errors": 13,
+        "success_rate": 0.9887,
+        "error_breakdown": {
+          "rate_limited": 3,
+          "server_error": 4,
+          "timeout": 2,
+          "dropped_stream": 3,
+          "refused": 1,
+          "other": 0
+        },
+        "truncation_rate": 0.0,
+        "ttft_ms": {
+          "p50": 383.0,
+          "p95": 594.5,
+          "p99": 695.1
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 785.0,
+            "p50_ms": 376.4
+          },
+          {
+            "input_tokens": 1512.0,
+            "p50_ms": 385.4
+          },
+          {
+            "input_tokens": 2645.0,
+            "p50_ms": 365.5
+          },
+          {
+            "input_tokens": 4818.0,
+            "p50_ms": 429.2
+          },
+          {
+            "input_tokens": 9242.0,
+            "p50_ms": 446.8
+          }
+        ],
+        "itl_ms": {
+          "p50": 11.1,
+          "p95": 14.3,
+          "p99": 25.9
+        },
+        "stall_rate": 0.0183,
+        "e2e_ms": {
+          "p50": 2789.3,
+          "p95": 5006.7,
+          "p99": 6918.0
+        },
+        "server_e2e_ms": {
+          "p50": 2721.8,
+          "p95": 4944.0,
+          "p99": 6853.6
+        },
+        "client_overhead_ms": {
+          "p50": 67.5,
+          "p95": 62.7,
+          "p99": null
+        },
+        "throughput_rps": 3.847,
+        "tokens_per_min": {
+          "avg": 50045.0,
+          "peak": 60444.0
+        },
+        "decode_tps_p50": 90.8,
+        "prefill_tps": 5297.0,
+        "avg_input_tokens": 2381.0,
+        "avg_output_tokens": 219.0
+      },
+      "cost": {
+        "input_per_million": 2.5,
+        "cached_input_per_million": 0.25,
+        "output_per_million": 10.0,
+        "per_request": 0.007057,
+        "per_1k_requests": 7.0568
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 256000,
+        "max_output_tokens": 64000,
+        "regions": [
+          "us",
+          "eu"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0004",
+          "ended_at": "2026-10-02T13:12:20Z",
+          "e2e_p95_ms": 5006.7,
+          "ttft_p50_ms": 383.0,
+          "error_rate": 0.0113
+        },
+        {
+          "run_id": "r_seed0127",
+          "ended_at": "2026-09-19T10:48:20Z",
+          "e2e_p95_ms": 4854.8,
+          "ttft_p50_ms": 382.8,
+          "error_rate": 0.0095
+        }
+      ]
+    },
+    {
+      "id": "cloudhaven--gale-3",
+      "routing": "fixed",
+      "name": "Gale 3",
+      "short_name": null,
+      "provider": "Cloudhaven",
+      "provider_id": "cloudhaven",
+      "model_id": "gale-3",
+      "organization": "Northwind AI",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0016",
+      "run_at": "2026-10-01T22:48:20Z",
+      "perf": {
+        "requests": 1120,
+        "errors": 4,
+        "success_rate": 0.9964,
+        "error_breakdown": {
+          "rate_limited": 1,
+          "server_error": 0,
+          "timeout": 1,
+          "dropped_stream": 2,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0,
+        "ttft_ms": {
+          "p50": 415.4,
+          "p95": 634.5,
+          "p99": 783.5
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 792.0,
+            "p50_ms": 406.5
+          },
+          {
+            "input_tokens": 1452.0,
+            "p50_ms": 401.4
+          },
+          {
+            "input_tokens": 2668.0,
+            "p50_ms": 426.9
+          },
+          {
+            "input_tokens": 4855.0,
+            "p50_ms": 430.8
+          },
+          {
+            "input_tokens": 9050.0,
+            "p50_ms": 404.6
+          }
+        ],
+        "itl_ms": {
+          "p50": 11.6,
+          "p95": 15.0,
+          "p99": 25.7
+        },
+        "stall_rate": 0.0125,
+        "e2e_ms": {
+          "p50": 2934.4,
+          "p95": 5231.0,
+          "p99": 6866.7
+        },
+        "server_e2e_ms": {
+          "p50": 2863.8,
+          "p95": 5156.6,
+          "p99": 6819.9
+        },
+        "client_overhead_ms": {
+          "p50": 70.6,
+          "p95": 74.4,
+          "p99": null
+        },
+        "throughput_rps": 3.742,
+        "tokens_per_min": {
+          "avg": 49503.0,
+          "peak": 63648.0
+        },
+        "decode_tps_p50": 86.9,
+        "prefill_tps": 5054.0,
+        "avg_input_tokens": 2461.0,
+        "avg_output_tokens": 221.0
+      },
+      "cost": {
+        "input_per_million": 2.75,
+        "cached_input_per_million": 0.275,
+        "output_per_million": 11.0,
+        "per_request": 0.007814,
+        "per_1k_requests": 7.8139
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 256000,
+        "max_output_tokens": 64000,
+        "regions": [
+          "us-east",
+          "eu-west",
+          "apac"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0016",
+          "ended_at": "2026-10-01T22:48:20Z",
+          "e2e_p95_ms": 5231.0,
+          "ttft_p50_ms": 415.4,
+          "error_rate": 0.0036
+        },
+        {
+          "run_id": "r_seed0125",
+          "ended_at": "2026-09-19T13:12:20Z",
+          "e2e_p95_ms": 5026.5,
+          "ttft_p50_ms": 415.6,
+          "error_rate": 0.0071
+        }
+      ]
+    },
+    {
+      "id": "auto",
+      "routing": "auto",
+      "name": "Auto routing",
+      "short_name": "Auto",
+      "provider": "Random per request",
+      "provider_id": "auto",
+      "model_id": "auto",
+      "organization": "Auto routing",
+      "open_weights": false,
+      "status": null,
+      "run_id": "r_seed0028",
+      "run_at": "2026-10-03T06:00:20Z",
+      "perf": {
+        "requests": 1263,
+        "errors": 10,
+        "success_rate": 0.9921,
+        "error_breakdown": {
+          "rate_limited": 2,
+          "server_error": 5,
+          "timeout": 1,
+          "dropped_stream": 2,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0008,
+        "ttft_ms": {
+          "p50": 297.0,
+          "p95": 669.4,
+          "p99": 843.3
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 787.0,
+            "p50_ms": 306.8
+          },
+          {
+            "input_tokens": 1445.0,
+            "p50_ms": 287.9
+          },
+          {
+            "input_tokens": 2671.0,
+            "p50_ms": 305.8
+          },
+          {
+            "input_tokens": 4926.0,
+            "p50_ms": 310.9
+          },
+          {
+            "input_tokens": 9297.0,
+            "p50_ms": 223.8
+          }
+        ],
+        "itl_ms": {
+          "p50": 9.1,
+          "p95": 17.7,
+          "p99": 28.5
+        },
+        "stall_rate": 0.0191,
+        "e2e_ms": {
+          "p50": 2205.1,
+          "p95": 5414.6,
+          "p99": 7093.9
+        },
+        "server_e2e_ms": {
+          "p50": 2134.3,
+          "p95": 5371.3,
+          "p99": 7047.7
+        },
+        "client_overhead_ms": {
+          "p50": 70.8,
+          "p95": 43.3,
+          "p99": null
+        },
+        "throughput_rps": 4.215,
+        "tokens_per_min": {
+          "avg": 54873.0,
+          "peak": 73248.0
+        },
+        "decode_tps_p50": 111.7,
+        "prefill_tps": 7120.0,
+        "avg_input_tokens": 2428.0,
+        "avg_output_tokens": 218.0
+      },
+      "cost": {
+        "input_per_million": null,
+        "cached_input_per_million": null,
+        "output_per_million": null,
+        "per_request": 0.004192,
+        "per_1k_requests": 4.1919
+      },
+      "capabilities": null,
+      "routing_mix": [
+        {
+          "offering_id": "northwind-api--gale-3-mini",
+          "share": 0.0776
+        },
+        {
+          "offering_id": "stratus--aurora-4-flash",
+          "share": 0.0776
+        },
+        {
+          "offering_id": "northwind-api--gale-3",
+          "share": 0.0752
+        },
+        {
+          "offering_id": "cloudhaven--aurora-4",
+          "share": 0.0736
+        },
+        {
+          "offering_id": "stratus--aurora-4",
+          "share": 0.0728
+        },
+        {
+          "offering_id": "swiftserve--forge-70b",
+          "share": 0.0728
+        },
+        {
+          "offering_id": "swiftserve--quanta-8b",
+          "share": 0.0721
+        },
+        {
+          "offering_id": "stratus--forge-70b",
+          "share": 0.0721
+        },
+        {
+          "offering_id": "aurora-api--aurora-4",
+          "share": 0.0721
+        },
+        {
+          "offering_id": "swiftserve--gale-3-mini",
+          "share": 0.0697
+        },
+        {
+          "offering_id": "stratus--helix-2",
+          "share": 0.0697
+        },
+        {
+          "offering_id": "cloudhaven--gale-3",
+          "share": 0.0689
+        },
+        {
+          "offering_id": "aurora-api--aurora-4-flash",
+          "share": 0.0641
+        },
+        {
+          "offering_id": "cloudhaven--gale-3-mini",
+          "share": 0.0618
+        }
+      ],
+      "recent_runs": [
+        {
+          "run_id": "r_seed0028",
+          "ended_at": "2026-10-03T06:00:20Z",
+          "e2e_p95_ms": 5414.6,
+          "ttft_p50_ms": 297.0,
+          "error_rate": 0.0079
+        }
+      ]
+    },
+    {
+      "id": "aurora-api--aurora-4",
+      "routing": "fixed",
+      "name": "Aurora 4",
+      "short_name": null,
+      "provider": "Aurora Labs API",
+      "provider_id": "aurora-api",
+      "model_id": "aurora-4",
+      "organization": "Aurora Labs",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0000",
+      "run_at": "2026-10-02T18:00:20Z",
+      "perf": {
+        "requests": 1071,
+        "errors": 4,
+        "success_rate": 0.9963,
+        "error_breakdown": {
+          "rate_limited": 1,
+          "server_error": 2,
+          "timeout": 0,
+          "dropped_stream": 1,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0,
+        "ttft_ms": {
+          "p50": 415.5,
+          "p95": 676.1,
+          "p99": 856.2
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 787.0,
+            "p50_ms": 403.2
+          },
+          {
+            "input_tokens": 1486.0,
+            "p50_ms": 412.8
+          },
+          {
+            "input_tokens": 2690.0,
+            "p50_ms": 415.7
+          },
+          {
+            "input_tokens": 4874.0,
+            "p50_ms": 425.4
+          },
+          {
+            "input_tokens": 9997.0,
+            "p50_ms": 460.8
+          }
+        ],
+        "itl_ms": {
+          "p50": 12.9,
+          "p95": 16.7,
+          "p99": 35.8
+        },
+        "stall_rate": 0.0206,
+        "e2e_ms": {
+          "p50": 3195.4,
+          "p95": 5576.9,
+          "p99": 7200.4
+        },
+        "server_e2e_ms": {
+          "p50": 3134.4,
+          "p95": 5524.6,
+          "p99": 7146.3
+        },
+        "client_overhead_ms": {
+          "p50": 61.0,
+          "p95": 52.3,
+          "p99": null
+        },
+        "throughput_rps": 3.573,
+        "tokens_per_min": {
+          "avg": 45900.0,
+          "peak": 59340.0
+        },
+        "decode_tps_p50": 78.2,
+        "prefill_tps": 4895.0,
+        "avg_input_tokens": 2406.0,
+        "avg_output_tokens": 215.0
+      },
+      "cost": {
+        "input_per_million": 3.0,
+        "cached_input_per_million": 0.3,
+        "output_per_million": 15.0,
+        "per_request": 0.009088,
+        "per_1k_requests": 9.0877
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 400000,
+        "max_output_tokens": 64000,
+        "regions": [
+          "us",
+          "eu"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0000",
+          "ended_at": "2026-10-02T18:00:20Z",
+          "e2e_p95_ms": 5576.9,
+          "ttft_p50_ms": 415.5,
+          "error_rate": 0.0037
+        },
+        {
+          "run_id": "r_seed0121",
+          "ended_at": "2026-09-19T18:00:20Z",
+          "e2e_p95_ms": 5812.8,
+          "ttft_p50_ms": 413.3,
+          "error_rate": 0.0047
+        }
+      ]
+    },
+    {
+      "id": "stratus--helix-2",
+      "routing": "fixed",
+      "name": "Helix 2",
+      "short_name": null,
+      "provider": "Stratus Cloud",
+      "provider_id": "stratus",
+      "model_id": "helix-2",
+      "organization": "Helix Research",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0012",
+      "run_at": "2026-10-02T03:36:20Z",
+      "perf": {
+        "requests": 1090,
+        "errors": 9,
+        "success_rate": 0.9917,
+        "error_breakdown": {
+          "rate_limited": 4,
+          "server_error": 1,
+          "timeout": 1,
+          "dropped_stream": 1,
+          "refused": 2,
+          "other": 0
+        },
+        "truncation_rate": 0.0,
+        "ttft_ms": {
+          "p50": 452.9,
+          "p95": 722.1,
+          "p99": 874.1
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 764.0,
+            "p50_ms": 434.7
+          },
+          {
+            "input_tokens": 1480.0,
+            "p50_ms": 441.9
+          },
+          {
+            "input_tokens": 2613.0,
+            "p50_ms": 471.8
+          },
+          {
+            "input_tokens": 4894.0,
+            "p50_ms": 466.2
+          },
+          {
+            "input_tokens": 10006.0,
+            "p50_ms": 465.5
+          }
+        ],
+        "itl_ms": {
+          "p50": 12.2,
+          "p95": 15.5,
+          "p99": 28.1
+        },
+        "stall_rate": 0.0185,
+        "e2e_ms": {
+          "p50": 3045.5,
+          "p95": 5645.4,
+          "p99": 7154.6
+        },
+        "server_e2e_ms": {
+          "p50": 2993.9,
+          "p95": 5569.9,
+          "p99": 7106.3
+        },
+        "client_overhead_ms": {
+          "p50": 51.6,
+          "p95": 75.5,
+          "p99": null
+        },
+        "throughput_rps": 3.637,
+        "tokens_per_min": {
+          "avg": 47421.0,
+          "peak": 57816.0
+        },
+        "decode_tps_p50": 82.6,
+        "prefill_tps": 4346.0,
+        "avg_input_tokens": 2415.0,
+        "avg_output_tokens": 219.0
+      },
+      "cost": {
+        "input_per_million": 1.8,
+        "cached_input_per_million": 0.18,
+        "output_per_million": 9.0,
+        "per_request": 0.00548,
+        "per_1k_requests": 5.4805
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": true,
+        "context_window": 200000,
+        "max_output_tokens": 32000,
+        "regions": [
+          "us-east",
+          "eu-central"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0012",
+          "ended_at": "2026-10-02T03:36:20Z",
+          "e2e_p95_ms": 5645.4,
+          "ttft_p50_ms": 452.9,
+          "error_rate": 0.0083
+        }
+      ]
+    },
+    {
+      "id": "stratus--aurora-4",
+      "routing": "fixed",
+      "name": "Aurora 4",
+      "short_name": null,
+      "provider": "Stratus Cloud",
+      "provider_id": "stratus",
+      "model_id": "aurora-4",
+      "organization": "Aurora Labs",
+      "open_weights": false,
+      "status": "available",
+      "run_id": "r_seed0008",
+      "run_at": "2026-10-02T08:24:20Z",
+      "perf": {
+        "requests": 974,
+        "errors": 7,
+        "success_rate": 0.9928,
+        "error_breakdown": {
+          "rate_limited": 3,
+          "server_error": 3,
+          "timeout": 1,
+          "dropped_stream": 0,
+          "refused": 0,
+          "other": 0
+        },
+        "truncation_rate": 0.0,
+        "ttft_ms": {
+          "p50": 521.5,
+          "p95": 838.8,
+          "p99": 1055.3
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 792.0,
+            "p50_ms": 503.1
+          },
+          {
+            "input_tokens": 1500.0,
+            "p50_ms": 524.6
+          },
+          {
+            "input_tokens": 2611.0,
+            "p50_ms": 523.6
+          },
+          {
+            "input_tokens": 4994.0,
+            "p50_ms": 529.0
+          },
+          {
+            "input_tokens": 8597.0,
+            "p50_ms": 531.0
+          }
+        ],
+        "itl_ms": {
+          "p50": 14.4,
+          "p95": 19.4,
+          "p99": 31.0
+        },
+        "stall_rate": 0.0227,
+        "e2e_ms": {
+          "p50": 3684.3,
+          "p95": 6408.4,
+          "p99": 8363.5
+        },
+        "server_e2e_ms": {
+          "p50": 3622.4,
+          "p95": 6339.3,
+          "p99": 8284.6
+        },
+        "client_overhead_ms": {
+          "p50": 61.9,
+          "p95": 69.1,
+          "p99": null
+        },
+        "throughput_rps": 3.253,
+        "tokens_per_min": {
+          "avg": 42854.0,
+          "peak": 53040.0
+        },
+        "decode_tps_p50": 70.0,
+        "prefill_tps": 3861.0,
+        "avg_input_tokens": 2394.0,
+        "avg_output_tokens": 221.0
+      },
+      "cost": {
+        "input_per_million": 3.0,
+        "cached_input_per_million": 0.3,
+        "output_per_million": 15.0,
+        "per_request": 0.009076,
+        "per_1k_requests": 9.0762
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": false,
+        "batch_api": true,
+        "context_window": 400000,
+        "max_output_tokens": 64000,
+        "regions": [
+          "us-east",
+          "us-west",
+          "eu-central"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0008",
+          "ended_at": "2026-10-02T08:24:20Z",
+          "e2e_p95_ms": 6408.4,
+          "ttft_p50_ms": 521.5,
+          "error_rate": 0.0072
+        },
+        {
+          "run_id": "r_seed0123",
+          "ended_at": "2026-09-19T15:36:20Z",
+          "e2e_p95_ms": 6522.9,
+          "ttft_p50_ms": 524.8,
+          "error_rate": 0.0072
+        }
+      ]
+    },
+    {
+      "id": "cloudhaven--aurora-4",
+      "routing": "fixed",
+      "name": "Aurora 4",
+      "short_name": null,
+      "provider": "Cloudhaven",
+      "provider_id": "cloudhaven",
+      "model_id": "aurora-4",
+      "organization": "Aurora Labs",
+      "open_weights": false,
+      "status": "degraded",
+      "run_id": "r_seed0020",
+      "run_at": "2026-10-01T18:00:20Z",
+      "perf": {
+        "requests": 894,
+        "errors": 13,
+        "success_rate": 0.9855,
+        "error_breakdown": {
+          "rate_limited": 3,
+          "server_error": 3,
+          "timeout": 4,
+          "dropped_stream": 1,
+          "refused": 2,
+          "other": 0
+        },
+        "truncation_rate": 0.0023,
+        "ttft_ms": {
+          "p50": 606.5,
+          "p95": 969.5,
+          "p99": 1201.7
+        },
+        "ttft_by_input": [
+          {
+            "input_tokens": 822.0,
+            "p50_ms": 585.9
+          },
+          {
+            "input_tokens": 1499.0,
+            "p50_ms": 597.1
+          },
+          {
+            "input_tokens": 2733.0,
+            "p50_ms": 619.3
+          },
+          {
+            "input_tokens": 5042.0,
+            "p50_ms": 625.7
+          },
+          {
+            "input_tokens": 8947.0,
+            "p50_ms": 727.6
+          }
+        ],
+        "itl_ms": {
+          "p50": 16.3,
+          "p95": 22.3,
+          "p99": 45.0
+        },
+        "stall_rate": 0.0429,
+        "e2e_ms": {
+          "p50": 4105.0,
+          "p95": 7421.4,
+          "p99": 9495.6
+        },
+        "server_e2e_ms": {
+          "p50": 4050.8,
+          "p95": 7364.9,
+          "p99": 9431.3
+        },
+        "client_overhead_ms": {
+          "p50": 54.2,
+          "p95": 56.5,
+          "p99": null
+        },
+        "throughput_rps": 2.984,
+        "tokens_per_min": {
+          "avg": 38215.0,
+          "peak": 51840.0
+        },
+        "decode_tps_p50": 62.0,
+        "prefill_tps": 3283.0,
+        "avg_input_tokens": 2415.0,
+        "avg_output_tokens": 216.0
+      },
+      "cost": {
+        "input_per_million": 3.3,
+        "cached_input_per_million": 0.33,
+        "output_per_million": 16.5,
+        "per_request": 0.010087,
+        "per_1k_requests": 10.0872
+      },
+      "capabilities": {
+        "streaming": true,
+        "tool_calling": true,
+        "json_mode": true,
+        "vision": true,
+        "prompt_caching": true,
+        "batch_api": false,
+        "context_window": 400000,
+        "max_output_tokens": 64000,
+        "regions": [
+          "us-west"
+        ]
+      },
+      "routing_mix": null,
+      "recent_runs": [
+        {
+          "run_id": "r_seed0020",
+          "ended_at": "2026-10-01T18:00:20Z",
+          "e2e_p95_ms": 7421.4,
+          "ttft_p50_ms": 606.5,
+          "error_rate": 0.0145
+        }
+      ]
+    }
+  ],
+  "conditions": {
+    "started_at": "2026-10-01T10:43:00Z",
+    "ended_at": "2026-10-03T06:00:20Z",
+    "client_region": "us-east (BlazeMeter cloud)",
+    "concurrency": [
+      20
+    ],
+    "ramp_up_s": 30,
+    "duration_s": 300,
+    "think_time_s": 2.0,
+    "streaming": true,
+    "stall_threshold_ms": 2000,
+    "timeout_ms": 30000,
+    "runs": 15,
+    "notes": "Client-side latency and volume from BlazeMeter; TTFT, tokens and error causes from the service's own Splunk logs. Each row is that offering's latest completed run."
+  },
+  "updated_at": "2026-10-04T22:48:20Z"
+}
