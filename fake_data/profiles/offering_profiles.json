@@ -1,0 +1,281 @@
+{
+  "_doc": "Latency/error model per offering, used only by the fake target services. Edit to change benchmark outcomes.",
+  "defaults": {
+    "timeout_ms": 30000,
+    "stall_threshold_ms": 2000,
+    "rate_limit_slope": 0.004,
+    "load_degradation": 0.6
+  },
+  "offerings": {
+    "aurora-api--aurora-4": {
+      "ttft_base_ms": 420,
+      "ttft_per_1k_input_ms": 9,
+      "decode_tps": 78,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 60,
+      "rate_limit_vus": 90,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.015,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0021,
+        "server_error": 0.0018,
+        "timeout": 0.0009,
+        "dropped_stream": 0.0007,
+        "refused": 0.0005
+      }
+    },
+    "aurora-api--aurora-4-flash": {
+      "ttft_base_ms": 190,
+      "ttft_per_1k_input_ms": 3,
+      "decode_tps": 165,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 120,
+      "rate_limit_vus": 160,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.01,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0014,
+        "server_error": 0.0012,
+        "timeout": 0.0006,
+        "dropped_stream": 0.0005,
+        "refused": 0.0003
+      }
+    },
+    "northwind-api--gale-3": {
+      "ttft_base_ms": 380,
+      "ttft_per_1k_input_ms": 8,
+      "decode_tps": 92,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 70,
+      "rate_limit_vus": 100,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.02,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0028,
+        "server_error": 0.0024,
+        "timeout": 0.0012,
+        "dropped_stream": 0.001,
+        "refused": 0.0006
+      }
+    },
+    "northwind-api--gale-3-mini": {
+      "ttft_base_ms": 230,
+      "ttft_per_1k_input_ms": 4,
+      "decode_tps": 140,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 110,
+      "rate_limit_vus": 150,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.0125,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0017,
+        "server_error": 0.0015,
+        "timeout": 0.0008,
+        "dropped_stream": 0.0006,
+        "refused": 0.0004
+      }
+    },
+    "stratus--aurora-4": {
+      "ttft_base_ms": 520,
+      "ttft_per_1k_input_ms": 10,
+      "decode_tps": 70,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 80,
+      "rate_limit_vus": 70,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.0225,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0031,
+        "server_error": 0.0027,
+        "timeout": 0.0013,
+        "dropped_stream": 0.0011,
+        "refused": 0.0007
+      }
+    },
+    "stratus--aurora-4-flash": {
+      "ttft_base_ms": 250,
+      "ttft_per_1k_input_ms": 3.5,
+      "decode_tps": 150,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 140,
+      "rate_limit_vus": 120,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.015,
+      "cache_hit_rate": 0.0,
+      "error_rates": {
+        "rate_limited": 0.0021,
+        "server_error": 0.0018,
+        "timeout": 0.0009,
+        "dropped_stream": 0.0007,
+        "refused": 0.0005
+      }
+    },
+    "stratus--helix-2": {
+      "ttft_base_ms": 460,
+      "ttft_per_1k_input_ms": 7,
+      "decode_tps": 84,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 70,
+      "rate_limit_vus": 90,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.0175,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0024,
+        "server_error": 0.0021,
+        "timeout": 0.001,
+        "dropped_stream": 0.0008,
+        "refused": 0.0006
+      }
+    },
+    "stratus--forge-70b": {
+      "ttft_base_ms": 340,
+      "ttft_per_1k_input_ms": 6,
+      "decode_tps": 95,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 60,
+      "rate_limit_vus": 80,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.025,
+      "cache_hit_rate": 0.0,
+      "error_rates": {
+        "rate_limited": 0.0035,
+        "server_error": 0.003,
+        "timeout": 0.0015,
+        "dropped_stream": 0.0012,
+        "refused": 0.0008
+      }
+    },
+    "cloudhaven--gale-3": {
+      "ttft_base_ms": 410,
+      "ttft_per_1k_input_ms": 8,
+      "decode_tps": 88,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 90,
+      "rate_limit_vus": 120,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.0125,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0017,
+        "server_error": 0.0015,
+        "timeout": 0.0008,
+        "dropped_stream": 0.0006,
+        "refused": 0.0004
+      }
+    },
+    "cloudhaven--gale-3-mini": {
+      "ttft_base_ms": 260,
+      "ttft_per_1k_input_ms": 4,
+      "decode_tps": 132,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 130,
+      "rate_limit_vus": 170,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.01,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0014,
+        "server_error": 0.0012,
+        "timeout": 0.0006,
+        "dropped_stream": 0.0005,
+        "refused": 0.0003
+      }
+    },
+    "cloudhaven--aurora-4": {
+      "ttft_base_ms": 610,
+      "ttft_per_1k_input_ms": 11,
+      "decode_tps": 62,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 50,
+      "rate_limit_vus": 60,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.045,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0063,
+        "server_error": 0.0054,
+        "timeout": 0.0027,
+        "dropped_stream": 0.0022,
+        "refused": 0.0014
+      }
+    },
+    "cloudhaven--helix-2": {
+      "ttft_base_ms": 500,
+      "ttft_per_1k_input_ms": 7,
+      "decode_tps": 80,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 60,
+      "rate_limit_vus": 80,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.025,
+      "cache_hit_rate": 0.35,
+      "error_rates": {
+        "rate_limited": 0.0035,
+        "server_error": 0.003,
+        "timeout": 0.0015,
+        "dropped_stream": 0.0012,
+        "refused": 0.0008
+      }
+    },
+    "swiftserve--forge-70b": {
+      "ttft_base_ms": 150,
+      "ttft_per_1k_input_ms": 2.5,
+      "decode_tps": 210,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 50,
+      "rate_limit_vus": 60,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.03,
+      "cache_hit_rate": 0.0,
+      "error_rates": {
+        "rate_limited": 0.0042,
+        "server_error": 0.0036,
+        "timeout": 0.0018,
+        "dropped_stream": 0.0014,
+        "refused": 0.001
+      }
+    },
+    "swiftserve--quanta-8b": {
+      "ttft_base_ms": 90,
+      "ttft_per_1k_input_ms": 1.2,
+      "decode_tps": 320,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 90,
+      "rate_limit_vus": 100,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.025,
+      "cache_hit_rate": 0.0,
+      "error_rates": {
+        "rate_limited": 0.0035,
+        "server_error": 0.003,
+        "timeout": 0.0015,
+        "dropped_stream": 0.0012,
+        "refused": 0.0008
+      }
+    },
+    "swiftserve--gale-3-mini": {
+      "ttft_base_ms": 170,
+      "ttft_per_1k_input_ms": 3,
+      "decode_tps": 175,
+      "jitter_sigma": 0.28,
+      "saturation_vus": 70,
+      "rate_limit_vus": 90,
+      "server_overhead_ms": 35,
+      "stall_probability": 0.0275,
+      "cache_hit_rate": 0.0,
+      "error_rates": {
+        "rate_limited": 0.0038,
+        "server_error": 0.0033,
+        "timeout": 0.0016,
+        "dropped_stream": 0.0013,
+        "refused": 0.0009
+      }
+    }
+  }
+}

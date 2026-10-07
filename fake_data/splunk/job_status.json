@@ -1,0 +1,18 @@
+{
+  "links": {},
+  "origin": "https://splunk.example/services/search/jobs",
+  "entry": [
+    {
+      "name": "{{search}}",
+      "id": "https://splunk.example/services/search/jobs/{{sid}}",
+      "content": {
+        "sid": "{{sid}}",
+        "dispatchState": "{{state}}",
+        "isDone": "{{is_done}}",
+        "doneProgress": "{{progress}}",
+        "resultCount": "{{result_count}}",
+        "eventSearch": "{{search}}"
+      }
+    }
+  ]
+}

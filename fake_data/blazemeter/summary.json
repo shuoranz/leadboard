@@ -1,0 +1,29 @@
+{
+  "api_version": 4,
+  "error": null,
+  "request_id": "{{request_id}}",
+  "result": {
+    "summary": [
+      {
+        "id": "ALL",
+        "lbl": "ALL",
+        "hits": "{{hits}}",
+        "failed": "{{failed}}",
+        "avg": "{{avg}}",
+        "min": "{{min}}",
+        "max": "{{max}}",
+        "tp50": "{{tp50}}",
+        "tp90": "{{tp90}}",
+        "tp95": "{{tp95}}",
+        "tp99": "{{tp99}}",
+        "hits_avg": "{{hits_avg}}",
+        "failed_avg": "{{failed_avg}}",
+        "maxUsers": "{{max_users}}",
+        "duration": "{{duration}}",
+        "first": "{{first}}",
+        "last": "{{last}}",
+        "errorsByCode": "{{errors_by_code}}"
+      }
+    ]
+  }
+}

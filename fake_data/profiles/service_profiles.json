@@ -1,0 +1,60 @@
+{
+  "_doc": "Prompt/response size distribution per service (lognormal around the mean). Used only by the fake target services.",
+  "services": {
+    "summarize-profile": {
+      "input_tokens": {
+        "mean": 2400,
+        "sigma": 0.6
+      },
+      "output_tokens": {
+        "mean": 220,
+        "sigma": 0.35
+      },
+      "max_output_tokens": 600
+    },
+    "headline-rewrite": {
+      "input_tokens": {
+        "mean": 900,
+        "sigma": 0.4
+      },
+      "output_tokens": {
+        "mean": 60,
+        "sigma": 0.3
+      },
+      "max_output_tokens": 120
+    },
+    "job-match-explain": {
+      "input_tokens": {
+        "mean": 5200,
+        "sigma": 0.7
+      },
+      "output_tokens": {
+        "mean": 380,
+        "sigma": 0.4
+      },
+      "max_output_tokens": 900
+    },
+    "outreach-draft": {
+      "input_tokens": {
+        "mean": 1800,
+        "sigma": 0.5
+      },
+      "output_tokens": {
+        "mean": 300,
+        "sigma": 0.35
+      },
+      "max_output_tokens": 700
+    },
+    "ticket-triage": {
+      "input_tokens": {
+        "mean": 1100,
+        "sigma": 0.5
+      },
+      "output_tokens": {
+        "mean": 40,
+        "sigma": 0.25
+      },
+      "max_output_tokens": 80
+    }
+  }
+}

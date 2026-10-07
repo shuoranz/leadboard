@@ -1,0 +1,6255 @@
+[
+ {
+  "id": "r_seed0131",
+  "batch_id": "b_seed0131",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-19T05:54:30Z",
+  "started_at": "2026-09-19T05:55:00Z",
+  "ended_at": "2026-09-19T06:00:20Z",
+  "updated_at": "2026-09-19T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000916,
+   "master_id": 10000917,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0131",
+   "search": "search index=llm_api run_id=r_seed0131",
+   "search_url": null,
+   "events": 1558
+  },
+  "headline": {
+   "requests": 1558,
+   "error_rate": 0.0039,
+   "e2e_p95_ms": 2678.6,
+   "ttft_p50_ms": 186.5,
+   "cost_per_1k": 1.1097
+  }
+ },
+ {
+  "id": "r_seed0129",
+  "batch_id": "b_seed0129",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-19T08:18:30Z",
+  "started_at": "2026-09-19T08:19:00Z",
+  "ended_at": "2026-09-19T08:24:20Z",
+  "updated_at": "2026-09-19T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000902,
+   "master_id": 10000903,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0129",
+   "search": "search index=llm_api run_id=r_seed0129",
+   "search_url": null,
+   "events": 1668
+  },
+  "headline": {
+   "requests": 1668,
+   "error_rate": 0.0096,
+   "e2e_p95_ms": 2426.1,
+   "ttft_p50_ms": 150.2,
+   "cost_per_1k": 1.6558
+  }
+ },
+ {
+  "id": "r_seed0127",
+  "batch_id": "b_seed0127",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-19T10:42:30Z",
+  "started_at": "2026-09-19T10:43:00Z",
+  "ended_at": "2026-09-19T10:48:20Z",
+  "updated_at": "2026-09-19T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000888,
+   "master_id": 10000889,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0127",
+   "search": "search index=llm_api run_id=r_seed0127",
+   "search_url": null,
+   "events": 1164
+  },
+  "headline": {
+   "requests": 1164,
+   "error_rate": 0.0095,
+   "e2e_p95_ms": 4854.8,
+   "ttft_p50_ms": 382.8,
+   "cost_per_1k": 6.83
+  }
+ },
+ {
+  "id": "r_seed0125",
+  "batch_id": "b_seed0125",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-19T13:06:30Z",
+  "started_at": "2026-09-19T13:07:00Z",
+  "ended_at": "2026-09-19T13:12:20Z",
+  "updated_at": "2026-09-19T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000874,
+   "master_id": 10000875,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0125",
+   "search": "search index=llm_api run_id=r_seed0125",
+   "search_url": null,
+   "events": 1124
+  },
+  "headline": {
+   "requests": 1124,
+   "error_rate": 0.0071,
+   "e2e_p95_ms": 5026.5,
+   "ttft_p50_ms": 415.6,
+   "cost_per_1k": 7.7623
+  }
+ },
+ {
+  "id": "r_seed0123",
+  "batch_id": "b_seed0123",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-19T15:30:30Z",
+  "started_at": "2026-09-19T15:31:00Z",
+  "ended_at": "2026-09-19T15:36:20Z",
+  "updated_at": "2026-09-19T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000860,
+   "master_id": 10000861,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0123",
+   "search": "search index=llm_api run_id=r_seed0123",
+   "search_url": null,
+   "events": 971
+  },
+  "headline": {
+   "requests": 971,
+   "error_rate": 0.0072,
+   "e2e_p95_ms": 6522.9,
+   "ttft_p50_ms": 524.8,
+   "cost_per_1k": 9.0105
+  }
+ },
+ {
+  "id": "r_seed0121",
+  "batch_id": "b_seed0121",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-19T17:54:30Z",
+  "started_at": "2026-09-19T17:55:00Z",
+  "ended_at": "2026-09-19T18:00:20Z",
+  "updated_at": "2026-09-19T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000846,
+   "master_id": 10000847,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0121",
+   "search": "search index=llm_api run_id=r_seed0121",
+   "search_url": null,
+   "events": 1060
+  },
+  "headline": {
+   "requests": 1060,
+   "error_rate": 0.0047,
+   "e2e_p95_ms": 5812.8,
+   "ttft_p50_ms": 413.3,
+   "cost_per_1k": 9.2489
+  }
+ },
+ {
+  "id": "r_seed0027",
+  "batch_id": "b_seed0027",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T10:46:30Z",
+  "started_at": "2026-09-25T10:47:00Z",
+  "ended_at": "2026-09-25T10:48:20Z",
+  "updated_at": "2026-09-25T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000188,
+   "master_id": 10000189,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0027",
+   "search": "search index=llm_api run_id=r_seed0027",
+   "search_url": null,
+   "events": 106
+  },
+  "headline": {
+   "requests": 106,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 2947.8,
+   "ttft_p50_ms": 167.6,
+   "cost_per_1k": 1.2124
+  }
+ },
+ {
+  "id": "r_seed0071",
+  "batch_id": "b_seed0071",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T10:46:30Z",
+  "started_at": "2026-09-25T10:47:00Z",
+  "ended_at": "2026-09-25T10:48:20Z",
+  "updated_at": "2026-09-25T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000496,
+   "master_id": 10000497,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0071",
+   "search": "search index=llm_api run_id=r_seed0071",
+   "search_url": null,
+   "events": 76
+  },
+  "headline": {
+   "requests": 76,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 5729.8,
+   "ttft_p50_ms": 172.0,
+   "cost_per_1k": 2.4494
+  }
+ },
+ {
+  "id": "r_seed0101",
+  "batch_id": "b_seed0101",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T10:46:30Z",
+  "started_at": "2026-09-25T10:47:00Z",
+  "ended_at": "2026-09-25T10:48:20Z",
+  "updated_at": "2026-09-25T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000706,
+   "master_id": 10000707,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0101",
+   "search": "search index=llm_api run_id=r_seed0101",
+   "search_url": null,
+   "events": 88
+  },
+  "headline": {
+   "requests": 88,
+   "error_rate": 0.0227,
+   "e2e_p95_ms": 3379.1,
+   "ttft_p50_ms": 164.2,
+   "cost_per_1k": 1.0843
+  }
+ },
+ {
+  "id": "r_seed0025",
+  "batch_id": "b_seed0025",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T13:10:30Z",
+  "started_at": "2026-09-25T13:11:00Z",
+  "ended_at": "2026-09-25T13:12:20Z",
+  "updated_at": "2026-09-25T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000174,
+   "master_id": 10000175,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0025",
+   "search": "search index=llm_api run_id=r_seed0025",
+   "search_url": null,
+   "events": 128
+  },
+  "headline": {
+   "requests": 128,
+   "error_rate": 0.0156,
+   "e2e_p95_ms": 1768.4,
+   "ttft_p50_ms": 89.7,
+   "cost_per_1k": 0.2249
+  }
+ },
+ {
+  "id": "r_seed0069",
+  "batch_id": "b_seed0069",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T13:10:30Z",
+  "started_at": "2026-09-25T13:11:00Z",
+  "ended_at": "2026-09-25T13:12:20Z",
+  "updated_at": "2026-09-25T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000482,
+   "master_id": 10000483,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0069",
+   "search": "search index=llm_api run_id=r_seed0069",
+   "search_url": null,
+   "events": 121
+  },
+  "headline": {
+   "requests": 121,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 2294.5,
+   "ttft_p50_ms": 92.4,
+   "cost_per_1k": 0.5005
+  }
+ },
+ {
+  "id": "r_seed0099",
+  "batch_id": "b_seed0099",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T13:10:30Z",
+  "started_at": "2026-09-25T13:11:00Z",
+  "ended_at": "2026-09-25T13:12:20Z",
+  "updated_at": "2026-09-25T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000692,
+   "master_id": 10000693,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0099",
+   "search": "search index=llm_api run_id=r_seed0099",
+   "search_url": null,
+   "events": 128
+  },
+  "headline": {
+   "requests": 128,
+   "error_rate": 0.0078,
+   "e2e_p95_ms": 2096.4,
+   "ttft_p50_ms": 90.9,
+   "cost_per_1k": 0.169
+  }
+ },
+ {
+  "id": "r_seed0023",
+  "batch_id": "b_seed0023",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T15:34:30Z",
+  "started_at": "2026-09-25T15:35:00Z",
+  "ended_at": "2026-09-25T15:36:20Z",
+  "updated_at": "2026-09-25T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000160,
+   "master_id": 10000161,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0023",
+   "search": "search index=llm_api run_id=r_seed0023",
+   "search_url": null,
+   "events": 117
+  },
+  "headline": {
+   "requests": 117,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 2773.6,
+   "ttft_p50_ms": 147.3,
+   "cost_per_1k": 1.6937
+  }
+ },
+ {
+  "id": "r_seed0067",
+  "batch_id": "b_seed0067",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T15:34:30Z",
+  "started_at": "2026-09-25T15:35:00Z",
+  "ended_at": "2026-09-25T15:36:20Z",
+  "updated_at": "2026-09-25T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000468,
+   "master_id": 10000469,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0067",
+   "search": "search index=llm_api run_id=r_seed0067",
+   "search_url": null,
+   "events": 89
+  },
+  "headline": {
+   "requests": 89,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 5392.8,
+   "ttft_p50_ms": 154.9,
+   "cost_per_1k": 3.782
+  }
+ },
+ {
+  "id": "r_seed0097",
+  "batch_id": "b_seed0097",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T15:34:30Z",
+  "started_at": "2026-09-25T15:35:00Z",
+  "ended_at": "2026-09-25T15:36:20Z",
+  "updated_at": "2026-09-25T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000678,
+   "master_id": 10000679,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0097",
+   "search": "search index=llm_api run_id=r_seed0097",
+   "search_url": null,
+   "events": 93
+  },
+  "headline": {
+   "requests": 93,
+   "error_rate": 0.0108,
+   "e2e_p95_ms": 3303.8,
+   "ttft_p50_ms": 148.0,
+   "cost_per_1k": 1.3301
+  }
+ },
+ {
+  "id": "r_seed0021",
+  "batch_id": "b_seed0021",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T17:58:30Z",
+  "started_at": "2026-09-25T17:59:00Z",
+  "ended_at": "2026-09-25T18:00:20Z",
+  "updated_at": "2026-09-25T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000146,
+   "master_id": 10000147,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0021",
+   "search": "search index=llm_api run_id=r_seed0021",
+   "search_url": null,
+   "events": 57
+  },
+  "headline": {
+   "requests": 57,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 6542.7,
+   "ttft_p50_ms": 573.7,
+   "cost_per_1k": 9.5886
+  }
+ },
+ {
+  "id": "r_seed0065",
+  "batch_id": "b_seed0065",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T17:58:30Z",
+  "started_at": "2026-09-25T17:59:00Z",
+  "ended_at": "2026-09-25T18:00:20Z",
+  "updated_at": "2026-09-25T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000454,
+   "master_id": 10000455,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0065",
+   "search": "search index=llm_api run_id=r_seed0065",
+   "search_url": null,
+   "events": 40
+  },
+  "headline": {
+   "requests": 40,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 10682.1,
+   "ttft_p50_ms": 569.5,
+   "cost_per_1k": 22.5417
+  }
+ },
+ {
+  "id": "r_seed0095",
+  "batch_id": "b_seed0095",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T17:58:30Z",
+  "started_at": "2026-09-25T17:59:00Z",
+  "ended_at": "2026-09-25T18:00:20Z",
+  "updated_at": "2026-09-25T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000664,
+   "master_id": 10000665,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0095",
+   "search": "search index=llm_api run_id=r_seed0095",
+   "search_url": null,
+   "events": 42
+  },
+  "headline": {
+   "requests": 42,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 9827.8,
+   "ttft_p50_ms": 578.6,
+   "cost_per_1k": 9.563
+  }
+ },
+ {
+  "id": "r_seed0019",
+  "batch_id": "b_seed0019",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T20:22:30Z",
+  "started_at": "2026-09-25T20:23:00Z",
+  "ended_at": "2026-09-25T20:24:20Z",
+  "updated_at": "2026-09-25T20:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000132,
+   "master_id": 10000133,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0019",
+   "search": "search index=llm_api run_id=r_seed0019",
+   "search_url": null,
+   "events": 91
+  },
+  "headline": {
+   "requests": 91,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 3335.9,
+   "ttft_p50_ms": 246.9,
+   "cost_per_1k": 1.2137
+  }
+ },
+ {
+  "id": "r_seed0063",
+  "batch_id": "b_seed0063",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T20:22:30Z",
+  "started_at": "2026-09-25T20:23:00Z",
+  "ended_at": "2026-09-25T20:24:20Z",
+  "updated_at": "2026-09-25T20:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000440,
+   "master_id": 10000441,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0063",
+   "search": "search index=llm_api run_id=r_seed0063",
+   "search_url": null,
+   "events": 65
+  },
+  "headline": {
+   "requests": 65,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 6254.9,
+   "ttft_p50_ms": 252.7,
+   "cost_per_1k": 2.4144
+  }
+ },
+ {
+  "id": "r_seed0093",
+  "batch_id": "b_seed0093",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T20:22:30Z",
+  "started_at": "2026-09-25T20:23:00Z",
+  "ended_at": "2026-09-25T20:24:20Z",
+  "updated_at": "2026-09-25T20:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000650,
+   "master_id": 10000651,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0093",
+   "search": "search index=llm_api run_id=r_seed0093",
+   "search_url": null,
+   "events": 78
+  },
+  "headline": {
+   "requests": 78,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4107.8,
+   "ttft_p50_ms": 254.9,
+   "cost_per_1k": 1.1851
+  }
+ },
+ {
+  "id": "r_seed0017",
+  "batch_id": "b_seed0017",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T22:46:30Z",
+  "started_at": "2026-09-25T22:47:00Z",
+  "ended_at": "2026-09-25T22:48:20Z",
+  "updated_at": "2026-09-25T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000118,
+   "master_id": 10000119,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0017",
+   "search": "search index=llm_api run_id=r_seed0017",
+   "search_url": null,
+   "events": 71
+  },
+  "headline": {
+   "requests": 71,
+   "error_rate": 0.0141,
+   "e2e_p95_ms": 5358.6,
+   "ttft_p50_ms": 383.1,
+   "cost_per_1k": 8.3872
+  }
+ },
+ {
+  "id": "r_seed0061",
+  "batch_id": "b_seed0061",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T22:46:30Z",
+  "started_at": "2026-09-25T22:47:00Z",
+  "ended_at": "2026-09-25T22:48:20Z",
+  "updated_at": "2026-09-25T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000426,
+   "master_id": 10000427,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0061",
+   "search": "search index=llm_api run_id=r_seed0061",
+   "search_url": null,
+   "events": 54
+  },
+  "headline": {
+   "requests": 54,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 7839.2,
+   "ttft_p50_ms": 433.1,
+   "cost_per_1k": 18.8849
+  }
+ },
+ {
+  "id": "r_seed0091",
+  "batch_id": "b_seed0091",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-25T22:46:30Z",
+  "started_at": "2026-09-25T22:47:00Z",
+  "ended_at": "2026-09-25T22:48:20Z",
+  "updated_at": "2026-09-25T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000636,
+   "master_id": 10000637,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0091",
+   "search": "search index=llm_api run_id=r_seed0091",
+   "search_url": null,
+   "events": 58
+  },
+  "headline": {
+   "requests": 58,
+   "error_rate": 0.0172,
+   "e2e_p95_ms": 6667.3,
+   "ttft_p50_ms": 418.1,
+   "cost_per_1k": 7.316
+  }
+ },
+ {
+  "id": "r_seed0015",
+  "batch_id": "b_seed0015",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T01:10:30Z",
+  "started_at": "2026-09-26T01:11:00Z",
+  "ended_at": "2026-09-26T01:12:20Z",
+  "updated_at": "2026-09-26T01:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000104,
+   "master_id": 10000105,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0015",
+   "search": "search index=llm_api run_id=r_seed0015",
+   "search_url": null,
+   "events": 76
+  },
+  "headline": {
+   "requests": 76,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4849.6,
+   "ttft_p50_ms": 324.1,
+   "cost_per_1k": 1.9781
+  }
+ },
+ {
+  "id": "r_seed0059",
+  "batch_id": "b_seed0059",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T01:10:30Z",
+  "started_at": "2026-09-26T01:11:00Z",
+  "ended_at": "2026-09-26T01:12:20Z",
+  "updated_at": "2026-09-26T01:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000412,
+   "master_id": 10000413,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0059",
+   "search": "search index=llm_api run_id=r_seed0059",
+   "search_url": null,
+   "events": 59
+  },
+  "headline": {
+   "requests": 59,
+   "error_rate": 0.0169,
+   "e2e_p95_ms": 6469.2,
+   "ttft_p50_ms": 367.6,
+   "cost_per_1k": 4.1816
+  }
+ },
+ {
+  "id": "r_seed0089",
+  "batch_id": "b_seed0089",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T01:10:30Z",
+  "started_at": "2026-09-26T01:11:00Z",
+  "ended_at": "2026-09-26T01:12:20Z",
+  "updated_at": "2026-09-26T01:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000622,
+   "master_id": 10000623,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0089",
+   "search": "search index=llm_api run_id=r_seed0089",
+   "search_url": null,
+   "events": 61
+  },
+  "headline": {
+   "requests": 61,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 7002.9,
+   "ttft_p50_ms": 346.0,
+   "cost_per_1k": 1.451
+  }
+ },
+ {
+  "id": "r_seed0013",
+  "batch_id": "b_seed0013",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--helix-2",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T03:34:30Z",
+  "started_at": "2026-09-26T03:35:00Z",
+  "ended_at": "2026-09-26T03:36:20Z",
+  "updated_at": "2026-09-26T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000090,
+   "master_id": 10000091,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0013",
+   "search": "search index=llm_api run_id=r_seed0013",
+   "search_url": null,
+   "events": 69
+  },
+  "headline": {
+   "requests": 69,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4953.5,
+   "ttft_p50_ms": 483.3,
+   "cost_per_1k": 5.7181
+  }
+ },
+ {
+  "id": "r_seed0057",
+  "batch_id": "b_seed0057",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--helix-2",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T03:34:30Z",
+  "started_at": "2026-09-26T03:35:00Z",
+  "ended_at": "2026-09-26T03:36:20Z",
+  "updated_at": "2026-09-26T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000398,
+   "master_id": 10000399,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0057",
+   "search": "search index=llm_api run_id=r_seed0057",
+   "search_url": null,
+   "events": 39
+  },
+  "headline": {
+   "requests": 39,
+   "error_rate": 0.0256,
+   "e2e_p95_ms": 10026.0,
+   "ttft_p50_ms": 459.7,
+   "cost_per_1k": 10.6033
+  }
+ },
+ {
+  "id": "r_seed0087",
+  "batch_id": "b_seed0087",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--helix-2",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T03:34:30Z",
+  "started_at": "2026-09-26T03:35:00Z",
+  "ended_at": "2026-09-26T03:36:20Z",
+  "updated_at": "2026-09-26T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000608,
+   "master_id": 10000609,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0087",
+   "search": "search index=llm_api run_id=r_seed0087",
+   "search_url": null,
+   "events": 58
+  },
+  "headline": {
+   "requests": 58,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 6092.8,
+   "ttft_p50_ms": 433.4,
+   "cost_per_1k": 5.3917
+  }
+ },
+ {
+  "id": "r_seed0117",
+  "batch_id": "b_seed0117",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T03:34:30Z",
+  "started_at": "2026-09-26T03:35:00Z",
+  "ended_at": "2026-09-26T03:36:20Z",
+  "updated_at": "2026-09-26T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000818,
+   "master_id": 10000819,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0117",
+   "search": "search index=llm_api run_id=r_seed0117",
+   "search_url": null,
+   "events": 143
+  },
+  "headline": {
+   "requests": 143,
+   "error_rate": 0.014,
+   "e2e_p95_ms": 1550.0,
+   "ttft_p50_ms": 332.5,
+   "cost_per_1k": 0.7533
+  }
+ },
+ {
+  "id": "r_seed0011",
+  "batch_id": "b_seed0011",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T05:58:30Z",
+  "started_at": "2026-09-26T05:59:00Z",
+  "ended_at": "2026-09-26T06:00:20Z",
+  "updated_at": "2026-09-26T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000076,
+   "master_id": 10000077,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0011",
+   "search": "search index=llm_api run_id=r_seed0011",
+   "search_url": null,
+   "events": 96
+  },
+  "headline": {
+   "requests": 96,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 3268.0,
+   "ttft_p50_ms": 242.3,
+   "cost_per_1k": 1.2044
+  }
+ },
+ {
+  "id": "r_seed0041",
+  "batch_id": "b_seed0041",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T05:58:30Z",
+  "started_at": "2026-09-26T05:59:00Z",
+  "ended_at": "2026-09-26T06:00:20Z",
+  "updated_at": "2026-09-26T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000286,
+   "master_id": 10000287,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0041",
+   "search": "search index=llm_api run_id=r_seed0041",
+   "search_url": null,
+   "events": 151
+  },
+  "headline": {
+   "requests": 151,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 1107.5,
+   "ttft_p50_ms": 239.7,
+   "cost_per_1k": 0.4143
+  }
+ },
+ {
+  "id": "r_seed0055",
+  "batch_id": "b_seed0055",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T05:58:30Z",
+  "started_at": "2026-09-26T05:59:00Z",
+  "ended_at": "2026-09-26T06:00:20Z",
+  "updated_at": "2026-09-26T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000384,
+   "master_id": 10000385,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0055",
+   "search": "search index=llm_api run_id=r_seed0055",
+   "search_url": null,
+   "events": 72
+  },
+  "headline": {
+   "requests": 72,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4861.7,
+   "ttft_p50_ms": 262.9,
+   "cost_per_1k": 2.4733
+  }
+ },
+ {
+  "id": "r_seed0085",
+  "batch_id": "b_seed0085",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T05:58:30Z",
+  "started_at": "2026-09-26T05:59:00Z",
+  "ended_at": "2026-09-26T06:00:20Z",
+  "updated_at": "2026-09-26T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000594,
+   "master_id": 10000595,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0085",
+   "search": "search index=llm_api run_id=r_seed0085",
+   "search_url": null,
+   "events": 82
+  },
+  "headline": {
+   "requests": 82,
+   "error_rate": 0.0122,
+   "e2e_p95_ms": 4530.0,
+   "ttft_p50_ms": 258.9,
+   "cost_per_1k": 1.3365
+  }
+ },
+ {
+  "id": "r_seed0115",
+  "batch_id": "b_seed0115",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T05:58:30Z",
+  "started_at": "2026-09-26T05:59:00Z",
+  "ended_at": "2026-09-26T06:00:20Z",
+  "updated_at": "2026-09-26T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000804,
+   "master_id": 10000805,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0115",
+   "search": "search index=llm_api run_id=r_seed0115",
+   "search_url": null,
+   "events": 173
+  },
+  "headline": {
+   "requests": 173,
+   "error_rate": 0.0058,
+   "e2e_p95_ms": 614.3,
+   "ttft_p50_ms": 141.0,
+   "cost_per_1k": 0.6983
+  }
+ },
+ {
+  "id": "r_seed0009",
+  "batch_id": "b_seed0009",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T08:22:30Z",
+  "started_at": "2026-09-26T08:23:00Z",
+  "ended_at": "2026-09-26T08:24:20Z",
+  "updated_at": "2026-09-26T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000062,
+   "master_id": 10000063,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0009",
+   "search": "search index=llm_api run_id=r_seed0009",
+   "search_url": null,
+   "events": 54
+  },
+  "headline": {
+   "requests": 54,
+   "error_rate": 0.037,
+   "e2e_p95_ms": 6141.4,
+   "ttft_p50_ms": 524.6,
+   "cost_per_1k": 8.7501
+  }
+ },
+ {
+  "id": "r_seed0039",
+  "batch_id": "b_seed0039",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T08:22:30Z",
+  "started_at": "2026-09-26T08:23:00Z",
+  "ended_at": "2026-09-26T08:24:20Z",
+  "updated_at": "2026-09-26T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000272,
+   "master_id": 10000273,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0039",
+   "search": "search index=llm_api run_id=r_seed0039",
+   "search_url": null,
+   "events": 189
+  },
+  "headline": {
+   "requests": 189,
+   "error_rate": 0.0106,
+   "e2e_p95_ms": 559.5,
+   "ttft_p50_ms": 86.7,
+   "cost_per_1k": 0.0797
+  }
+ },
+ {
+  "id": "r_seed0053",
+  "batch_id": "b_seed0053",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T08:22:30Z",
+  "started_at": "2026-09-26T08:23:00Z",
+  "ended_at": "2026-09-26T08:24:20Z",
+  "updated_at": "2026-09-26T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000370,
+   "master_id": 10000371,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0053",
+   "search": "search index=llm_api run_id=r_seed0053",
+   "search_url": null,
+   "events": 44
+  },
+  "headline": {
+   "requests": 44,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 9401.7,
+   "ttft_p50_ms": 538.1,
+   "cost_per_1k": 15.6298
+  }
+ },
+ {
+  "id": "r_seed0083",
+  "batch_id": "b_seed0083",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T08:22:30Z",
+  "started_at": "2026-09-26T08:23:00Z",
+  "ended_at": "2026-09-26T08:24:20Z",
+  "updated_at": "2026-09-26T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000580,
+   "master_id": 10000581,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0083",
+   "search": "search index=llm_api run_id=r_seed0083",
+   "search_url": null,
+   "events": 49
+  },
+  "headline": {
+   "requests": 49,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 8037.9,
+   "ttft_p50_ms": 510.9,
+   "cost_per_1k": 9.0171
+  }
+ },
+ {
+  "id": "r_seed0113",
+  "batch_id": "b_seed0113",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T08:22:30Z",
+  "started_at": "2026-09-26T08:23:00Z",
+  "ended_at": "2026-09-26T08:24:20Z",
+  "updated_at": "2026-09-26T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000790,
+   "master_id": 10000791,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0113",
+   "search": "search index=llm_api run_id=r_seed0113",
+   "search_url": null,
+   "events": 204
+  },
+  "headline": {
+   "requests": 204,
+   "error_rate": 0.0098,
+   "e2e_p95_ms": 417.7,
+   "ttft_p50_ms": 86.1,
+   "cost_per_1k": 0.0955
+  }
+ },
+ {
+  "id": "r_seed0007",
+  "batch_id": "b_seed0007",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T10:46:30Z",
+  "started_at": "2026-09-26T10:47:00Z",
+  "ended_at": "2026-09-26T10:48:20Z",
+  "updated_at": "2026-09-26T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000048,
+   "master_id": 10000049,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0007",
+   "search": "search index=llm_api run_id=r_seed0007",
+   "search_url": null,
+   "events": 93
+  },
+  "headline": {
+   "requests": 93,
+   "error_rate": 0.0215,
+   "e2e_p95_ms": 3582.2,
+   "ttft_p50_ms": 237.7,
+   "cost_per_1k": 1.1152
+  }
+ },
+ {
+  "id": "r_seed0037",
+  "batch_id": "b_seed0037",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T10:46:30Z",
+  "started_at": "2026-09-26T10:47:00Z",
+  "ended_at": "2026-09-26T10:48:20Z",
+  "updated_at": "2026-09-26T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000258,
+   "master_id": 10000259,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0037",
+   "search": "search index=llm_api run_id=r_seed0037",
+   "search_url": null,
+   "events": 168
+  },
+  "headline": {
+   "requests": 168,
+   "error_rate": 0.006,
+   "e2e_p95_ms": 884.2,
+   "ttft_p50_ms": 155.2,
+   "cost_per_1k": 0.4161
+  }
+ },
+ {
+  "id": "r_seed0051",
+  "batch_id": "b_seed0051",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T10:46:30Z",
+  "started_at": "2026-09-26T10:47:00Z",
+  "ended_at": "2026-09-26T10:48:20Z",
+  "updated_at": "2026-09-26T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000356,
+   "master_id": 10000357,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0051",
+   "search": "search index=llm_api run_id=r_seed0051",
+   "search_url": null,
+   "events": 70
+  },
+  "headline": {
+   "requests": 70,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4761.4,
+   "ttft_p50_ms": 232.2,
+   "cost_per_1k": 2.2011
+  }
+ },
+ {
+  "id": "r_seed0081",
+  "batch_id": "b_seed0081",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T10:46:30Z",
+  "started_at": "2026-09-26T10:47:00Z",
+  "ended_at": "2026-09-26T10:48:20Z",
+  "updated_at": "2026-09-26T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000566,
+   "master_id": 10000567,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0081",
+   "search": "search index=llm_api run_id=r_seed0081",
+   "search_url": null,
+   "events": 82
+  },
+  "headline": {
+   "requests": 82,
+   "error_rate": 0.0244,
+   "e2e_p95_ms": 4247.5,
+   "ttft_p50_ms": 219.7,
+   "cost_per_1k": 1.0436
+  }
+ },
+ {
+  "id": "r_seed0111",
+  "batch_id": "b_seed0111",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T10:46:30Z",
+  "started_at": "2026-09-26T10:47:00Z",
+  "ended_at": "2026-09-26T10:48:20Z",
+  "updated_at": "2026-09-26T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000776,
+   "master_id": 10000777,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0111",
+   "search": "search index=llm_api run_id=r_seed0111",
+   "search_url": null,
+   "events": 148
+  },
+  "headline": {
+   "requests": 148,
+   "error_rate": 0.0068,
+   "e2e_p95_ms": 983.3,
+   "ttft_p50_ms": 241.5,
+   "cost_per_1k": 0.4471
+  }
+ },
+ {
+  "id": "r_seed0005",
+  "batch_id": "b_seed0005",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T13:10:30Z",
+  "started_at": "2026-09-26T13:11:00Z",
+  "ended_at": "2026-09-26T13:12:20Z",
+  "updated_at": "2026-09-26T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000034,
+   "master_id": 10000035,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0005",
+   "search": "search index=llm_api run_id=r_seed0005",
+   "search_url": null,
+   "events": 75
+  },
+  "headline": {
+   "requests": 75,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4772.6,
+   "ttft_p50_ms": 398.2,
+   "cost_per_1k": 6.6198
+  }
+ },
+ {
+  "id": "r_seed0035",
+  "batch_id": "b_seed0035",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T13:10:30Z",
+  "started_at": "2026-09-26T13:11:00Z",
+  "ended_at": "2026-09-26T13:12:20Z",
+  "updated_at": "2026-09-26T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000244,
+   "master_id": 10000245,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0035",
+   "search": "search index=llm_api run_id=r_seed0035",
+   "search_url": null,
+   "events": 147
+  },
+  "headline": {
+   "requests": 147,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 1257.8,
+   "ttft_p50_ms": 256.4,
+   "cost_per_1k": 0.4096
+  }
+ },
+ {
+  "id": "r_seed0049",
+  "batch_id": "b_seed0049",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T13:10:30Z",
+  "started_at": "2026-09-26T13:11:00Z",
+  "ended_at": "2026-09-26T13:12:20Z",
+  "updated_at": "2026-09-26T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000342,
+   "master_id": 10000343,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0049",
+   "search": "search index=llm_api run_id=r_seed0049",
+   "search_url": null,
+   "events": 51
+  },
+  "headline": {
+   "requests": 51,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 7470.1,
+   "ttft_p50_ms": 372.5,
+   "cost_per_1k": 15.0907
+  }
+ },
+ {
+  "id": "r_seed0079",
+  "batch_id": "b_seed0079",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T13:10:30Z",
+  "started_at": "2026-09-26T13:11:00Z",
+  "ended_at": "2026-09-26T13:12:20Z",
+  "updated_at": "2026-09-26T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000552,
+   "master_id": 10000553,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0079",
+   "search": "search index=llm_api run_id=r_seed0079",
+   "search_url": null,
+   "events": 55
+  },
+  "headline": {
+   "requests": 55,
+   "error_rate": 0.0182,
+   "e2e_p95_ms": 7226.3,
+   "ttft_p50_ms": 367.5,
+   "cost_per_1k": 6.7918
+  }
+ },
+ {
+  "id": "r_seed0109",
+  "batch_id": "b_seed0109",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T13:10:30Z",
+  "started_at": "2026-09-26T13:11:00Z",
+  "ended_at": "2026-09-26T13:12:20Z",
+  "updated_at": "2026-09-26T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000762,
+   "master_id": 10000763,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0109",
+   "search": "search index=llm_api run_id=r_seed0109",
+   "search_url": null,
+   "events": 167
+  },
+  "headline": {
+   "requests": 167,
+   "error_rate": 0.012,
+   "e2e_p95_ms": 836.0,
+   "ttft_p50_ms": 226.8,
+   "cost_per_1k": 0.4214
+  }
+ },
+ {
+  "id": "r_seed0003",
+  "batch_id": "b_seed0003",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T15:34:30Z",
+  "started_at": "2026-09-26T15:35:00Z",
+  "ended_at": "2026-09-26T15:36:20Z",
+  "updated_at": "2026-09-26T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000020,
+   "master_id": 10000021,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0003",
+   "search": "search index=llm_api run_id=r_seed0003",
+   "search_url": null,
+   "events": 104
+  },
+  "headline": {
+   "requests": 104,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 2836.5,
+   "ttft_p50_ms": 194.1,
+   "cost_per_1k": 1.1672
+  }
+ },
+ {
+  "id": "r_seed0033",
+  "batch_id": "b_seed0033",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T15:34:30Z",
+  "started_at": "2026-09-26T15:35:00Z",
+  "ended_at": "2026-09-26T15:36:20Z",
+  "updated_at": "2026-09-26T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000230,
+   "master_id": 10000231,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0033",
+   "search": "search index=llm_api run_id=r_seed0033",
+   "search_url": null,
+   "events": 158
+  },
+  "headline": {
+   "requests": 158,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 1145.5,
+   "ttft_p50_ms": 234.2,
+   "cost_per_1k": 0.3677
+  }
+ },
+ {
+  "id": "r_seed0047",
+  "batch_id": "b_seed0047",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T15:34:30Z",
+  "started_at": "2026-09-26T15:35:00Z",
+  "ended_at": "2026-09-26T15:36:20Z",
+  "updated_at": "2026-09-26T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000328,
+   "master_id": 10000329,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0047",
+   "search": "search index=llm_api run_id=r_seed0047",
+   "search_url": null,
+   "events": 79
+  },
+  "headline": {
+   "requests": 79,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 4549.0,
+   "ttft_p50_ms": 191.5,
+   "cost_per_1k": 2.0952
+  }
+ },
+ {
+  "id": "r_seed0077",
+  "batch_id": "b_seed0077",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T15:34:30Z",
+  "started_at": "2026-09-26T15:35:00Z",
+  "ended_at": "2026-09-26T15:36:20Z",
+  "updated_at": "2026-09-26T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000538,
+   "master_id": 10000539,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0077",
+   "search": "search index=llm_api run_id=r_seed0077",
+   "search_url": null,
+   "events": 89
+  },
+  "headline": {
+   "requests": 89,
+   "error_rate": 0.0112,
+   "e2e_p95_ms": 4236.0,
+   "ttft_p50_ms": 183.1,
+   "cost_per_1k": 1.1733
+  }
+ },
+ {
+  "id": "r_seed0107",
+  "batch_id": "b_seed0107",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T15:34:30Z",
+  "started_at": "2026-09-26T15:35:00Z",
+  "ended_at": "2026-09-26T15:36:20Z",
+  "updated_at": "2026-09-26T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000748,
+   "master_id": 10000749,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0107",
+   "search": "search index=llm_api run_id=r_seed0107",
+   "search_url": null,
+   "events": 172
+  },
+  "headline": {
+   "requests": 172,
+   "error_rate": 0.0116,
+   "e2e_p95_ms": 855.8,
+   "ttft_p50_ms": 242.1,
+   "cost_per_1k": 0.4392
+  }
+ },
+ {
+  "id": "r_seed0001",
+  "batch_id": "b_seed0001",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T17:58:30Z",
+  "started_at": "2026-09-26T17:59:00Z",
+  "ended_at": "2026-09-26T18:00:20Z",
+  "updated_at": "2026-09-26T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000006,
+   "master_id": 10000007,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0001",
+   "search": "search index=llm_api run_id=r_seed0001",
+   "search_url": null,
+   "events": 62
+  },
+  "headline": {
+   "requests": 62,
+   "error_rate": 0.0161,
+   "e2e_p95_ms": 6984.3,
+   "ttft_p50_ms": 424.9,
+   "cost_per_1k": 10.6376
+  }
+ },
+ {
+  "id": "r_seed0031",
+  "batch_id": "b_seed0031",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T17:58:30Z",
+  "started_at": "2026-09-26T17:59:00Z",
+  "ended_at": "2026-09-26T18:00:20Z",
+  "updated_at": "2026-09-26T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000216,
+   "master_id": 10000217,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0031",
+   "search": "search index=llm_api run_id=r_seed0031",
+   "search_url": null,
+   "events": 168
+  },
+  "headline": {
+   "requests": 168,
+   "error_rate": 0.006,
+   "e2e_p95_ms": 959.6,
+   "ttft_p50_ms": 182.8,
+   "cost_per_1k": 0.3767
+  }
+ },
+ {
+  "id": "r_seed0045",
+  "batch_id": "b_seed0045",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T17:58:30Z",
+  "started_at": "2026-09-26T17:59:00Z",
+  "ended_at": "2026-09-26T18:00:20Z",
+  "updated_at": "2026-09-26T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000314,
+   "master_id": 10000315,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0045",
+   "search": "search index=llm_api run_id=r_seed0045",
+   "search_url": null,
+   "events": 45
+  },
+  "headline": {
+   "requests": 45,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 10505.4,
+   "ttft_p50_ms": 391.9,
+   "cost_per_1k": 19.9998
+  }
+ },
+ {
+  "id": "r_seed0075",
+  "batch_id": "b_seed0075",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T17:58:30Z",
+  "started_at": "2026-09-26T17:59:00Z",
+  "ended_at": "2026-09-26T18:00:20Z",
+  "updated_at": "2026-09-26T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000524,
+   "master_id": 10000525,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0075",
+   "search": "search index=llm_api run_id=r_seed0075",
+   "search_url": null,
+   "events": 54
+  },
+  "headline": {
+   "requests": 54,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 7725.5,
+   "ttft_p50_ms": 413.0,
+   "cost_per_1k": 9.7042
+  }
+ },
+ {
+  "id": "r_seed0105",
+  "batch_id": "b_seed0105",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-26T17:58:30Z",
+  "started_at": "2026-09-26T17:59:00Z",
+  "ended_at": "2026-09-26T18:00:20Z",
+  "updated_at": "2026-09-26T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000734,
+   "master_id": 10000735,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0105",
+   "search": "search index=llm_api run_id=r_seed0105",
+   "search_url": null,
+   "events": 181
+  },
+  "headline": {
+   "requests": 181,
+   "error_rate": 0.0055,
+   "e2e_p95_ms": 747.9,
+   "ttft_p50_ms": 187.4,
+   "cost_per_1k": 0.3705
+  }
+ },
+ {
+  "id": "r_seed0029",
+  "batch_id": "b_seed0029",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-27T05:58:30Z",
+  "started_at": "2026-09-27T05:59:00Z",
+  "ended_at": "2026-09-27T06:00:20Z",
+  "updated_at": "2026-09-27T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000202,
+   "master_id": 10000203,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0029",
+   "search": "search index=llm_api run_id=r_seed0029",
+   "search_url": null,
+   "events": 84
+  },
+  "headline": {
+   "requests": 84,
+   "error_rate": 0.0238,
+   "e2e_p95_ms": 4949.1,
+   "ttft_p50_ms": 352.7,
+   "cost_per_1k": 4.0003
+  }
+ },
+ {
+  "id": "r_seed0043",
+  "batch_id": "b_seed0043",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3-mini",
+    "cloudhaven--gale-3-mini",
+    "swiftserve--gale-3-mini",
+    "swiftserve--quanta-8b",
+    "stratus--aurora-4-flash"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-27T05:58:30Z",
+  "started_at": "2026-09-27T05:59:00Z",
+  "ended_at": "2026-09-27T06:00:20Z",
+  "updated_at": "2026-09-27T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000300,
+   "master_id": 10000301,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0043",
+   "search": "search index=llm_api run_id=r_seed0043",
+   "search_url": null,
+   "events": 166
+  },
+  "headline": {
+   "requests": 166,
+   "error_rate": 0.006,
+   "e2e_p95_ms": 1016.9,
+   "ttft_p50_ms": 196.6,
+   "cost_per_1k": 0.355
+  }
+ },
+ {
+  "id": "r_seed0073",
+  "batch_id": "b_seed0073",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-27T05:58:30Z",
+  "started_at": "2026-09-27T05:59:00Z",
+  "ended_at": "2026-09-27T06:00:20Z",
+  "updated_at": "2026-09-27T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000510,
+   "master_id": 10000511,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0073",
+   "search": "search index=llm_api run_id=r_seed0073",
+   "search_url": null,
+   "events": 55
+  },
+  "headline": {
+   "requests": 55,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 8989.1,
+   "ttft_p50_ms": 360.3,
+   "cost_per_1k": 9.0157
+  }
+ },
+ {
+  "id": "r_seed0103",
+  "batch_id": "b_seed0103",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-27T05:58:30Z",
+  "started_at": "2026-09-27T05:59:00Z",
+  "ended_at": "2026-09-27T06:00:20Z",
+  "updated_at": "2026-09-27T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000720,
+   "master_id": 10000721,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0103",
+   "search": "search index=llm_api run_id=r_seed0103",
+   "search_url": null,
+   "events": 67
+  },
+  "headline": {
+   "requests": 67,
+   "error_rate": 0.0,
+   "e2e_p95_ms": 7023.7,
+   "ttft_p50_ms": 288.4,
+   "cost_per_1k": 4.1514
+  }
+ },
+ {
+  "id": "r_seed0119",
+  "batch_id": "b_seed0119",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4-flash",
+    "stratus--aurora-4-flash",
+    "northwind-api--gale-3-mini",
+    "cloudhaven--gale-3-mini",
+    "swiftserve--quanta-8b",
+    "swiftserve--forge-70b",
+    "stratus--forge-70b"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 5,
+   "ramp_up_s": 10,
+   "duration_s": 60,
+   "think_time_s": 1.0,
+   "profile_id": "smoke",
+   "name": "Smoke"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-09-27T05:58:30Z",
+  "started_at": "2026-09-27T05:59:00Z",
+  "ended_at": "2026-09-27T06:00:20Z",
+  "updated_at": "2026-09-27T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000832,
+   "master_id": 10000833,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0119",
+   "search": "search index=llm_api run_id=r_seed0119",
+   "search_url": null,
+   "events": 157
+  },
+  "headline": {
+   "requests": 157,
+   "error_rate": 0.0064,
+   "e2e_p95_ms": 1035.4,
+   "ttft_p50_ms": 204.0,
+   "cost_per_1k": 0.4404
+  }
+ },
+ {
+  "id": "r_seed0026",
+  "batch_id": "b_seed0026",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T10:42:30Z",
+  "started_at": "2026-10-01T10:43:00Z",
+  "ended_at": "2026-10-01T10:48:20Z",
+  "updated_at": "2026-10-01T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000181,
+   "master_id": 10000182,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0026",
+   "search": "search index=llm_api run_id=r_seed0026",
+   "search_url": null,
+   "events": 1568
+  },
+  "headline": {
+   "requests": 1568,
+   "error_rate": 0.0121,
+   "e2e_p95_ms": 2816.5,
+   "ttft_p50_ms": 168.3,
+   "cost_per_1k": 1.1972
+  }
+ },
+ {
+  "id": "r_seed0070",
+  "batch_id": "b_seed0070",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T10:42:30Z",
+  "started_at": "2026-10-01T10:43:00Z",
+  "ended_at": "2026-10-01T10:48:20Z",
+  "updated_at": "2026-10-01T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000489,
+   "master_id": 10000490,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0070",
+   "search": "search index=llm_api run_id=r_seed0070",
+   "search_url": null,
+   "events": 1258
+  },
+  "headline": {
+   "requests": 1258,
+   "error_rate": 0.0103,
+   "e2e_p95_ms": 4633.9,
+   "ttft_p50_ms": 180.9,
+   "cost_per_1k": 2.4244
+  }
+ },
+ {
+  "id": "r_seed0100",
+  "batch_id": "b_seed0100",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T10:42:30Z",
+  "started_at": "2026-10-01T10:43:00Z",
+  "ended_at": "2026-10-01T10:48:20Z",
+  "updated_at": "2026-10-01T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000699,
+   "master_id": 10000700,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0100",
+   "search": "search index=llm_api run_id=r_seed0100",
+   "search_url": null,
+   "events": 1396
+  },
+  "headline": {
+   "requests": 1396,
+   "error_rate": 0.0079,
+   "e2e_p95_ms": 3696.6,
+   "ttft_p50_ms": 168.0,
+   "cost_per_1k": 1.0823
+  }
+ },
+ {
+  "id": "r_seed0024",
+  "batch_id": "b_seed0024",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T13:06:30Z",
+  "started_at": "2026-10-01T13:07:00Z",
+  "ended_at": "2026-10-01T13:12:20Z",
+  "updated_at": "2026-10-01T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000167,
+   "master_id": 10000168,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0024",
+   "search": "search index=llm_api run_id=r_seed0024",
+   "search_url": null,
+   "events": 1895
+  },
+  "headline": {
+   "requests": 1895,
+   "error_rate": 0.0069,
+   "e2e_p95_ms": 1544.7,
+   "ttft_p50_ms": 89.1,
+   "cost_per_1k": 0.2152
+  }
+ },
+ {
+  "id": "r_seed0068",
+  "batch_id": "b_seed0068",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T13:06:30Z",
+  "started_at": "2026-10-01T13:07:00Z",
+  "ended_at": "2026-10-01T13:12:20Z",
+  "updated_at": "2026-10-01T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000475,
+   "master_id": 10000476,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0068",
+   "search": "search index=llm_api run_id=r_seed0068",
+   "search_url": null,
+   "events": 1630
+  },
+  "headline": {
+   "requests": 1630,
+   "error_rate": 0.0147,
+   "e2e_p95_ms": 2878.3,
+   "ttft_p50_ms": 92.6,
+   "cost_per_1k": 0.4351
+  }
+ },
+ {
+  "id": "r_seed0098",
+  "batch_id": "b_seed0098",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T13:06:30Z",
+  "started_at": "2026-10-01T13:07:00Z",
+  "ended_at": "2026-10-01T13:12:20Z",
+  "updated_at": "2026-10-01T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000685,
+   "master_id": 10000686,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0098",
+   "search": "search index=llm_api run_id=r_seed0098",
+   "search_url": null,
+   "events": 1745
+  },
+  "headline": {
+   "requests": 1745,
+   "error_rate": 0.0057,
+   "e2e_p95_ms": 2176.7,
+   "ttft_p50_ms": 89.3,
+   "cost_per_1k": 0.1799
+  }
+ },
+ {
+  "id": "r_seed0022",
+  "batch_id": "b_seed0022",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T15:30:30Z",
+  "started_at": "2026-10-01T15:31:00Z",
+  "ended_at": "2026-10-01T15:36:20Z",
+  "updated_at": "2026-10-01T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000153,
+   "master_id": 10000154,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0022",
+   "search": "search index=llm_api run_id=r_seed0022",
+   "search_url": null,
+   "events": 1692
+  },
+  "headline": {
+   "requests": 1692,
+   "error_rate": 0.0083,
+   "e2e_p95_ms": 2292.3,
+   "ttft_p50_ms": 148.8,
+   "cost_per_1k": 1.5843
+  }
+ },
+ {
+  "id": "r_seed0066",
+  "batch_id": "b_seed0066",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T15:30:30Z",
+  "started_at": "2026-10-01T15:31:00Z",
+  "ended_at": "2026-10-01T15:36:20Z",
+  "updated_at": "2026-10-01T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000461,
+   "master_id": 10000462,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0066",
+   "search": "search index=llm_api run_id=r_seed0066",
+   "search_url": null,
+   "events": 1372
+  },
+  "headline": {
+   "requests": 1372,
+   "error_rate": 0.0109,
+   "e2e_p95_ms": 4168.5,
+   "ttft_p50_ms": 158.3,
+   "cost_per_1k": 3.3793
+  }
+ },
+ {
+  "id": "r_seed0096",
+  "batch_id": "b_seed0096",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T15:30:30Z",
+  "started_at": "2026-10-01T15:31:00Z",
+  "ended_at": "2026-10-01T15:36:20Z",
+  "updated_at": "2026-10-01T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000671,
+   "master_id": 10000672,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0096",
+   "search": "search index=llm_api run_id=r_seed0096",
+   "search_url": null,
+   "events": 1496
+  },
+  "headline": {
+   "requests": 1496,
+   "error_rate": 0.0107,
+   "e2e_p95_ms": 3196.2,
+   "ttft_p50_ms": 147.1,
+   "cost_per_1k": 1.3246
+  }
+ },
+ {
+  "id": "r_seed0020",
+  "batch_id": "b_seed0020",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T17:54:30Z",
+  "started_at": "2026-10-01T17:55:00Z",
+  "ended_at": "2026-10-01T18:00:20Z",
+  "updated_at": "2026-10-01T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000139,
+   "master_id": 10000140,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0020",
+   "search": "search index=llm_api run_id=r_seed0020",
+   "search_url": null,
+   "events": 894
+  },
+  "headline": {
+   "requests": 894,
+   "error_rate": 0.0145,
+   "e2e_p95_ms": 7421.4,
+   "ttft_p50_ms": 606.5,
+   "cost_per_1k": 10.0872
+  }
+ },
+ {
+  "id": "r_seed0064",
+  "batch_id": "b_seed0064",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T17:54:30Z",
+  "started_at": "2026-10-01T17:55:00Z",
+  "ended_at": "2026-10-01T18:00:20Z",
+  "updated_at": "2026-10-01T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000447,
+   "master_id": 10000448,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0064",
+   "search": "search index=llm_api run_id=r_seed0064",
+   "search_url": null,
+   "events": 644
+  },
+  "headline": {
+   "requests": 644,
+   "error_rate": 0.0186,
+   "e2e_p95_ms": 12357.0,
+   "ttft_p50_ms": 626.2,
+   "cost_per_1k": 19.1411
+  }
+ },
+ {
+  "id": "r_seed0094",
+  "batch_id": "b_seed0094",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T17:54:30Z",
+  "started_at": "2026-10-01T17:55:00Z",
+  "ended_at": "2026-10-01T18:00:20Z",
+  "updated_at": "2026-10-01T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000657,
+   "master_id": 10000658,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0094",
+   "search": "search index=llm_api run_id=r_seed0094",
+   "search_url": null,
+   "events": 762
+  },
+  "headline": {
+   "requests": 762,
+   "error_rate": 0.0184,
+   "e2e_p95_ms": 9800.8,
+   "ttft_p50_ms": 596.9,
+   "cost_per_1k": 9.599
+  }
+ },
+ {
+  "id": "r_seed0018",
+  "batch_id": "b_seed0018",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T20:18:30Z",
+  "started_at": "2026-10-01T20:19:00Z",
+  "ended_at": "2026-10-01T20:24:20Z",
+  "updated_at": "2026-10-01T20:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000125,
+   "master_id": 10000126,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0018",
+   "search": "search index=llm_api run_id=r_seed0018",
+   "search_url": null,
+   "events": 1389
+  },
+  "headline": {
+   "requests": 1389,
+   "error_rate": 0.0072,
+   "e2e_p95_ms": 3377.0,
+   "ttft_p50_ms": 256.9,
+   "cost_per_1k": 1.2615
+  }
+ },
+ {
+  "id": "r_seed0062",
+  "batch_id": "b_seed0062",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T20:18:30Z",
+  "started_at": "2026-10-01T20:19:00Z",
+  "ended_at": "2026-10-01T20:24:20Z",
+  "updated_at": "2026-10-01T20:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000433,
+   "master_id": 10000434,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0062",
+   "search": "search index=llm_api run_id=r_seed0062",
+   "search_url": null,
+   "events": 1085
+  },
+  "headline": {
+   "requests": 1085,
+   "error_rate": 0.0055,
+   "e2e_p95_ms": 5674.8,
+   "ttft_p50_ms": 267.0,
+   "cost_per_1k": 2.5491
+  }
+ },
+ {
+  "id": "r_seed0092",
+  "batch_id": "b_seed0092",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T20:18:30Z",
+  "started_at": "2026-10-01T20:19:00Z",
+  "ended_at": "2026-10-01T20:24:20Z",
+  "updated_at": "2026-10-01T20:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000643,
+   "master_id": 10000644,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0092",
+   "search": "search index=llm_api run_id=r_seed0092",
+   "search_url": null,
+   "events": 1213
+  },
+  "headline": {
+   "requests": 1213,
+   "error_rate": 0.0016,
+   "e2e_p95_ms": 4590.8,
+   "ttft_p50_ms": 263.3,
+   "cost_per_1k": 1.1578
+  }
+ },
+ {
+  "id": "r_seed0016",
+  "batch_id": "b_seed0016",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T22:42:30Z",
+  "started_at": "2026-10-01T22:43:00Z",
+  "ended_at": "2026-10-01T22:48:20Z",
+  "updated_at": "2026-10-01T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000111,
+   "master_id": 10000112,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0016",
+   "search": "search index=llm_api run_id=r_seed0016",
+   "search_url": null,
+   "events": 1120
+  },
+  "headline": {
+   "requests": 1120,
+   "error_rate": 0.0036,
+   "e2e_p95_ms": 5231.0,
+   "ttft_p50_ms": 415.4,
+   "cost_per_1k": 7.8139
+  }
+ },
+ {
+  "id": "r_seed0060",
+  "batch_id": "b_seed0060",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T22:42:30Z",
+  "started_at": "2026-10-01T22:43:00Z",
+  "ended_at": "2026-10-01T22:48:20Z",
+  "updated_at": "2026-10-01T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000419,
+   "master_id": 10000420,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0060",
+   "search": "search index=llm_api run_id=r_seed0060",
+   "search_url": null,
+   "events": 823
+  },
+  "headline": {
+   "requests": 823,
+   "error_rate": 0.0036,
+   "e2e_p95_ms": 8819.2,
+   "ttft_p50_ms": 421.2,
+   "cost_per_1k": 15.5982
+  }
+ },
+ {
+  "id": "r_seed0090",
+  "batch_id": "b_seed0090",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-01T22:42:30Z",
+  "started_at": "2026-10-01T22:43:00Z",
+  "ended_at": "2026-10-01T22:48:20Z",
+  "updated_at": "2026-10-01T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000629,
+   "master_id": 10000630,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0090",
+   "search": "search index=llm_api run_id=r_seed0090",
+   "search_url": null,
+   "events": 947
+  },
+  "headline": {
+   "requests": 947,
+   "error_rate": 0.0074,
+   "e2e_p95_ms": 6598.2,
+   "ttft_p50_ms": 416.6,
+   "cost_per_1k": 7.3966
+  }
+ },
+ {
+  "id": "r_seed0014",
+  "batch_id": "b_seed0014",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T01:06:30Z",
+  "started_at": "2026-10-02T01:07:00Z",
+  "ended_at": "2026-10-02T01:12:20Z",
+  "updated_at": "2026-10-02T01:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000097,
+   "master_id": 10000098,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0014",
+   "search": "search index=llm_api run_id=r_seed0014",
+   "search_url": null,
+   "events": 1166
+  },
+  "headline": {
+   "requests": 1166,
+   "error_rate": 0.0069,
+   "e2e_p95_ms": 4913.4,
+   "ttft_p50_ms": 337.6,
+   "cost_per_1k": 1.8784
+  }
+ },
+ {
+  "id": "r_seed0058",
+  "batch_id": "b_seed0058",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T01:06:30Z",
+  "started_at": "2026-10-02T01:07:00Z",
+  "ended_at": "2026-10-02T01:12:20Z",
+  "updated_at": "2026-10-02T01:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000405,
+   "master_id": 10000406,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0058",
+   "search": "search index=llm_api run_id=r_seed0058",
+   "search_url": null,
+   "events": 890
+  },
+  "headline": {
+   "requests": 890,
+   "error_rate": 0.0067,
+   "e2e_p95_ms": 8263.1,
+   "ttft_p50_ms": 355.1,
+   "cost_per_1k": 3.9576
+  }
+ },
+ {
+  "id": "r_seed0088",
+  "batch_id": "b_seed0088",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T01:06:30Z",
+  "started_at": "2026-10-02T01:07:00Z",
+  "ended_at": "2026-10-02T01:12:20Z",
+  "updated_at": "2026-10-02T01:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000615,
+   "master_id": 10000616,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0088",
+   "search": "search index=llm_api run_id=r_seed0088",
+   "search_url": null,
+   "events": 1001
+  },
+  "headline": {
+   "requests": 1001,
+   "error_rate": 0.013,
+   "e2e_p95_ms": 6486.7,
+   "ttft_p50_ms": 334.3,
+   "cost_per_1k": 1.5484
+  }
+ },
+ {
+  "id": "r_seed0012",
+  "batch_id": "b_seed0012",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--helix-2",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T03:30:30Z",
+  "started_at": "2026-10-02T03:31:00Z",
+  "ended_at": "2026-10-02T03:36:20Z",
+  "updated_at": "2026-10-02T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000083,
+   "master_id": 10000084,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0012",
+   "search": "search index=llm_api run_id=r_seed0012",
+   "search_url": null,
+   "events": 1090
+  },
+  "headline": {
+   "requests": 1090,
+   "error_rate": 0.0083,
+   "e2e_p95_ms": 5645.4,
+   "ttft_p50_ms": 452.9,
+   "cost_per_1k": 5.4805
+  }
+ },
+ {
+  "id": "r_seed0056",
+  "batch_id": "b_seed0056",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--helix-2",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T03:30:30Z",
+  "started_at": "2026-10-02T03:31:00Z",
+  "ended_at": "2026-10-02T03:36:20Z",
+  "updated_at": "2026-10-02T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000391,
+   "master_id": 10000392,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0056",
+   "search": "search index=llm_api run_id=r_seed0056",
+   "search_url": null,
+   "events": 792
+  },
+  "headline": {
+   "requests": 792,
+   "error_rate": 0.0051,
+   "e2e_p95_ms": 9677.3,
+   "ttft_p50_ms": 475.5,
+   "cost_per_1k": 11.0944
+  }
+ },
+ {
+  "id": "r_seed0086",
+  "batch_id": "b_seed0086",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--helix-2",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T03:30:30Z",
+  "started_at": "2026-10-02T03:31:00Z",
+  "ended_at": "2026-10-02T03:36:20Z",
+  "updated_at": "2026-10-02T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000601,
+   "master_id": 10000602,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0086",
+   "search": "search index=llm_api run_id=r_seed0086",
+   "search_url": null,
+   "events": 927
+  },
+  "headline": {
+   "requests": 927,
+   "error_rate": 0.0076,
+   "e2e_p95_ms": 7049.8,
+   "ttft_p50_ms": 455.1,
+   "cost_per_1k": 5.3271
+  }
+ },
+ {
+  "id": "r_seed0116",
+  "batch_id": "b_seed0116",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T03:30:30Z",
+  "started_at": "2026-10-02T03:31:00Z",
+  "ended_at": "2026-10-02T03:36:20Z",
+  "updated_at": "2026-10-02T03:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000811,
+   "master_id": 10000812,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0116",
+   "search": "search index=llm_api run_id=r_seed0116",
+   "search_url": null,
+   "events": 1943
+  },
+  "headline": {
+   "requests": 1943,
+   "error_rate": 0.0087,
+   "e2e_p95_ms": 1225.1,
+   "ttft_p50_ms": 335.9,
+   "cost_per_1k": 0.7998
+  }
+ },
+ {
+  "id": "r_seed0010",
+  "batch_id": "b_seed0010",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T05:54:30Z",
+  "started_at": "2026-10-02T05:55:00Z",
+  "ended_at": "2026-10-02T06:00:20Z",
+  "updated_at": "2026-10-02T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000069,
+   "master_id": 10000070,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0010",
+   "search": "search index=llm_api run_id=r_seed0010",
+   "search_url": null,
+   "events": 1464
+  },
+  "headline": {
+   "requests": 1464,
+   "error_rate": 0.0068,
+   "e2e_p95_ms": 3146.1,
+   "ttft_p50_ms": 252.4,
+   "cost_per_1k": 1.2853
+  }
+ },
+ {
+  "id": "r_seed0040",
+  "batch_id": "b_seed0040",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T05:54:30Z",
+  "started_at": "2026-10-02T05:55:00Z",
+  "ended_at": "2026-10-02T06:00:20Z",
+  "updated_at": "2026-10-02T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000279,
+   "master_id": 10000280,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0040",
+   "search": "search index=llm_api run_id=r_seed0040",
+   "search_url": null,
+   "events": 2032
+  },
+  "headline": {
+   "requests": 2032,
+   "error_rate": 0.0074,
+   "e2e_p95_ms": 1086.7,
+   "ttft_p50_ms": 243.4,
+   "cost_per_1k": 0.4149
+  }
+ },
+ {
+  "id": "r_seed0054",
+  "batch_id": "b_seed0054",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T05:54:30Z",
+  "started_at": "2026-10-02T05:55:00Z",
+  "ended_at": "2026-10-02T06:00:20Z",
+  "updated_at": "2026-10-02T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000377,
+   "master_id": 10000378,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0054",
+   "search": "search index=llm_api run_id=r_seed0054",
+   "search_url": null,
+   "events": 1151
+  },
+  "headline": {
+   "requests": 1151,
+   "error_rate": 0.0026,
+   "e2e_p95_ms": 5450.1,
+   "ttft_p50_ms": 260.7,
+   "cost_per_1k": 2.5447
+  }
+ },
+ {
+  "id": "r_seed0084",
+  "batch_id": "b_seed0084",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T05:54:30Z",
+  "started_at": "2026-10-02T05:55:00Z",
+  "ended_at": "2026-10-02T06:00:20Z",
+  "updated_at": "2026-10-02T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000587,
+   "master_id": 10000588,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0084",
+   "search": "search index=llm_api run_id=r_seed0084",
+   "search_url": null,
+   "events": 1294
+  },
+  "headline": {
+   "requests": 1294,
+   "error_rate": 0.0077,
+   "e2e_p95_ms": 4129.5,
+   "ttft_p50_ms": 245.2,
+   "cost_per_1k": 1.2681
+  }
+ },
+ {
+  "id": "r_seed0114",
+  "batch_id": "b_seed0114",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T05:54:30Z",
+  "started_at": "2026-10-02T05:55:00Z",
+  "ended_at": "2026-10-02T06:00:20Z",
+  "updated_at": "2026-10-02T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000797,
+   "master_id": 10000798,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0114",
+   "search": "search index=llm_api run_id=r_seed0114",
+   "search_url": null,
+   "events": 2235
+  },
+  "headline": {
+   "requests": 2235,
+   "error_rate": 0.0089,
+   "e2e_p95_ms": 610.0,
+   "ttft_p50_ms": 145.9,
+   "cost_per_1k": 0.6925
+  }
+ },
+ {
+  "id": "r_seed0008",
+  "batch_id": "b_seed0008",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T08:18:30Z",
+  "started_at": "2026-10-02T08:19:00Z",
+  "ended_at": "2026-10-02T08:24:20Z",
+  "updated_at": "2026-10-02T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000055,
+   "master_id": 10000056,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0008",
+   "search": "search index=llm_api run_id=r_seed0008",
+   "search_url": null,
+   "events": 974
+  },
+  "headline": {
+   "requests": 974,
+   "error_rate": 0.0072,
+   "e2e_p95_ms": 6408.4,
+   "ttft_p50_ms": 521.5,
+   "cost_per_1k": 9.0762
+  }
+ },
+ {
+  "id": "r_seed0038",
+  "batch_id": "b_seed0038",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T08:18:30Z",
+  "started_at": "2026-10-02T08:19:00Z",
+  "ended_at": "2026-10-02T08:24:20Z",
+  "updated_at": "2026-10-02T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000265,
+   "master_id": 10000266,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0038",
+   "search": "search index=llm_api run_id=r_seed0038",
+   "search_url": null,
+   "events": 2299
+  },
+  "headline": {
+   "requests": 2299,
+   "error_rate": 0.0135,
+   "e2e_p95_ms": 548.7,
+   "ttft_p50_ms": 87.7,
+   "cost_per_1k": 0.0789
+  }
+ },
+ {
+  "id": "r_seed0052",
+  "batch_id": "b_seed0052",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T08:18:30Z",
+  "started_at": "2026-10-02T08:19:00Z",
+  "ended_at": "2026-10-02T08:24:20Z",
+  "updated_at": "2026-10-02T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000363,
+   "master_id": 10000364,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0052",
+   "search": "search index=llm_api run_id=r_seed0052",
+   "search_url": null,
+   "events": 699
+  },
+  "headline": {
+   "requests": 699,
+   "error_rate": 0.0086,
+   "e2e_p95_ms": 11169.4,
+   "ttft_p50_ms": 544.3,
+   "cost_per_1k": 18.1679
+  }
+ },
+ {
+  "id": "r_seed0082",
+  "batch_id": "b_seed0082",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T08:18:30Z",
+  "started_at": "2026-10-02T08:19:00Z",
+  "ended_at": "2026-10-02T08:24:20Z",
+  "updated_at": "2026-10-02T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000573,
+   "master_id": 10000574,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0082",
+   "search": "search index=llm_api run_id=r_seed0082",
+   "search_url": null,
+   "events": 817
+  },
+  "headline": {
+   "requests": 817,
+   "error_rate": 0.0098,
+   "e2e_p95_ms": 8554.5,
+   "ttft_p50_ms": 502.6,
+   "cost_per_1k": 8.7771
+  }
+ },
+ {
+  "id": "r_seed0112",
+  "batch_id": "b_seed0112",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--quanta-8b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T08:18:30Z",
+  "started_at": "2026-10-02T08:19:00Z",
+  "ended_at": "2026-10-02T08:24:20Z",
+  "updated_at": "2026-10-02T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000783,
+   "master_id": 10000784,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0112",
+   "search": "search index=llm_api run_id=r_seed0112",
+   "search_url": null,
+   "events": 2378
+  },
+  "headline": {
+   "requests": 2378,
+   "error_rate": 0.0076,
+   "e2e_p95_ms": 431.6,
+   "ttft_p50_ms": 87.2,
+   "cost_per_1k": 0.0935
+  }
+ },
+ {
+  "id": "r_seed0006",
+  "batch_id": "b_seed0006",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T10:42:30Z",
+  "started_at": "2026-10-02T10:43:00Z",
+  "ended_at": "2026-10-02T10:48:20Z",
+  "updated_at": "2026-10-02T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000041,
+   "master_id": 10000042,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0006",
+   "search": "search index=llm_api run_id=r_seed0006",
+   "search_url": null,
+   "events": 1454
+  },
+  "headline": {
+   "requests": 1454,
+   "error_rate": 0.0055,
+   "e2e_p95_ms": 3216.9,
+   "ttft_p50_ms": 228.6,
+   "cost_per_1k": 1.1262
+  }
+ },
+ {
+  "id": "r_seed0036",
+  "batch_id": "b_seed0036",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "swiftserve--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T10:42:30Z",
+  "started_at": "2026-10-02T10:43:00Z",
+  "ended_at": "2026-10-02T10:48:20Z",
+  "updated_at": "2026-10-02T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000251,
+   "master_id": 10000252,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0036",
+   "search": "search index=llm_api run_id=r_seed0036",
+   "search_url": null,
+   "events": 2057
+  },
+  "headline": {
+   "requests": 2057,
+   "error_rate": 0.0151,
+   "e2e_p95_ms": 916.1,
+   "ttft_p50_ms": 166.1,
+   "cost_per_1k": 0.4059
+  }
+ },
+ {
+  "id": "r_seed0050",
+  "batch_id": "b_seed0050",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T10:42:30Z",
+  "started_at": "2026-10-02T10:43:00Z",
+  "ended_at": "2026-10-02T10:48:20Z",
+  "updated_at": "2026-10-02T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000349,
+   "master_id": 10000350,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0050",
+   "search": "search index=llm_api run_id=r_seed0050",
+   "search_url": null,
+   "events": 1114
+  },
+  "headline": {
+   "requests": 1114,
+   "error_rate": 0.0072,
+   "e2e_p95_ms": 5645.4,
+   "ttft_p50_ms": 239.3,
+   "cost_per_1k": 2.2821
+  }
+ },
+ {
+  "id": "r_seed0080",
+  "batch_id": "b_seed0080",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T10:42:30Z",
+  "started_at": "2026-10-02T10:43:00Z",
+  "ended_at": "2026-10-02T10:48:20Z",
+  "updated_at": "2026-10-02T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000559,
+   "master_id": 10000560,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0080",
+   "search": "search index=llm_api run_id=r_seed0080",
+   "search_url": null,
+   "events": 1256
+  },
+  "headline": {
+   "requests": 1256,
+   "error_rate": 0.0024,
+   "e2e_p95_ms": 4433.4,
+   "ttft_p50_ms": 222.8,
+   "cost_per_1k": 1.0678
+  }
+ },
+ {
+  "id": "r_seed0110",
+  "batch_id": "b_seed0110",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T10:42:30Z",
+  "started_at": "2026-10-02T10:43:00Z",
+  "ended_at": "2026-10-02T10:48:20Z",
+  "updated_at": "2026-10-02T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000769,
+   "master_id": 10000770,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0110",
+   "search": "search index=llm_api run_id=r_seed0110",
+   "search_url": null,
+   "events": 2112
+  },
+  "headline": {
+   "requests": 2112,
+   "error_rate": 0.0028,
+   "e2e_p95_ms": 909.6,
+   "ttft_p50_ms": 253.8,
+   "cost_per_1k": 0.4635
+  }
+ },
+ {
+  "id": "r_seed0004",
+  "batch_id": "b_seed0004",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T13:06:30Z",
+  "started_at": "2026-10-02T13:07:00Z",
+  "ended_at": "2026-10-02T13:12:20Z",
+  "updated_at": "2026-10-02T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000027,
+   "master_id": 10000028,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0004",
+   "search": "search index=llm_api run_id=r_seed0004",
+   "search_url": null,
+   "events": 1154
+  },
+  "headline": {
+   "requests": 1154,
+   "error_rate": 0.0113,
+   "e2e_p95_ms": 5006.7,
+   "ttft_p50_ms": 383.0,
+   "cost_per_1k": 7.0568
+  }
+ },
+ {
+  "id": "r_seed0034",
+  "batch_id": "b_seed0034",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T13:06:30Z",
+  "started_at": "2026-10-02T13:07:00Z",
+  "ended_at": "2026-10-02T13:12:20Z",
+  "updated_at": "2026-10-02T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000237,
+   "master_id": 10000238,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0034",
+   "search": "search index=llm_api run_id=r_seed0034",
+   "search_url": null,
+   "events": 1988
+  },
+  "headline": {
+   "requests": 1988,
+   "error_rate": 0.003,
+   "e2e_p95_ms": 1183.9,
+   "ttft_p50_ms": 253.6,
+   "cost_per_1k": 0.4229
+  }
+ },
+ {
+  "id": "r_seed0048",
+  "batch_id": "b_seed0048",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T13:06:30Z",
+  "started_at": "2026-10-02T13:07:00Z",
+  "ended_at": "2026-10-02T13:12:20Z",
+  "updated_at": "2026-10-02T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000335,
+   "master_id": 10000336,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0048",
+   "search": "search index=llm_api run_id=r_seed0048",
+   "search_url": null,
+   "events": 839
+  },
+  "headline": {
+   "requests": 839,
+   "error_rate": 0.0072,
+   "e2e_p95_ms": 9014.6,
+   "ttft_p50_ms": 395.0,
+   "cost_per_1k": 14.1414
+  }
+ },
+ {
+  "id": "r_seed0078",
+  "batch_id": "b_seed0078",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T13:06:30Z",
+  "started_at": "2026-10-02T13:07:00Z",
+  "ended_at": "2026-10-02T13:12:20Z",
+  "updated_at": "2026-10-02T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000545,
+   "master_id": 10000546,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0078",
+   "search": "search index=llm_api run_id=r_seed0078",
+   "search_url": null,
+   "events": 988
+  },
+  "headline": {
+   "requests": 988,
+   "error_rate": 0.003,
+   "e2e_p95_ms": 6391.0,
+   "ttft_p50_ms": 375.9,
+   "cost_per_1k": 6.6816
+  }
+ },
+ {
+  "id": "r_seed0108",
+  "batch_id": "b_seed0108",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T13:06:30Z",
+  "started_at": "2026-10-02T13:07:00Z",
+  "ended_at": "2026-10-02T13:12:20Z",
+  "updated_at": "2026-10-02T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000755,
+   "master_id": 10000756,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0108",
+   "search": "search index=llm_api run_id=r_seed0108",
+   "search_url": null,
+   "events": 2150
+  },
+  "headline": {
+   "requests": 2150,
+   "error_rate": 0.006,
+   "e2e_p95_ms": 845.5,
+   "ttft_p50_ms": 226.8,
+   "cost_per_1k": 0.4204
+  }
+ },
+ {
+  "id": "r_seed0002",
+  "batch_id": "b_seed0002",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T15:30:30Z",
+  "started_at": "2026-10-02T15:31:00Z",
+  "ended_at": "2026-10-02T15:36:20Z",
+  "updated_at": "2026-10-02T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000013,
+   "master_id": 10000014,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0002",
+   "search": "search index=llm_api run_id=r_seed0002",
+   "search_url": null,
+   "events": 1553
+  },
+  "headline": {
+   "requests": 1553,
+   "error_rate": 0.0032,
+   "e2e_p95_ms": 2793.6,
+   "ttft_p50_ms": 191.5,
+   "cost_per_1k": 1.1472
+  }
+ },
+ {
+  "id": "r_seed0032",
+  "batch_id": "b_seed0032",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "northwind-api--gale-3-mini",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T15:30:30Z",
+  "started_at": "2026-10-02T15:31:00Z",
+  "ended_at": "2026-10-02T15:36:20Z",
+  "updated_at": "2026-10-02T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000223,
+   "master_id": 10000224,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0032",
+   "search": "search index=llm_api run_id=r_seed0032",
+   "search_url": null,
+   "events": 2037
+  },
+  "headline": {
+   "requests": 2037,
+   "error_rate": 0.002,
+   "e2e_p95_ms": 1098.5,
+   "ttft_p50_ms": 222.9,
+   "cost_per_1k": 0.3863
+  }
+ },
+ {
+  "id": "r_seed0046",
+  "batch_id": "b_seed0046",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T15:30:30Z",
+  "started_at": "2026-10-02T15:31:00Z",
+  "ended_at": "2026-10-02T15:36:20Z",
+  "updated_at": "2026-10-02T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000321,
+   "master_id": 10000322,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0046",
+   "search": "search index=llm_api run_id=r_seed0046",
+   "search_url": null,
+   "events": 1232
+  },
+  "headline": {
+   "requests": 1232,
+   "error_rate": 0.0065,
+   "e2e_p95_ms": 4866.8,
+   "ttft_p50_ms": 193.3,
+   "cost_per_1k": 2.1892
+  }
+ },
+ {
+  "id": "r_seed0076",
+  "batch_id": "b_seed0076",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T15:30:30Z",
+  "started_at": "2026-10-02T15:31:00Z",
+  "ended_at": "2026-10-02T15:36:20Z",
+  "updated_at": "2026-10-02T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000531,
+   "master_id": 10000532,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0076",
+   "search": "search index=llm_api run_id=r_seed0076",
+   "search_url": null,
+   "events": 1362
+  },
+  "headline": {
+   "requests": 1362,
+   "error_rate": 0.0051,
+   "e2e_p95_ms": 3719.2,
+   "ttft_p50_ms": 186.3,
+   "cost_per_1k": 1.1844
+  }
+ },
+ {
+  "id": "r_seed0106",
+  "batch_id": "b_seed0106",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "stratus--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T15:30:30Z",
+  "started_at": "2026-10-02T15:31:00Z",
+  "ended_at": "2026-10-02T15:36:20Z",
+  "updated_at": "2026-10-02T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000741,
+   "master_id": 10000742,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0106",
+   "search": "search index=llm_api run_id=r_seed0106",
+   "search_url": null,
+   "events": 2123
+  },
+  "headline": {
+   "requests": 2123,
+   "error_rate": 0.0052,
+   "e2e_p95_ms": 847.8,
+   "ttft_p50_ms": 244.5,
+   "cost_per_1k": 0.4287
+  }
+ },
+ {
+  "id": "r_seed0000",
+  "batch_id": "b_seed0000",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T17:54:30Z",
+  "started_at": "2026-10-02T17:55:00Z",
+  "ended_at": "2026-10-02T18:00:20Z",
+  "updated_at": "2026-10-02T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 9999999,
+   "master_id": 10000000,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0000",
+   "search": "search index=llm_api run_id=r_seed0000",
+   "search_url": null,
+   "events": 1071
+  },
+  "headline": {
+   "requests": 1071,
+   "error_rate": 0.0037,
+   "e2e_p95_ms": 5576.9,
+   "ttft_p50_ms": 415.5,
+   "cost_per_1k": 9.0877
+  }
+ },
+ {
+  "id": "r_seed0030",
+  "batch_id": "b_seed0030",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T17:54:30Z",
+  "started_at": "2026-10-02T17:55:00Z",
+  "ended_at": "2026-10-02T18:00:20Z",
+  "updated_at": "2026-10-02T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000209,
+   "master_id": 10000210,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0030",
+   "search": "search index=llm_api run_id=r_seed0030",
+   "search_url": null,
+   "events": 2129
+  },
+  "headline": {
+   "requests": 2129,
+   "error_rate": 0.0052,
+   "e2e_p95_ms": 942.1,
+   "ttft_p50_ms": 183.5,
+   "cost_per_1k": 0.3615
+  }
+ },
+ {
+  "id": "r_seed0044",
+  "batch_id": "b_seed0044",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T17:54:30Z",
+  "started_at": "2026-10-02T17:55:00Z",
+  "ended_at": "2026-10-02T18:00:20Z",
+  "updated_at": "2026-10-02T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000307,
+   "master_id": 10000308,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0044",
+   "search": "search index=llm_api run_id=r_seed0044",
+   "search_url": null,
+   "events": 757
+  },
+  "headline": {
+   "requests": 757,
+   "error_rate": 0.004,
+   "e2e_p95_ms": 9570.2,
+   "ttft_p50_ms": 431.6,
+   "cost_per_1k": 17.9888
+  }
+ },
+ {
+  "id": "r_seed0074",
+  "batch_id": "b_seed0074",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T17:54:30Z",
+  "started_at": "2026-10-02T17:55:00Z",
+  "ended_at": "2026-10-02T18:00:20Z",
+  "updated_at": "2026-10-02T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000517,
+   "master_id": 10000518,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0074",
+   "search": "search index=llm_api run_id=r_seed0074",
+   "search_url": null,
+   "events": 890
+  },
+  "headline": {
+   "requests": 890,
+   "error_rate": 0.0079,
+   "e2e_p95_ms": 7350.7,
+   "ttft_p50_ms": 415.2,
+   "cost_per_1k": 8.8173
+  }
+ },
+ {
+  "id": "r_seed0104",
+  "batch_id": "b_seed0104",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-02T17:54:30Z",
+  "started_at": "2026-10-02T17:55:00Z",
+  "ended_at": "2026-10-02T18:00:20Z",
+  "updated_at": "2026-10-02T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000727,
+   "master_id": 10000728,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0104",
+   "search": "search index=llm_api run_id=r_seed0104",
+   "search_url": null,
+   "events": 2217
+  },
+  "headline": {
+   "requests": 2217,
+   "error_rate": 0.0036,
+   "e2e_p95_ms": 713.8,
+   "ttft_p50_ms": 185.2,
+   "cost_per_1k": 0.3611
+  }
+ },
+ {
+  "id": "r_seed0028",
+  "batch_id": "b_seed0028",
+  "service_id": "summarize-profile",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-03T05:54:30Z",
+  "started_at": "2026-10-03T05:55:00Z",
+  "ended_at": "2026-10-03T06:00:20Z",
+  "updated_at": "2026-10-03T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000195,
+   "master_id": 10000196,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0028",
+   "search": "search index=llm_api run_id=r_seed0028",
+   "search_url": null,
+   "events": 1263
+  },
+  "headline": {
+   "requests": 1263,
+   "error_rate": 0.0079,
+   "e2e_p95_ms": 5414.6,
+   "ttft_p50_ms": 297.0,
+   "cost_per_1k": 4.1919
+  }
+ },
+ {
+  "id": "r_seed0042",
+  "batch_id": "b_seed0042",
+  "service_id": "headline-rewrite",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3-mini",
+    "cloudhaven--gale-3-mini",
+    "swiftserve--gale-3-mini",
+    "swiftserve--quanta-8b",
+    "stratus--aurora-4-flash"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-03T05:54:30Z",
+  "started_at": "2026-10-03T05:55:00Z",
+  "ended_at": "2026-10-03T06:00:20Z",
+  "updated_at": "2026-10-03T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000293,
+   "master_id": 10000294,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0042",
+   "search": "search index=llm_api run_id=r_seed0042",
+   "search_url": null,
+   "events": 2118
+  },
+  "headline": {
+   "requests": 2118,
+   "error_rate": 0.0066,
+   "e2e_p95_ms": 1047.1,
+   "ttft_p50_ms": 194.8,
+   "cost_per_1k": 0.3484
+  }
+ },
+ {
+  "id": "r_seed0072",
+  "batch_id": "b_seed0072",
+  "service_id": "job-match-explain",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-03T05:54:30Z",
+  "started_at": "2026-10-03T05:55:00Z",
+  "ended_at": "2026-10-03T06:00:20Z",
+  "updated_at": "2026-10-03T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000503,
+   "master_id": 10000504,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0072",
+   "search": "search index=llm_api run_id=r_seed0072",
+   "search_url": null,
+   "events": 954
+  },
+  "headline": {
+   "requests": 954,
+   "error_rate": 0.0052,
+   "e2e_p95_ms": 8709.4,
+   "ttft_p50_ms": 303.1,
+   "cost_per_1k": 7.974
+  }
+ },
+ {
+  "id": "r_seed0102",
+  "batch_id": "b_seed0102",
+  "service_id": "outreach-draft",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-03T05:54:30Z",
+  "started_at": "2026-10-03T05:55:00Z",
+  "ended_at": "2026-10-03T06:00:20Z",
+  "updated_at": "2026-10-03T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000713,
+   "master_id": 10000714,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0102",
+   "search": "search index=llm_api run_id=r_seed0102",
+   "search_url": null,
+   "events": 1073
+  },
+  "headline": {
+   "requests": 1073,
+   "error_rate": 0.0121,
+   "e2e_p95_ms": 7153.5,
+   "ttft_p50_ms": 297.4,
+   "cost_per_1k": 3.9902
+  }
+ },
+ {
+  "id": "r_seed0118",
+  "batch_id": "b_seed0118",
+  "service_id": "ticket-triage",
+  "label": "Nightly benchmark",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4-flash",
+    "stratus--aurora-4-flash",
+    "northwind-api--gale-3-mini",
+    "cloudhaven--gale-3-mini",
+    "swiftserve--quanta-8b",
+    "swiftserve--forge-70b",
+    "stratus--forge-70b"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 20,
+   "ramp_up_s": 30,
+   "duration_s": 300,
+   "think_time_s": 2.0,
+   "profile_id": "baseline",
+   "name": "Baseline"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-03T05:54:30Z",
+  "started_at": "2026-10-03T05:55:00Z",
+  "ended_at": "2026-10-03T06:00:20Z",
+  "updated_at": "2026-10-03T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000825,
+   "master_id": 10000826,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0118",
+   "search": "search index=llm_api run_id=r_seed0118",
+   "search_url": null,
+   "events": 2142
+  },
+  "headline": {
+   "requests": 2142,
+   "error_rate": 0.0079,
+   "e2e_p95_ms": 988.1,
+   "ttft_p50_ms": 205.5,
+   "cost_per_1k": 0.4618
+  }
+ },
+ {
+  "id": "r_seed0130",
+  "batch_id": "b_seed0130",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4-flash",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T05:49:30Z",
+  "started_at": "2026-10-04T05:50:00Z",
+  "ended_at": "2026-10-04T06:00:20Z",
+  "updated_at": "2026-10-04T06:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000909,
+   "master_id": 10000910,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0130",
+   "search": "search index=llm_api run_id=r_seed0130",
+   "search_url": null,
+   "events": 12342
+  },
+  "headline": {
+   "requests": 12342,
+   "error_rate": 0.0036,
+   "e2e_p95_ms": 2769.7,
+   "ttft_p50_ms": 187.6,
+   "cost_per_1k": 1.1315
+  }
+ },
+ {
+  "id": "r_seed0128",
+  "batch_id": "b_seed0128",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": "swiftserve--forge-70b",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T08:13:30Z",
+  "started_at": "2026-10-04T08:14:00Z",
+  "ended_at": "2026-10-04T08:24:20Z",
+  "updated_at": "2026-10-04T08:24:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000895,
+   "master_id": 10000896,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0128",
+   "search": "search index=llm_api run_id=r_seed0128",
+   "search_url": null,
+   "events": 12712
+  },
+  "headline": {
+   "requests": 12712,
+   "error_rate": 0.0866,
+   "e2e_p95_ms": 3028.6,
+   "ttft_p50_ms": 201.4,
+   "cost_per_1k": 1.6067
+  }
+ },
+ {
+  "id": "r_seed0126",
+  "batch_id": "b_seed0126",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": "northwind-api--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T10:37:30Z",
+  "started_at": "2026-10-04T10:38:00Z",
+  "ended_at": "2026-10-04T10:48:20Z",
+  "updated_at": "2026-10-04T10:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000881,
+   "master_id": 10000882,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0126",
+   "search": "search index=llm_api run_id=r_seed0126",
+   "search_url": null,
+   "events": 8894
+  },
+  "headline": {
+   "requests": 8894,
+   "error_rate": 0.0082,
+   "e2e_p95_ms": 5306.6,
+   "ttft_p50_ms": 409.7,
+   "cost_per_1k": 7.0164
+  }
+ },
+ {
+  "id": "r_seed0124",
+  "batch_id": "b_seed0124",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": "cloudhaven--gale-3",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T13:01:30Z",
+  "started_at": "2026-10-04T13:02:00Z",
+  "ended_at": "2026-10-04T13:12:20Z",
+  "updated_at": "2026-10-04T13:12:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000867,
+   "master_id": 10000868,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0124",
+   "search": "search index=llm_api run_id=r_seed0124",
+   "search_url": null,
+   "events": 8964
+  },
+  "headline": {
+   "requests": 8964,
+   "error_rate": 0.0044,
+   "e2e_p95_ms": 5045.0,
+   "ttft_p50_ms": 410.3,
+   "cost_per_1k": 7.7562
+  }
+ },
+ {
+  "id": "r_seed0122",
+  "batch_id": "b_seed0122",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": "stratus--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T15:25:30Z",
+  "started_at": "2026-10-04T15:26:00Z",
+  "ended_at": "2026-10-04T15:36:20Z",
+  "updated_at": "2026-10-04T15:36:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000853,
+   "master_id": 10000854,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0122",
+   "search": "search index=llm_api run_id=r_seed0122",
+   "search_url": null,
+   "events": 7881
+  },
+  "headline": {
+   "requests": 7881,
+   "error_rate": 0.045,
+   "e2e_p95_ms": 6537.1,
+   "ttft_p50_ms": 520.4,
+   "cost_per_1k": 9.0119
+  }
+ },
+ {
+  "id": "r_seed0120",
+  "batch_id": "b_seed0120",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": "aurora-api--aurora-4",
+   "pool": null,
+   "mode": "fixed"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T17:49:30Z",
+  "started_at": "2026-10-04T17:50:00Z",
+  "ended_at": "2026-10-04T18:00:20Z",
+  "updated_at": "2026-10-04T18:00:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000839,
+   "master_id": 10000840,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0120",
+   "search": "search index=llm_api run_id=r_seed0120",
+   "search_url": null,
+   "events": 7880
+  },
+  "headline": {
+   "requests": 7880,
+   "error_rate": 0.0052,
+   "e2e_p95_ms": 6369.0,
+   "ttft_p50_ms": 499.0,
+   "cost_per_1k": 9.1042
+  }
+ },
+ {
+  "id": "r_seed0132",
+  "batch_id": "b_seed0132",
+  "service_id": "summarize-profile",
+  "label": "Peak-load check",
+  "routing": {
+   "offering_id": null,
+   "pool": [
+    "aurora-api--aurora-4",
+    "aurora-api--aurora-4-flash",
+    "northwind-api--gale-3",
+    "northwind-api--gale-3-mini",
+    "stratus--aurora-4",
+    "stratus--aurora-4-flash",
+    "stratus--helix-2",
+    "stratus--forge-70b",
+    "cloudhaven--gale-3",
+    "cloudhaven--gale-3-mini",
+    "cloudhaven--aurora-4",
+    "swiftserve--forge-70b",
+    "swiftserve--quanta-8b",
+    "swiftserve--gale-3-mini"
+   ],
+   "mode": "auto"
+  },
+  "load": {
+   "concurrency": 80,
+   "ramp_up_s": 60,
+   "duration_s": 600,
+   "think_time_s": 2.0,
+   "profile_id": "stress",
+   "name": "Stress"
+  },
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2026-10-04T22:37:30Z",
+  "started_at": "2026-10-04T22:38:00Z",
+  "ended_at": "2026-10-04T22:48:20Z",
+  "updated_at": "2026-10-04T22:48:20Z",
+  "error": null,
+  "cancel_requested": false,
+  "blazemeter": {
+   "test_id": 10000923,
+   "master_id": 10000924,
+   "report_url": null,
+   "status": "ENDED"
+  },
+  "splunk": {
+   "sid": "seed_r_seed0132",
+   "search": "search index=llm_api run_id=r_seed0132",
+   "search_url": null,
+   "events": 9710
+  },
+  "headline": {
+   "requests": 9710,
+   "error_rate": 0.0225,
+   "e2e_p95_ms": 5748.1,
+   "ttft_p50_ms": 313.4,
+   "cost_per_1k": 4.1162
+  }
+ }
+]

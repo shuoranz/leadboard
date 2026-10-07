@@ -1,0 +1,52 @@
+[
+  {
+    "id": "summarize-profile",
+    "name": "Summarize Profile API",
+    "description": "Summarizes a member profile into a short paragraph.",
+    "endpoint_path": "/v1/profile/summarize",
+    "allowed_offering_ids": null
+  },
+  {
+    "id": "headline-rewrite",
+    "name": "Headline Rewrite API",
+    "description": "Suggests three headline rewrites for a profile.",
+    "endpoint_path": "/v1/profile/headline",
+    "allowed_offering_ids": [
+      "aurora-api--aurora-4-flash",
+      "northwind-api--gale-3-mini",
+      "cloudhaven--gale-3-mini",
+      "swiftserve--gale-3-mini",
+      "swiftserve--quanta-8b",
+      "stratus--aurora-4-flash"
+    ]
+  },
+  {
+    "id": "job-match-explain",
+    "name": "Job Match Explain API",
+    "description": "Explains why a candidate matches a job posting.",
+    "endpoint_path": "/v1/match/explain",
+    "allowed_offering_ids": null
+  },
+  {
+    "id": "outreach-draft",
+    "name": "Outreach Draft API",
+    "description": "Drafts a personalized outreach message.",
+    "endpoint_path": "/v1/outreach/draft",
+    "allowed_offering_ids": null
+  },
+  {
+    "id": "ticket-triage",
+    "name": "Ticket Triage API",
+    "description": "Classifies and routes inbound support tickets.",
+    "endpoint_path": "/v1/tickets/triage",
+    "allowed_offering_ids": [
+      "aurora-api--aurora-4-flash",
+      "stratus--aurora-4-flash",
+      "northwind-api--gale-3-mini",
+      "cloudhaven--gale-3-mini",
+      "swiftserve--quanta-8b",
+      "swiftserve--forge-70b",
+      "stratus--forge-70b"
+    ]
+  }
+]

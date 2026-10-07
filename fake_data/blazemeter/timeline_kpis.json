@@ -1,0 +1,11 @@
+{
+  "api_version": 4,
+  "error": null,
+  "request_id": "{{request_id}}",
+  "result": {
+    "interval": "{{interval}}",
+    "kpis": ["ts", "na", "n", "ec", "t", "t90"],
+    "labels": { "ts": "timestamp (s)", "na": "active users", "n": "hits", "ec": "errors", "t": "avg response time (ms)", "t90": "p90 response time (ms)" },
+    "points": "{{points}}"
+  }
+}

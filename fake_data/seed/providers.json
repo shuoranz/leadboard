@@ -1,0 +1,7 @@
+[
+  { "id": "aurora-api", "name": "Aurora Labs API", "kind": "first_party", "description": "Aurora Labs' own hosted API.", "console_url": "https://console.aurora.example" },
+  { "id": "northwind-api", "name": "Northwind AI API", "kind": "first_party", "description": "Northwind AI's own hosted API.", "console_url": "https://platform.northwind.example" },
+  { "id": "stratus", "name": "Stratus Cloud", "kind": "cloud", "description": "Hyperscaler model hosting (managed endpoints, provisioned throughput).", "console_url": "https://console.stratus.example" },
+  { "id": "cloudhaven", "name": "Cloudhaven", "kind": "cloud", "description": "Hyperscaler model hosting with regional deployments.", "console_url": "https://portal.cloudhaven.example" },
+  { "id": "swiftserve", "name": "Swiftserve", "kind": "inference_host", "description": "Low-latency inference host for open-weight models.", "console_url": "https://app.swiftserve.example" }
+]

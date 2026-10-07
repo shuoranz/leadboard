@@ -1,0 +1,9 @@
+[
+  { "id": "aurora-4", "name": "Aurora 4", "organization": "Aurora Labs", "family": "Aurora", "open_weights": false, "context_window": 400000, "max_output_tokens": 64000, "released": "2026-05-12" },
+  { "id": "aurora-4-flash", "name": "Aurora 4 Flash", "organization": "Aurora Labs", "family": "Aurora", "open_weights": false, "context_window": 1000000, "max_output_tokens": 32000, "released": "2026-05-12" },
+  { "id": "gale-3", "name": "Gale 3", "organization": "Northwind AI", "family": "Gale", "open_weights": false, "context_window": 256000, "max_output_tokens": 64000, "released": "2026-03-02" },
+  { "id": "gale-3-mini", "name": "Gale 3 Mini", "organization": "Northwind AI", "family": "Gale", "open_weights": false, "context_window": 128000, "max_output_tokens": 16000, "released": "2026-03-02" },
+  { "id": "helix-2", "name": "Helix 2", "organization": "Helix Research", "family": "Helix", "open_weights": false, "context_window": 200000, "max_output_tokens": 32000, "released": "2026-01-20" },
+  { "id": "forge-70b", "name": "Forge 70B", "organization": "OpenForge", "family": "Forge", "open_weights": true, "context_window": 131072, "max_output_tokens": 16000, "released": "2025-11-08" },
+  { "id": "quanta-8b", "name": "Quanta 8B", "organization": "Quanta", "family": "Quanta", "open_weights": true, "context_window": 65536, "max_output_tokens": 8000, "released": "2026-02-14" }
+]

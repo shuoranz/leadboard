@@ -1,0 +1,7 @@
+{
+  "preview": false,
+  "init_offset": "{{offset}}",
+  "messages": [],
+  "fields": "{{fields}}",
+  "results": "{{results}}"
+}

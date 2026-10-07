@@ -1,0 +1,13 @@
+{
+  "api_version": 4,
+  "error": null,
+  "request_id": "{{request_id}}",
+  "result": {
+    "id": "{{master_id}}",
+    "testId": "{{test_id}}",
+    "name": "{{name}}",
+    "created": "{{created}}",
+    "status": "CREATED",
+    "publicTokenUrl": "{{report_url}}"
+  }
+}
