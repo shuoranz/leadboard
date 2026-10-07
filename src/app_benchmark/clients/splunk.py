@@ -6,9 +6,11 @@ from typing import Any
 
 import httpx
 
+from .errors import UpstreamError
 
-class SplunkError(RuntimeError):
-    pass
+
+class SplunkError(UpstreamError):
+    system = "Splunk"
 
 
 class SplunkClient:
@@ -24,11 +26,11 @@ class SplunkClient:
         except httpx.HTTPError as e:
             raise SplunkError(f"Splunk {what} failed: {e}") from e
         if res.is_error:
-            raise SplunkError(f"Splunk {what} failed: {res.status_code} {res.text[:200]}")
+            raise SplunkError(f"Splunk {what} failed: {res.status_code} {res.text[:200]}", status=res.status_code)
         try:
             return res.json()
         except ValueError as e:
-            raise SplunkError(f"Splunk {what} failed: not JSON") from e
+            raise SplunkError(f"Splunk {what} failed: not JSON", "Splunk sent an invalid response") from e
 
     async def create_job(self, search: str) -> str:
         return (await self._call("POST", "/services/search/jobs", "search job", data={"search": search, "output_mode": "json"}))["sid"]
@@ -39,18 +41,19 @@ class SplunkClient:
             body = await self._call("GET", f"/services/search/jobs/{sid}", f"job {sid} status", params={"output_mode": "json"})
             content = body["entry"][0]["content"]
             if content["dispatchState"] == "FAILED":
-                raise SplunkError(f"Splunk job {sid} failed")
+                raise SplunkError(f"Splunk job {sid} failed", "Splunk search job failed")
             if content["isDone"]:
                 return int(content["resultCount"])
             if time.monotonic() > deadline:
-                raise SplunkError(f"Splunk job {sid} timed out after {timeout_s:.0f}s")
+                raise SplunkError(f"Splunk job {sid} timed out after {timeout_s:.0f}s", f"Splunk search timed out after {timeout_s:.0f}s")
             await asyncio.sleep(poll_s)
 
     async def results(self, sid: str, page: int = 5000) -> list[dict[str, str]]:
         rows: list[dict[str, str]] = []
         while True:
             params = {"output_mode": "json", "count": page, "offset": len(rows)}
-            batch = (await self._call("GET", f"/services/search/jobs/{sid}/results", f"results for {sid}", params=params))["results"]
+            path = f"/services/search/jobs/{sid}/results"
+            batch = (await self._call("GET", path, f"results for {sid}", params=params))["results"]
             rows.extend(batch)
             if len(batch) < page:
                 return rows

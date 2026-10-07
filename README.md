@@ -96,6 +96,8 @@ For the merge to work, the services must:
 - log the fields listed in [`aggregate.py`](src/app_benchmark/runs/aggregate.py), such as `ttft_ms`, `e2e_ms`, `input_tokens`, `output_tokens`, `status`, `error_type`, `offering_id`;
 - honour the routing headers.
 
+When an upstream call fails, the UI and the run's error only name the system and the HTTP status (e.g. "Splunk returned HTTP 503"). The full message, with paths and the upstream response, is in the API's logs.
+
 The BlazeMeter and Splunk clients use the documented v4 test/master/report endpoints and the REST search-job API. Expect to adjust field names to your BlazeMeter plan's report format.
 
 ## Build

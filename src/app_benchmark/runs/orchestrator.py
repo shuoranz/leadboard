@@ -12,6 +12,9 @@ still generating load stops that test first, so the next queued run never overla
 
 Collecting is retried through brief BlazeMeter, Splunk or DB outages: by then the test is over
 and its data is still upstream, so failing the run would throw a finished test away.
+
+A failed run's ``error`` is shown to users, so it holds only ``RunFailed`` messages and the
+public side of upstream errors; the details are logged.
 """
 
 import asyncio
@@ -22,17 +25,28 @@ from typing import Any
 from urllib.parse import quote
 
 from ..clients.blazemeter import BlazeMeterClient, BlazeMeterError
-from ..clients.db import DbClient, DbError
-from ..clients.splunk import SplunkClient, SplunkError
+from ..clients.db import DbClient
+from ..clients.errors import UpstreamError
+from ..clients.splunk import SplunkClient
 from ..schemas import ACTIVE_STATUSES, TERMINAL_STATUSES
 from ..settings import Settings
 from .aggregate import build_results, headline
 
 log = logging.getLogger(__name__)
 
-#: Errors talking to an upstream system, which may clear up if tried again.
-UPSTREAM_ERRORS = (BlazeMeterError, SplunkError, DbError)
 COLLECT_BACKOFF_MAX_S = 300.0
+
+
+class RunFailed(RuntimeError):
+    """Why a run failed, in words meant for its users (stored as the run's ``error``)."""
+
+
+def public_error(e: Exception) -> str:
+    if isinstance(e, UpstreamError):
+        return e.public
+    if isinstance(e, RunFailed):
+        return str(e)[:500]
+    return "Internal error (details are in the API logs)"
 
 
 def now() -> str:
@@ -127,7 +141,7 @@ class Orchestrator:
             except Exception as e:
                 log.exception("run %s failed", run_id)
                 await self._stop_load(run_id)
-                await self._patch(run_id, status="failed", error=str(e)[:500], ended_at=now())
+                await self._patch(run_id, status="failed", error=public_error(e), ended_at=now())
         finally:
             self._cancel.discard(run_id)
             self._live.pop(run_id, None)
@@ -149,7 +163,7 @@ class Orchestrator:
             return None
         service = await self.db.get("services", run["service_id"])
         if not service:
-            raise RuntimeError(f"Service {run['service_id']} no longer exists")
+            raise RunFailed(f"Service {run['service_id']} no longer exists")
         routing = run["routing"]
         headers = {"X-Run-Id": run["id"], "X-Routing": routing["mode"]}
         if routing["mode"] == "fixed":
@@ -219,7 +233,7 @@ class Orchestrator:
                     blazemeter={**run["blazemeter"], "status": "ENDED"},
                 )
             if time.monotonic() > deadline:
-                raise RuntimeError(f"BlazeMeter test {master} is still {st['status']} {self.s.wait_grace_s:.0f}s past its planned duration")
+                raise RunFailed(f"BlazeMeter test {master} is still {st['status']} {self.s.wait_grace_s:.0f}s past its planned duration")
             progress = max(2, min(90, round(int(st.get("progress") or 0) * 0.9)))
             if progress != last:
                 last = progress
@@ -243,10 +257,10 @@ class Orchestrator:
         while True:
             try:
                 return await self._collect(run)
-            except UPSTREAM_ERRORS as e:
+            except UpstreamError as e:
                 attempt += 1
                 if attempt > self.s.collect_retries:
-                    raise RuntimeError(f"Couldn't collect results after {attempt} attempts: {e}") from e
+                    raise RunFailed(f"Couldn't collect results after {attempt} attempts: {e.public}") from e
                 delay = min(self.s.collect_backoff_s * 2 ** (attempt - 1), COLLECT_BACKOFF_MAX_S)
                 log.warning("run %s: collecting failed (attempt %d), retrying in %.0fs: %s", run["id"], attempt, delay, e)
                 await asyncio.sleep(delay)
@@ -265,7 +279,7 @@ class Orchestrator:
             if cancelled:
                 await self._patch(run["id"], status="cancelled", progress=100, ended_at=now())
                 return
-            raise RuntimeError("BlazeMeter recorded no requests: the test ended before generating any load")
+            raise RunFailed("BlazeMeter recorded no requests: the test ended before generating any load")
 
         search = f"search index={self.s.splunk_index} run_id={run['id']}"
         search_url = f"{self.s.splunk_web_url}/en-US/app/search/search?q={quote(search)}"

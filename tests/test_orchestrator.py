@@ -91,7 +91,7 @@ async def test_failure_while_running_stops_the_load_test(system, monkeypatch):
     monkeypatch.setattr(orch.bm, "status", down)
     await asyncio.wait_for(orch.idle(), 5)
     run = await get(api, run_id)
-    assert run["status"] == "failed" and "connection reset" in run["error"]
+    assert run["status"] == "failed" and run["error"] == "BlazeMeter is unreachable"  # the details are only logged
     assert bm_mod._masters[run["blazemeter"]["master_id"]].stop  # no orphaned load on the service
 
 
@@ -230,7 +230,7 @@ async def test_collecting_fails_once_the_outage_outlasts_the_retries(system, mon
     await asyncio.wait_for(orch.idle(), 10)
     run = await get(api, run_id)
     assert run["status"] == "failed" and calls["n"] == 3
-    assert "after 3 attempts" in run["error"] and "connection refused" in run["error"]
+    assert run["error"] == "Couldn't collect results after 3 attempts: Splunk is unreachable"
 
 
 async def test_a_test_with_no_requests_is_not_retried(system, monkeypatch):
@@ -252,6 +252,20 @@ async def test_splunk_connection_errors_are_splunk_errors():
         raise httpx.ConnectError("connection refused")
 
     client = SplunkClient("http://splunk", "t", httpx.MockTransport(refuse))
-    with pytest.raises(SplunkError, match="connection refused"):
+    with pytest.raises(SplunkError, match="connection refused") as e:
         await client.search("search x", 0, 1)
+    assert e.value.public == "Splunk is unreachable"
     await client.aclose()
+
+
+async def test_an_unexpected_failure_is_not_described_to_users(system, monkeypatch):
+    orch, api = system.orchestrator, system.client
+
+    async def broken(master_id):
+        raise KeyError("summary")  # e.g. a report in a shape we don't expect
+
+    monkeypatch.setattr(orch.bm, "summary", broken)
+    run_id = await start(api, SHORT)
+    await asyncio.wait_for(orch.idle(), 10)
+    run = await get(api, run_id)
+    assert run["status"] == "failed" and run["error"] == "Internal error (details are in the API logs)"

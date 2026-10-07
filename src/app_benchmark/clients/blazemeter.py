@@ -4,9 +4,11 @@ from typing import Any
 
 import httpx
 
+from .errors import UpstreamError
 
-class BlazeMeterError(RuntimeError):
-    pass
+
+class BlazeMeterError(UpstreamError):
+    system = "BlazeMeter"
 
 
 class BlazeMeterClient:
@@ -19,12 +21,15 @@ class BlazeMeterClient:
     async def _call(self, method: str, path: str, **kw) -> Any:
         try:
             res = await self._http.request(method, f"/api/v4{path}", **kw)
-            body = res.json()
-        except (httpx.HTTPError, ValueError) as e:
+        except httpx.HTTPError as e:
             raise BlazeMeterError(f"BlazeMeter {method} {path} failed: {e}") from e
+        try:
+            body = res.json()
+        except ValueError as e:
+            raise BlazeMeterError(f"BlazeMeter {method} {path} -> {res.status_code}: not JSON", status=res.status_code) from e
         if res.is_error or body.get("error"):
-            err = body.get("error") or {}
-            raise BlazeMeterError(f"BlazeMeter {method} {path} -> {res.status_code}: {err.get('message', res.text[:200])}")
+            message = (body.get("error") or {}).get("message", res.text[:200])
+            raise BlazeMeterError(f"BlazeMeter {method} {path} -> {res.status_code}: {message}", status=res.status_code)
         return body["result"]
 
     async def create_test(

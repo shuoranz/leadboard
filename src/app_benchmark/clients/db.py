@@ -4,11 +4,11 @@ from typing import Any
 
 import httpx
 
+from .errors import UpstreamError
 
-class DbError(RuntimeError):
-    def __init__(self, message: str, status: int | None = None):
-        super().__init__(message)
-        self.status = status
+
+class DbError(UpstreamError):
+    system = "DB service"
 
 
 class DbClient:
@@ -22,11 +22,11 @@ class DbClient:
         try:
             res = await self._http.request(method, path, **kw)
         except httpx.HTTPError as e:
-            raise DbError(f"DB service unreachable: {e}") from e
+            raise DbError(f"DB {method} {path} unreachable: {e}") from e
         if res.status_code == 204:
             return None
         if res.is_error:
-            raise DbError(f"DB {method} {path} -> {res.status_code}: {res.text[:200]}", res.status_code)
+            raise DbError(f"DB {method} {path} -> {res.status_code}: {res.text[:200]}", status=res.status_code)
         return res.json()
 
     async def query(

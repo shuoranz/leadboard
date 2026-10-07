@@ -13,13 +13,13 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .api import catalog, leaderboard, runs, services
-from .clients.blazemeter import BlazeMeterError
 from .clients.db import DbError
-from .clients.splunk import SplunkError
+from .clients.errors import UpstreamError
 from .deps import Container
 from .settings import Settings
 
 STATIC = Path(__file__).parent / "static"
+log = logging.getLogger(__name__)
 
 
 def create_app(settings: Settings | None = None, transports: dict[str, httpx.AsyncBaseTransport] | None = None) -> FastAPI:
@@ -31,20 +31,20 @@ def create_app(settings: Settings | None = None, transports: dict[str, httpx.Asy
         try:
             resumed = await container.orchestrator.resume()
             if resumed:
-                logging.getLogger(__name__).info("resumed %d unfinished runs", resumed)
+                log.info("resumed %d unfinished runs", resumed)
         except DbError as e:
-            logging.getLogger(__name__).warning("could not resume runs: %s", e)
+            log.warning("could not resume runs: %s", e)
         yield
         await container.aclose()
 
     app = FastAPI(title="LLM service benchmark", version="0.2.0", lifespan=lifespan)
     app.state.container = container
 
-    @app.exception_handler(DbError)
-    @app.exception_handler(BlazeMeterError)
-    @app.exception_handler(SplunkError)
-    async def upstream_error(_: Request, exc: Exception):
-        return JSONResponse({"detail": str(exc)}, status_code=502)
+    @app.exception_handler(UpstreamError)
+    async def upstream_error(request: Request, exc: UpstreamError):
+        # The details name internal paths and quote upstream responses: logs only.
+        log.warning("%s %s: %s", request.method, request.url.path, exc)
+        return JSONResponse({"detail": exc.public}, status_code=502)
 
     for r in (services.router, catalog.router, runs.router, leaderboard.router):
         app.include_router(r, prefix="/api")
