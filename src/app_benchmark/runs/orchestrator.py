@@ -9,6 +9,9 @@ A cancel is honoured at whichever step the run is in: before the BlazeMeter test
 never started), while it runs (it is stopped and keeps partial results), but not once the test
 has ended (its results are being collected and are kept). A run that fails while its test is
 still generating load stops that test first, so the next queued run never overlaps it.
+
+Collecting is retried through brief BlazeMeter, Splunk or DB outages: by then the test is over
+and its data is still upstream, so failing the run would throw a finished test away.
 """
 
 import asyncio
@@ -19,13 +22,17 @@ from typing import Any
 from urllib.parse import quote
 
 from ..clients.blazemeter import BlazeMeterClient, BlazeMeterError
-from ..clients.db import DbClient
-from ..clients.splunk import SplunkClient
+from ..clients.db import DbClient, DbError
+from ..clients.splunk import SplunkClient, SplunkError
 from ..schemas import ACTIVE_STATUSES, TERMINAL_STATUSES
 from ..settings import Settings
 from .aggregate import build_results, headline
 
 log = logging.getLogger(__name__)
+
+#: Errors talking to an upstream system, which may clear up if tried again.
+UPSTREAM_ERRORS = (BlazeMeterError, SplunkError, DbError)
+COLLECT_BACKOFF_MAX_S = 300.0
 
 
 def now() -> str:
@@ -114,7 +121,7 @@ class Orchestrator:
                         return
                 if run["status"] in ("starting", "running"):
                     run = await self._wait(run)
-                await self._collect(run)
+                await self._collect_with_retries(run)
             except asyncio.CancelledError:
                 raise
             except Exception as e:
@@ -229,6 +236,20 @@ class Orchestrator:
                 break
             log.info("%s: %d of %d requests indexed (attempt %d)", search, len(events), expected, attempt)
         return sid, events
+
+    async def _collect_with_retries(self, run: dict[str, Any]) -> None:
+        """Collect, riding out upstream outages. Safe to repeat: results are saved under the run id."""
+        attempt = 0
+        while True:
+            try:
+                return await self._collect(run)
+            except UPSTREAM_ERRORS as e:
+                attempt += 1
+                if attempt > self.s.collect_retries:
+                    raise RuntimeError(f"Couldn't collect results after {attempt} attempts: {e}") from e
+                delay = min(self.s.collect_backoff_s * 2 ** (attempt - 1), COLLECT_BACKOFF_MAX_S)
+                log.warning("run %s: collecting failed (attempt %d), retrying in %.0fs: %s", run["id"], attempt, delay, e)
+                await asyncio.sleep(delay)
 
     async def _collect(self, run: dict[str, Any]) -> None:
         master = run["blazemeter"]["master_id"]

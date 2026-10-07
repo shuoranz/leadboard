@@ -65,7 +65,14 @@ def fake_clients(fake_data):
 async def system(fake_data):
     http.override(SPLUNK_HEC, asgi(splunk_mod.app))
     http.override(TARGET, asgi(target_mod.app))
-    settings = Settings(poll_interval_s=0.01, splunk_poll_interval_s=0.01, splunk_settle_s=0, serve_static=False, _env_file=None)
+    settings = Settings(
+        poll_interval_s=0.01,
+        splunk_poll_interval_s=0.01,
+        splunk_settle_s=0,
+        collect_backoff_s=0,
+        serve_static=False,
+        _env_file=None,
+    )
     app = create_app(
         settings,
         transports={"db": asgi(db_mod.app), "blazemeter": asgi(bm_mod.app), "splunk": asgi(splunk_mod.app)},

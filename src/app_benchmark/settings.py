@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     splunk_settle_s: float = 2.0
     splunk_attempts: int = 3
     splunk_min_coverage: float = 0.98
+    #: A finished test's results are still in BlazeMeter and Splunk, so collecting them is retried
+    #: through brief outages: this many times, waiting collect_backoff_s, then twice as long each
+    #: time (at most 5 minutes) — about 10 minutes in all with the defaults.
+    collect_retries: int = 6
+    collect_backoff_s: float = 10.0
 
     # Reported with every run as its test conditions.
     client_region: str = "us-east (BlazeMeter cloud)"

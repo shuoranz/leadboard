@@ -18,19 +18,26 @@ class SplunkClient:
     async def aclose(self) -> None:
         await self._http.aclose()
 
-    async def create_job(self, search: str) -> str:
-        res = await self._http.post("/services/search/jobs", data={"search": search, "output_mode": "json"})
+    async def _call(self, method: str, path: str, what: str, **kw) -> Any:
+        try:
+            res = await self._http.request(method, path, **kw)
+        except httpx.HTTPError as e:
+            raise SplunkError(f"Splunk {what} failed: {e}") from e
         if res.is_error:
-            raise SplunkError(f"Splunk search job failed: {res.status_code} {res.text[:200]}")
-        return res.json()["sid"]
+            raise SplunkError(f"Splunk {what} failed: {res.status_code} {res.text[:200]}")
+        try:
+            return res.json()
+        except ValueError as e:
+            raise SplunkError(f"Splunk {what} failed: not JSON") from e
+
+    async def create_job(self, search: str) -> str:
+        return (await self._call("POST", "/services/search/jobs", "search job", data={"search": search, "output_mode": "json"}))["sid"]
 
     async def wait(self, sid: str, poll_s: float, timeout_s: float) -> int:
         deadline = time.monotonic() + timeout_s
         while True:
-            res = await self._http.get(f"/services/search/jobs/{sid}", params={"output_mode": "json"})
-            if res.is_error:
-                raise SplunkError(f"Splunk job {sid} status failed: {res.status_code}")
-            content = res.json()["entry"][0]["content"]
+            body = await self._call("GET", f"/services/search/jobs/{sid}", f"job {sid} status", params={"output_mode": "json"})
+            content = body["entry"][0]["content"]
             if content["dispatchState"] == "FAILED":
                 raise SplunkError(f"Splunk job {sid} failed")
             if content["isDone"]:
@@ -42,12 +49,8 @@ class SplunkClient:
     async def results(self, sid: str, page: int = 5000) -> list[dict[str, str]]:
         rows: list[dict[str, str]] = []
         while True:
-            res = await self._http.get(
-                f"/services/search/jobs/{sid}/results", params={"output_mode": "json", "count": page, "offset": len(rows)}
-            )
-            if res.is_error:
-                raise SplunkError(f"Splunk results for {sid} failed: {res.status_code}")
-            batch = res.json()["results"]
+            params = {"output_mode": "json", "count": page, "offset": len(rows)}
+            batch = (await self._call("GET", f"/services/search/jobs/{sid}/results", f"results for {sid}", params=params))["results"]
             rows.extend(batch)
             if len(batch) < page:
                 return rows

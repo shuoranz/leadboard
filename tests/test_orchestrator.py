@@ -2,9 +2,11 @@
 
 import asyncio
 
+import httpx
 import pytest
 
 from app_benchmark.clients.blazemeter import BlazeMeterError
+from app_benchmark.clients.splunk import SplunkClient, SplunkError
 from benchmark_fakes.blazemeter import app as bm_mod
 
 LONG = {"concurrency": 3, "ramp_up_s": 0, "duration_s": 3000, "think_time_s": 1}
@@ -195,3 +197,61 @@ async def test_a_failed_stop_is_retried_and_the_cancel_is_not_lost(system, monke
     run = await get(api, run_id)
     assert run["status"] == "cancelled" and calls["n"] == 3
     assert bm_mod._masters[run["blazemeter"]["master_id"]].aborted
+
+
+async def test_collecting_rides_out_a_brief_splunk_outage(system, monkeypatch):
+    orch, api = system.orchestrator, system.client
+    original, calls = orch.splunk.search, {"n": 0}
+
+    async def flaky(*args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] <= 2:
+            raise SplunkError("Splunk search job failed: 503")
+        return await original(*args, **kwargs)
+
+    monkeypatch.setattr(orch.splunk, "search", flaky)
+    run_id = await start(api, SHORT)
+    await asyncio.wait_for(orch.idle(), 10)
+    run = await get(api, run_id)
+    assert run["status"] == "completed" and run["headline"]["requests"] > 0 and calls["n"] == 3
+
+
+async def test_collecting_fails_once_the_outage_outlasts_the_retries(system, monkeypatch):
+    orch, api = system.orchestrator, system.client
+    calls = {"n": 0}
+
+    async def down(*args, **kwargs):
+        calls["n"] += 1
+        raise SplunkError("Splunk search job failed: connection refused")
+
+    monkeypatch.setattr(orch.splunk, "search", down)
+    monkeypatch.setattr(orch.s, "collect_retries", 2)
+    run_id = await start(api, SHORT)
+    await asyncio.wait_for(orch.idle(), 10)
+    run = await get(api, run_id)
+    assert run["status"] == "failed" and calls["n"] == 3
+    assert "after 3 attempts" in run["error"] and "connection refused" in run["error"]
+
+
+async def test_a_test_with_no_requests_is_not_retried(system, monkeypatch):
+    orch, api = system.orchestrator, system.client
+    original, calls = orch.bm.summary, {"n": 0}
+
+    async def empty(master_id):
+        calls["n"] += 1
+        return {**(await original(master_id)), "hits": 0, "failed": 0}
+
+    monkeypatch.setattr(orch.bm, "summary", empty)
+    run_id = await start(api, SHORT)
+    await asyncio.wait_for(orch.idle(), 10)
+    assert (await get(api, run_id))["status"] == "failed" and calls["n"] == 1
+
+
+async def test_splunk_connection_errors_are_splunk_errors():
+    def refuse(request):
+        raise httpx.ConnectError("connection refused")
+
+    client = SplunkClient("http://splunk", "t", httpx.MockTransport(refuse))
+    with pytest.raises(SplunkError, match="connection refused"):
+        await client.search("search x", 0, 1)
+    await client.aclose()
